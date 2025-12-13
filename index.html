@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Band Briefing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c1a2a;
+      --panel: rgba(17, 36, 54, 0.9);
+      --panel-strong: rgba(21, 46, 68, 0.95);
+      --card: rgba(255, 255, 255, 0.04);
+      --text: #edf0f6;
+      --muted: #99a7ba;
+      --accent: #3ee6a1;
+      --accent-2: #5ac8ff;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(circle at 15% 20%, rgba(90, 200, 255, 0.12), transparent 25%), radial-gradient(circle at 85% 0%, rgba(62, 230, 161, 0.2), transparent 22%), var(--bg);
+      color: var(--text);
+    }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+    header.hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--panel);
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    header .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+    header h1 {
+      margin: 0 0 12px;
+      font-size: 32px;
+      letter-spacing: -0.02em;
+    }
+    header p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      max-width: 640px;
+      line-height: 1.4;
+    }
+    .badge {
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(62, 230, 161, 0.14);
+      border: 1px solid rgba(62, 230, 161, 0.4);
+      color: var(--text);
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      transition: transform 0.08s ease, box-shadow 0.18s ease, background 0.18s ease;
+      color: var(--text);
+    }
+    button.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b1220;
+      box-shadow: 0 10px 30px rgba(62, 230, 161, 0.25);
+    }
+    button.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+    }
+    button:hover { transform: translateY(-1px); }
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    section.panel {
+      background: var(--panel-strong);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .panel .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .panel h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.01em;
+    }
+    .panel p.sub {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
+    }
+    .input-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+    .input-card label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      color: var(--text);
+      resize: vertical;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    textarea:focus {
+      outline: 2px solid rgba(90, 200, 255, 0.35);
+      border-color: rgba(90, 200, 255, 0.45);
+    }
+    .dropzone {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 28px 18px;
+      text-align: center;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.18s ease, background 0.18s ease;
+    }
+    .dropzone strong { color: var(--text); }
+    .dropzone.dragging {
+      border-color: var(--accent-2);
+      background: rgba(90, 200, 255, 0.08);
+    }
+    .hint { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+    .status {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .status.success { color: var(--accent); }
+    .status.warn { color: #facc15; }
+    .status.error { color: #ff7676; }
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    .stat {
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+    }
+    .stat .label { color: var(--muted); font-size: 13px; }
+    .stat .value { font-size: 24px; font-weight: 700; margin-top: 4px; }
+    ul.clean {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    ul.clean li {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .tag {
+      display: inline-flex;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(62, 230, 161, 0.14);
+      color: var(--text);
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    .raw {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 13px;
+      color: var(--muted);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .empty {
+      padding: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    @media (max-width: 720px) {
+      header.hero { flex-direction: column; }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Band helper</p>
+        <h1>Band Briefing</h1>
+        <p>Drop in your director's email or PDF. We'll pull out dates, rehearsal times, and action items so you can see what matters right away.</p>
+        <div class="actions">
+          <button class="primary" id="sampleBtn">Load sample email</button>
+          <button class="secondary" id="clearBtn">Clear</button>
+        </div>
+      </div>
+      <div class="badge" id="statusBadge">Ready to parse locally - No data leaves this page</div>
+    </header>
+
+    <section class="panel">
+      <div class="title-row">
+        <div>
+          <h2>1) Add your email</h2>
+          <p class="sub">Paste text or upload a PDF. Everything is processed in your browser.</p>
+        </div>
+        <div class="pill" id="inputState">Waiting for content</div>
+      </div>
+      <div class="input-grid">
+        <div class="input-card">
+          <label for="emailText">Manual text</label>
+          <textarea id="emailText" placeholder="Paste an email from your director here..."></textarea>
+          <p class="hint">Tip: keep the full email body so we can find dates, times, and asks.</p>
+        </div>
+        <div class="input-card">
+          <label>Upload PDF</label>
+          <div class="dropzone" id="dropzone">
+            <strong>Drag & drop</strong> your PDF here or click to choose a file.
+          </div>
+          <input type="file" id="pdfInput" accept="application/pdf" hidden>
+          <p class="hint">We use PDF.js in the browser to extract text. Large files may take a moment.</p>
+          <p class="status" id="pdfStatus"></p>
+        </div>
+      </div>
+      <div class="actions" style="margin-top:14px;">
+        <button class="primary" id="parseBtn">Parse now</button>
+        <button class="secondary" id="quickPeekBtn">Quick highlight</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="title-row">
+        <div>
+          <h2>2) Digestible summary</h2>
+          <p class="sub">We highlight dates, rehearsals, and tasks. Click an item to copy it.</p>
+        </div>
+        <div class="pill" id="lastParsed">Nothing parsed yet</div>
+      </div>
+      <div class="stat-grid" id="statGrid"></div>
+
+      <div class="output-grid" style="margin-top:14px;">
+        <div class="card" id="quickCard">
+          <div class="title-row">
+            <h3 style="margin:0;font-size:16px;">Quick focus</h3>
+            <span class="tag">auto</span>
+          </div>
+          <div id="quickSummary" class="empty">Run a parse to surface the next date and top tasks.</div>
+        </div>
+        <div class="card" id="eventsCard">
+          <div class="title-row">
+            <h3 style="margin:0;font-size:16px;">Key dates & rehearsals</h3>
+          </div>
+          <ul class="clean" id="eventsList"></ul>
+        </div>
+        <div class="card" id="tasksCard">
+          <div class="title-row">
+            <h3 style="margin:0;font-size:16px;">To-dos & reminders</h3>
+          </div>
+          <ul class="clean" id="todoList"></ul>
+        </div>
+        <div class="card" id="linksCard">
+          <div class="title-row">
+            <h3 style="margin:0;font-size:16px;">Links & contacts</h3>
+          </div>
+          <ul class="clean" id="linksList"></ul>
+          <ul class="clean" id="contactsList" style="margin-top:10px;"></ul>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <div class="title-row">
+          <h3 style="margin:0;font-size:16px;">Raw capture (for sanity check)</h3>
+        </div>
+        <div id="rawLines" class="raw empty">Parsed text will show here.</div>
+      </div>
+    </section>
+    <p class="footer-note">Made for quick, local parsing. Share ideas for tweaks anytime.</p>
+  </main>
+
+  <script>
+    const textArea = document.getElementById("emailText");
+    const parseBtn = document.getElementById("parseBtn");
+    const quickPeekBtn = document.getElementById("quickPeekBtn");
+    const sampleBtn = document.getElementById("sampleBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const inputState = document.getElementById("inputState");
+    const statusBadge = document.getElementById("statusBadge");
+    const pdfInput = document.getElementById("pdfInput");
+    const dropzone = document.getElementById("dropzone");
+    const pdfStatus = document.getElementById("pdfStatus");
+    const lastParsed = document.getElementById("lastParsed");
+    const statGrid = document.getElementById("statGrid");
+    const quickSummary = document.getElementById("quickSummary");
+    const eventsList = document.getElementById("eventsList");
+    const todoList = document.getElementById("todoList");
+    const linksList = document.getElementById("linksList");
+    const contactsList = document.getElementById("contactsList");
+    const rawLines = document.getElementById("rawLines");
+
+    const sampleEmail = `Subject: Week of Dec 11 rehearsals and concert reminders
+
+Hi everyone,
+
+Thanks for last week's work. A few notes for this week:
+
+- Monday 12/11: Full band rehearsal 3:30-5:00pm at the band room. Please be early to help set chairs.
+- Tuesday 12/12: Brass sectional 4:00-5:30pm in Room 204.
+- Thursday Dec 14: Dress rehearsal 6:30-8:30pm on stage. Wear concert black.
+- Friday 12/15: Winter concert call time 6:00pm, downbeat at 7:00pm. Parents use the south lot entrance.
+- Fees: Please bring $15 for buses by Wednesday.
+- Music stands: Remember to label yours. If yours is broken, tell me Tuesday.
+- Documents: Permission slip is here: https://example.com/permission-slip
+
+Contact: director@school.edu if you have conflicts.
+
+Thanks!
+Coach`;
+
+    let parsedData = null;
+
+    function setStatus(message, tone = "muted") {
+      statusBadge.textContent = message;
+      statusBadge.style.borderColor = tone === "warn" ? "#facc15" : tone === "error" ? "#ff7676" : "rgba(62, 230, 161, 0.4)";
+      statusBadge.style.background = tone === "error"
+        ? "rgba(255, 118, 118, 0.12)"
+        : tone === "warn"
+          ? "rgba(250, 204, 21, 0.12)"
+          : "rgba(62, 230, 161, 0.14)";
+    }
+
+    function setInputState(text) {
+      inputState.textContent = text;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, (m) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[m]));
+    }
+
+    function hasContent() {
+      return textArea.value.trim().length > 0;
+    }
+
+    function refreshInputState() {
+      setInputState(hasContent() ? "Content ready" : "Waiting for content");
+    }
+
+    function normalizeLines(text) {
+      return text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split(/\n+/).map((l) => l.trim()).filter(Boolean);
+    }
+
+    const monthMap = {
+      january: 0, jan: 0,
+      february: 1, feb: 1,
+      march: 2, mar: 2,
+      april: 3, apr: 3,
+      may: 4,
+      june: 5, jun: 5,
+      july: 6, jul: 6,
+      august: 7, aug: 7,
+      september: 8, sept: 8, sep: 8,
+      october: 9, oct: 9,
+      november: 10, nov: 10,
+      december: 11, dec: 11,
+    };
+    const monthTokens = Object.keys(monthMap);
+
+    function extractDateToken(line) {
+      const monthRegex = new RegExp(`\\b(${monthTokens.join("|")})\\.?\\s+\\d{1,2}(?:,?\\s*\\d{2,4})?`, "i");
+      const numericRegex = /\b\d{1,2}[\/.-]\d{1,2}(?:[\/.-]\d{2,4})?/;
+      const monthMatch = line.match(monthRegex);
+      if (monthMatch) return monthMatch[0];
+      const numMatch = line.match(numericRegex);
+      return numMatch ? numMatch[0] : null;
+    }
+
+    function extractTime(line) {
+      const range = line.match(/(\d{1,2}:?\d{0,2}\s*(?:am|pm)?)[\s-]+(\d{1,2}:?\d{0,2}\s*(?:am|pm)?)/i);
+      if (range) return range[1].trim() + " - " + range[2].trim();
+      const time = line.match(/\b\d{1,2}:\d{2}\s*(?:am|pm)?\b|\b\d{1,2}\s*(?:am|pm)\b/i);
+      return time ? time[0].trim() : null;
+    }
+
+    function extractLocation(line) {
+      const loc = line.match(/\b(?:at|in|room|stage|location)[:\s]+([^.,;]+)/i);
+      return loc ? loc[1].trim() : null;
+    }
+
+    function collectLinks(line) {
+      return line.match(/https?:\/\/[^\s)]+/gi) || [];
+    }
+
+    function collectEmails(line) {
+      return line.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi) || [];
+    }
+
+    function scoreEventLine(line) {
+      const keywords = ["rehearsal", "concert", "sectional", "call time", "downbeat", "practice", "performance"];
+      return keywords.reduce((acc, word) => acc + (line.toLowerCase().includes(word) ? 1 : 0), 0);
+    }
+
+    function toDate(dateToken) {
+      if (!dateToken) return null;
+      const now = new Date();
+      let candidate;
+      const numeric = dateToken.match(/(\d{1,2})[\/.-](\d{1,2})(?:[\/.-](\d{2,4}))?/);
+      if (numeric) {
+        const month = parseInt(numeric[1], 10) - 1;
+        const day = parseInt(numeric[2], 10);
+        const year = numeric[3] ? parseInt(numeric[3], 10) : now.getFullYear();
+        candidate = new Date(year, month, day);
+        if (candidate < now) candidate.setFullYear(year + 1);
+        return candidate;
+      }
+      const monthMatch = dateToken.match(new RegExp("(" + monthTokens.join("|") + ")\\s+(\\d{1,2})(?:,?\\s*(\\d{2,4}))?", "i"));
+      if (monthMatch) {
+        const month = monthMap[monthMatch[1].toLowerCase()];
+        const day = parseInt(monthMatch[2], 10);
+        const year = monthMatch[3] ? parseInt(monthMatch[3], 10) : now.getFullYear();
+        candidate = new Date(year, month, day);
+        if (candidate < now) candidate.setFullYear(year + 1);
+        return candidate;
+      }
+      return null;
+    }
+
+    function parseEmail(rawText) {
+      const normalized = rawText.trim();
+      const lines = normalizeLines(normalized);
+      const events = [];
+      const todos = [];
+      const reminders = [];
+      const links = [];
+      const contacts = [];
+
+      lines.forEach((line) => {
+        const dateToken = extractDateToken(line);
+        const timeToken = extractTime(line);
+        const loc = extractLocation(line);
+        const lineLinks = collectLinks(line);
+        const emails = collectEmails(line);
+        lineLinks.forEach((l) => links.push(l));
+        emails.forEach((e) => contacts.push(e));
+
+        const hasTodoCue = /please|bring|remember|due|submit|required|action|complete/i.test(line) || line.startsWith("- ");
+        if (hasTodoCue) reminders.push(line);
+
+        if (dateToken || timeToken) {
+          events.push({
+            raw: line,
+            dateText: dateToken,
+            time: timeToken,
+            location: loc,
+            score: scoreEventLine(line),
+            parsedDate: toDate(dateToken),
+          });
+        } else if (hasTodoCue) {
+          todos.push(line);
+        }
+      });
+
+      // Merge reminders and todos while deduping
+      const todoSet = new Set(todos);
+      reminders.forEach((r) => todoSet.add(r));
+
+      const eventWithDate = events.filter((e) => e.parsedDate);
+      eventWithDate.sort((a, b) => a.parsedDate - b.parsedDate);
+      const nextEvent = eventWithDate[0] || events.sort((a, b) => b.score - a.score)[0];
+
+      const wordCount = normalized.split(/\\s+/).filter(Boolean).length;
+      const stats = {
+        lines: lines.length,
+        words: wordCount,
+        events: events.length,
+        todos: todoSet.size,
+        links: links.length + contacts.length,
+      };
+
+      return {
+        normalized,
+        lines,
+        events,
+        todos: Array.from(todoSet),
+        links: Array.from(new Set(links)),
+        contacts: Array.from(new Set(contacts)),
+        nextEvent,
+        stats,
+      };
+    }
+
+    function render(parsed) {
+      parsedData = parsed;
+      lastParsed.textContent = "Parsed just now";
+      renderStats(parsed.stats);
+      renderQuick(parsed);
+      renderEvents(parsed.events);
+      renderTodos(parsed.todos);
+      renderLinks(parsed.links, parsed.contacts);
+      renderRaw(parsed.lines);
+      setStatus("Parsed locally. Highlighted " + parsed.events.length + " event(s).", "success");
+    }
+
+    function renderStats(stats) {
+      const blocks = [
+        { label: "Lines", value: stats.lines },
+        { label: "Words", value: stats.words },
+        { label: "Events found", value: stats.events },
+        { label: "To-dos", value: stats.todos },
+        { label: "Links/contacts", value: stats.links },
+      ];
+      statGrid.innerHTML = blocks.map((b) => `
+        <div class="stat">
+          <div class="label">${b.label}</div>
+          <div class="value">${b.value}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderQuick(parsed) {
+      if (!parsed.nextEvent && parsed.todos.length === 0) {
+        quickSummary.className = "empty";
+        quickSummary.textContent = "No obvious events or tasks yet. Try adding more details.";
+        return;
+      }
+      quickSummary.className = "";
+      const next = parsed.nextEvent ? `
+        <div style="margin-bottom:10px;">
+          <div class="label" style="text-transform:uppercase;font-size:12px;color:var(--muted);letter-spacing:0.05em;">Next date</div>
+          <div style="font-size:18px;font-weight:700;">${escapeHtml(parsed.nextEvent.dateText || "Date not clear")}</div>
+          <div style="color:var(--muted);margin-top:4px;">${escapeHtml(parsed.nextEvent.raw)}</div>
+        </div>
+      ` : "";
+      const tasks = parsed.todos.slice(0, 2).map((t) => `<li>${escapeHtml(t)}</li>`).join("");
+      const todoBlock = parsed.todos.length ? `<div><div class="label" style="text-transform:uppercase;font-size:12px;color:var(--muted);letter-spacing:0.05em;">Top tasks</div><ul style="padding-left:18px;margin:6px 0 0;">${tasks}</ul></div>` : "";
+      quickSummary.innerHTML = next + todoBlock;
+    }
+
+    function renderEvents(events) {
+      if (!events.length) {
+        eventsList.innerHTML = "<div class='empty'>No dates found yet.</div>";
+        return;
+      }
+      eventsList.innerHTML = events.map((e) => `
+        <li data-copy="${escapeHtml(e.raw)}">
+          <div style="font-weight:700;">${escapeHtml(e.dateText || "Date?")} <span class="tag">${escapeHtml(e.time || "time tbd")}</span></div>
+          <div style="color:var(--muted);margin-top:4px;">${escapeHtml(e.raw)}</div>
+          ${e.location ? `<div class="pill" style="margin-top:6px;">Location: ${escapeHtml(e.location)}</div>` : ""}
+        </li>
+      `).join("");
+    }
+
+    function renderTodos(todos) {
+      if (!todos.length) {
+        todoList.innerHTML = "<div class='empty'>No action items spotted.</div>";
+        return;
+      }
+      todoList.innerHTML = todos.map((t) => `
+        <li data-copy="${escapeHtml(t)}">
+          <div>${escapeHtml(t)}</div>
+        </li>
+      `).join("");
+    }
+
+    function renderLinks(links, contacts) {
+      linksList.innerHTML = links.length ? links.map((l) => `
+        <li><a style="color: var(--accent-2);" href="${escapeHtml(l)}" target="_blank" rel="noopener">${escapeHtml(l)}</a></li>
+      `).join("") : "<div class='empty'>No links found.</div>";
+      contactsList.innerHTML = contacts.length ? contacts.map((c) => `
+        <li data-copy="${escapeHtml(c)}">${escapeHtml(c)}</li>
+      `).join("") : "";
+    }
+
+    function renderRaw(lines) {
+      if (!lines.length) {
+        rawLines.className = "raw empty";
+        rawLines.textContent = "Parsed text will show here.";
+        return;
+      }
+      rawLines.className = "raw";
+      rawLines.innerHTML = lines.map((l) => escapeHtml(l)).join("\n");
+    }
+
+    function copyOnClick(event) {
+      const target = event.target.closest("[data-copy]");
+      if (!target) return;
+      const content = target.getAttribute("data-copy");
+      navigator.clipboard.writeText(content).then(() => {
+        setStatus("Copied to clipboard", "success");
+      });
+    }
+
+    function handleSample() {
+      textArea.value = sampleEmail;
+      refreshInputState();
+      setStatus("Loaded sample email.");
+    }
+
+    function handleClear() {
+      textArea.value = "";
+      pdfStatus.textContent = "";
+      parsedData = null;
+      refreshInputState();
+      lastParsed.textContent = "Nothing parsed yet";
+      statGrid.innerHTML = "";
+      quickSummary.textContent = "Run a parse to surface the next date and top tasks.";
+      quickSummary.className = "empty";
+      eventsList.innerHTML = "";
+      todoList.innerHTML = "";
+      linksList.innerHTML = "";
+      contactsList.innerHTML = "";
+      rawLines.textContent = "Parsed text will show here.";
+      rawLines.className = "raw empty";
+      setStatus("Cleared.");
+    }
+
+    function handleQuickPeek() {
+      const text = textArea.value.trim();
+      if (!text) {
+        setStatus("Add some text or upload a PDF first.", "warn");
+        return;
+      }
+      render(parseEmail(text));
+    }
+
+    async function handleParse() {
+      const text = textArea.value.trim();
+      if (!text) {
+        setStatus("Add some text or upload a PDF first.", "warn");
+        return;
+      }
+      setStatus("Parsing...");
+      render(parseEmail(text));
+    }
+
+    function setupDropzone() {
+      dropzone.addEventListener("click", () => pdfInput.click());
+      dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropzone.classList.add("dragging");
+      });
+      dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragging"));
+      dropzone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropzone.classList.remove("dragging");
+        if (e.dataTransfer.files?.length) {
+          handlePdfFile(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    async function handlePdfFile(file) {
+      if (!file || file.type !== "application/pdf") {
+        pdfStatus.textContent = "Please drop a PDF file.";
+        pdfStatus.className = "status warn";
+        return;
+      }
+      if (!window.pdfjsLib) {
+        pdfStatus.textContent = "PDF.js failed to load. Check your connection.";
+        pdfStatus.className = "status error";
+        return;
+      }
+      pdfStatus.textContent = "Reading PDF...";
+      pdfStatus.className = "status";
+      try {
+        const text = await extractPdfText(file);
+        textArea.value = text;
+        refreshInputState();
+        setStatus("PDF loaded. Parse when ready.", "success");
+        pdfStatus.textContent = "Loaded: " + file.name;
+        render(parseEmail(text));
+      } catch (err) {
+        console.error(err);
+        pdfStatus.textContent = "Could not read that PDF.";
+        pdfStatus.className = "status error";
+        setStatus("PDF read failed.", "error");
+      }
+    }
+
+    async function extractPdfText(file) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      const buffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+      let text = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const strings = content.items.map((item) => item.str).join(" ");
+        text += strings + "\\n";
+      }
+      return text.trim();
+    }
+
+    function setupListeners() {
+      parseBtn.addEventListener("click", handleParse);
+      quickPeekBtn.addEventListener("click", handleQuickPeek);
+      sampleBtn.addEventListener("click", handleSample);
+      clearBtn.addEventListener("click", handleClear);
+      textArea.addEventListener("input", refreshInputState);
+      eventsList.addEventListener("click", copyOnClick);
+      todoList.addEventListener("click", copyOnClick);
+      linksList.addEventListener("click", copyOnClick);
+      contactsList.addEventListener("click", copyOnClick);
+      pdfInput.addEventListener("change", (e) => {
+        const file = e.target.files?.[0];
+        if (file) handlePdfFile(file);
+      });
+      setupDropzone();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setupListeners();
+      refreshInputState();
+      setStatus("Ready to parse locally - No data leaves this page");
+    });
+  </script>
+</body>
+</html>

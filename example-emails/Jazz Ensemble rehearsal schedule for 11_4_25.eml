@@ -1,0 +1,818 @@
+Delivered-To: mattwren88@gmail.com
+Received: by 2002:a05:6674:6a05:b0:66c:bcdf:305f with SMTP id wy5csp1312985pxc;
+        Thu, 30 Oct 2025 12:34:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=3; AJvYcCXMEgCWDkcaTz7M1ugfJ3twoZqw9PKpQps/h1MabkXUMHRC9QPEFuy2g4zSnhL0O91pVD/9xkkdxGGp@gmail.com
+X-Google-Smtp-Source: AGHT+IEGsSHXv3yWY60yiGkTTfSuRmhyrZTAAjeUlv8CnT0GX5DLh3UEgDR5bxRrumKK3AvIu2J/
+X-Received: by 2002:a53:cf11:0:b0:63e:3994:4ae3 with SMTP id 956f58d0204a3-63f92317fbcmr433745d50.41.1761852866243;
+        Thu, 30 Oct 2025 12:34:26 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; t=1761852866; cv=pass;
+        d=google.com; s=arc-20240605;
+        b=d0sbRMApSHt1ZxrnmqYcVDnXp9EnSpDFFPK9QpcQDUqUGxu3PsRtNL7u5SbKKvE+1o
+         7RC753QdkD5j2Vg+8tSz2Y1bLSVE8692fDLWxaQnwEWz10gWW9OFkr9Ytc3B+6suQtMn
+         fmjJwBzfS4TyJAHhTZb3iVlZOe6On2z0qizu/BTgBEhhh0JBu8Yk5sKnsZKcpok37tm1
+         KAwZYUNKGK/QznyE/e288ZtTZfxzgL4Pmprc7QqgiBlH2wxsHxDoBdKMPc49TW4kJy6p
+         9+dZzJv8UJcOF5WepcRSvo5pJSzZQpQ7f1ZH7zUfvK8qnXWsmOiA87vv92+XgXy7utiZ
+         9oaA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=mime-version:content-language:accept-language:message-id:date
+         :thread-index:thread-topic:subject:cc:from:dkim-signature;
+        bh=5qnmdqnlynACZkKvQr3ZuP/oL04r9wPpKq1x4WLwER8=;
+        fh=xJdzIIq0GBn7yxg67WPz/WVcyhlw5VZMK0Q11pBeyr8=;
+        b=dfibIRiQIud95CDq6tUMhYZTIaiCs1dVd+Ft/isAZpD5iQbBa8BVj+PZjvbb/3GRY3
+         Szau5sLN0H12EFfKxRSdWOjxXzdtzZs/Fwbp7tY5nBz7CrwtsBtBZhiAfERhR5tQqn9Q
+         1xYA5QdvVqDtDe4NW2bFl2KI2RLlwI/tddeUWrynRLJWAkH9a1C1tocHhc5mHdm1OEMh
+         3dX4uvztwtelZZgdS0li5781ZGiXWorJZnhZXSR2Z+w1AWzvpbDeBKwVbWW2ECKHIeMJ
+         KQQNmj4vNzsRGhPf1gwuw3LLZHNrzTgQxwTiZr8VGaA0MPhDqgVMZ+De5D2aS3VVRGx/
+         8P/Q==;
+        dara=google.com
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@keystone.edu header.s=selector2 header.b=FtHyRKFd;
+       arc=pass (i=1 spf=pass spfdomain=keystone.edu dkim=pass dkdomain=keystone.edu dmarc=pass fromdomain=keystone.edu);
+       spf=pass (google.com: domain of jeffrey.tylutki@keystone.edu designates 2a01:111:f403:c001::2 as permitted sender) smtp.mailfrom=jeffrey.tylutki@keystone.edu;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=keystone.edu
+Return-Path: <jeffrey.tylutki@keystone.edu>
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazlp170120002.outbound.protection.outlook.com. [2a01:111:f403:c001::2])
+        by mx.google.com with ESMTPS id 00721157ae682-785ee60aafesi115207937b3.115.2025.10.30.12.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Oct 2025 12:34:26 -0700 (PDT)
+Received-SPF: pass (google.com: domain of jeffrey.tylutki@keystone.edu designates 2a01:111:f403:c001::2 as permitted sender) client-ip=2a01:111:f403:c001::2;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@keystone.edu header.s=selector2 header.b=FtHyRKFd;
+       arc=pass (i=1 spf=pass spfdomain=keystone.edu dkim=pass dkdomain=keystone.edu dmarc=pass fromdomain=keystone.edu);
+       spf=pass (google.com: domain of jeffrey.tylutki@keystone.edu designates 2a01:111:f403:c001::2 as permitted sender) smtp.mailfrom=jeffrey.tylutki@keystone.edu;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=keystone.edu
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DXAkIVXDtOqjtDrdCas9eGvpYdP91rIV8n2q6nYOAGahozLrEtyPJxCx8+5lIT1kB+9DRMBXIqTVlBjntdIgC50axjGou2QJ3frUHqxcECfYwc7QxzEtd2xsATsVEEnofmBemU7/Yscw+bLsn3rRbi/ZX2iB9MUZvtOWjv2ov/24/WhuJ9+8WqQVdJN/tiy7gvDkntVjwhy3XMQob/PMQjKAu79U2xMOjqvrIrcmiwKi13JuWoaPmtcQ0tPZOTfS+ljbPhq7NfGldgXElsOu8FmMFJZUM/HYctcEShQ1r7ALRSu6RRUDx1Nv06ds51a3DW1F7/zq/0m5+eE3lHlLAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5qnmdqnlynACZkKvQr3ZuP/oL04r9wPpKq1x4WLwER8=;
+ b=UYD24vGcDTwyg8BVKwQHdnhKNmOVHFpW0pXOQAz5MJPk4QswGrl4UhmQoj/+YU+B+qkY9wK29kIDxXMnsyyU+FblYV9YmG3fDvn/W+5Rcjmb+dKgkBO9GjmhNVUKj4orijZlMa/lsFlzD3kI3WddUisqJ0YhywTjQZuWiocNeA5VoGcs5nVnFIrq2KyVf5v8ir8ivFdBfUxL1F6pwbaBGZF6HV4LjZR8PiqZF19LARbxZeREvXcuC56jRHIqx7u6WJCbByiXLa64LoJ6cdn2ZIaGbZyRlUR8YNNFGWpgzBAvAzrLXtmcAEFEBChftFLYG+HlGBb5Doqo4lholxkjXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=keystone.edu; dmarc=pass action=none header.from=keystone.edu;
+ dkim=pass header.d=keystone.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=keystone.edu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5qnmdqnlynACZkKvQr3ZuP/oL04r9wPpKq1x4WLwER8=;
+ b=FtHyRKFdQK9jFD7C2C4/NoJibzXBinTBcCs3D6W923rRjtgtpgseJbCRSzoJPF9wji3E5qTikUaCxhPEcjE3UhYSj78w66bon1Y46r4CWiuwcomUycQzrZYQ+AINJaKyAnT7EEILAsd4TpRKZK/BTqvtM7/9b/zcGZuON5QItZ95BfbxH6ors3znvMqMM+YdnQjRVCA9mxck590so/iQXwWrbT+sPFo3fHwWgr0pVSOhJDjvPety2eXZunLiZRmyrJQoItzdYRKDyA0jk0W3pUWHLd0EDb0Pqc3ilbstkZ+Oix/vgpSwCBiR+EvYnCgGPG04lk1ijxoKa14KgSafJg==
+Received: from PH3PPFA59B5AE6C.namprd18.prod.outlook.com
+ (2603:10b6:518:1::cbc) by CH3PR18MB5487.namprd18.prod.outlook.com
+ (2603:10b6:610:15f::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.14; Thu, 30 Oct
+ 2025 19:34:11 +0000
+Received: from PH3PPFA59B5AE6C.namprd18.prod.outlook.com
+ ([fe80::9e52:2dc9:2e9:160d]) by PH3PPFA59B5AE6C.namprd18.prod.outlook.com
+ ([fe80::9e52:2dc9:2e9:160d%5]) with mapi id 15.20.9275.011; Thu, 30 Oct 2025
+ 19:34:11 +0000
+From: Jeffrey Tylutki <jeffrey.tylutki@keystone.edu>
+CC: Tyler Dempsey <tyler.dempsey@keystone.edu>, Jason Zarnowski
+	<jason.zarnowski@keystone.edu>, Jared Zarnowski
+	<jared.zarnowski@keystone.edu>, Rebecca Hetzel <rebecca.hetzel@keystone.edu>
+Subject: Jazz Ensemble rehearsal schedule for 11/4/25
+Thread-Topic: Jazz Ensemble rehearsal schedule for 11/4/25
+Thread-Index: AdxJ0h7ZkyxVToMWSc+1dsDqsVBSwQ==
+Date: Thu, 30 Oct 2025 19:34:11 +0000
+Message-ID:
+ <PH3PPFA59B5AE6CA0A6E93C46E31FFAC40799FBA@PH3PPFA59B5AE6C.namprd18.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=keystone.edu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH3PPFA59B5AE6C:EE_|CH3PR18MB5487:EE_
+x-ms-office365-filtering-correlation-id: 6dec8cc5-b403-458e-d40a-08de17eb4d27
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|7416014|376014|38070700021|4053099003|8096899003;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?Zpchbb7xSUEQ+aym5cnjbmu4hAoC24JiE4avmdzjr3vUcc3DLJNI40PPNibZ?=
+ =?us-ascii?Q?3xJF86C3aJZyxE4xEuv37yCyxwyBC8oTh/dxwkXRmR+QNxCeVlkKCqd/RYYR?=
+ =?us-ascii?Q?yw1rc5imFRbmFzSBWkA55PUiCBkyMgBERLtGoPDfUfynxQfTLqFlEKFSf2tz?=
+ =?us-ascii?Q?jgWyIS9vjbV8wnFVTEddV2igyoTkMEHxXnlwSea94zpf7GspVP6F22zaReB9?=
+ =?us-ascii?Q?78kZthC2ePnyDeP0fH/7GNSUi5vMhdCNpES7YadXRBZE8BRzn/INloX0tX7G?=
+ =?us-ascii?Q?BGeelVzw4UcIGGkfUZ3hZdbcryV6OivT913fZrQ27p12/B4HWCR8tXUc0pF9?=
+ =?us-ascii?Q?QgXXQrKmhfWx2Wtfnaqf7B3C+CNilhc662oSixe+E0iSzAby9mFa+RCtiX/3?=
+ =?us-ascii?Q?HqYjy3mhgWMi99gntND8pkRZ3DUi8HYn2eYZCYs57yXLWGngvSX/E47CNocE?=
+ =?us-ascii?Q?xp9VIu3QFnVbfXozg79H9ts35sks9eAdUhByAfG54wfSjCW+6s3IyxcDR3lg?=
+ =?us-ascii?Q?zxQ5TU8KTH99+i+f+kqMY3p5dJkV6SpYeJIFqnS3yCX3JKkkpkUtpqcdKofG?=
+ =?us-ascii?Q?tN5zsMBp6f8ajoMN0yZSAsemcRK1TEj5rxa2Y2/OBHs8kE123jvX7EUPShVK?=
+ =?us-ascii?Q?YS6m94jIOo8EP8NyB+Et0GkbfNuY1Dk/10dIsHcD5tjuP6tUF3YvSdvj8xwg?=
+ =?us-ascii?Q?vHq6vt5XI6wJCLynHNwMiElL4KmtZ6VlZr0uV3H5vEpSfp1e1mZQhz3QDFnh?=
+ =?us-ascii?Q?WPYAVDKzhh4XY2vgn6cqiK1WeQzVnj3kLUdk+kUUjFRdCZVHQl2DI35vOoFh?=
+ =?us-ascii?Q?QpfDJN6U7TR4cldHbXWlW6AYvfvn9CtEh0XBWCwBevEhjPnkTd9FViClCXoX?=
+ =?us-ascii?Q?gLicpJJwSvvcTSWzWGoyzQeXLmvtamL9+UUDOM2Dk4YLlQv+/5n/sIFrarSg?=
+ =?us-ascii?Q?Qqdq/X59BZ7txOAsjVAYa8mZcHN7Pp7Wor4gcv7XtDJaWbPYJ4v1sI3VIvzy?=
+ =?us-ascii?Q?F4BFvFKuzIsS7A+O31izsvFyiQ8pNV0/4B3T1nSQQCCJhYpn5rWxIT3krUkV?=
+ =?us-ascii?Q?Bggk5mqtSP2dum8DKCiB/ZxqScPxbucO7dxqi2GvlrWOrkWiTcNdAi997G/W?=
+ =?us-ascii?Q?hRcehKNNHQrUivGk5AuXKuMOzVTTIu2kzt2yPDabBCyoGVfBjRbd9Qtpzft4?=
+ =?us-ascii?Q?fcFn49ApcRQa+A9UO2AnuflMao0XUcGqZ4eKFdsuMdZ9q24Jm07aK7pNMvKi?=
+ =?us-ascii?Q?mmHTM+aa4mubQicofDndIvhJAkrQox/KpJh3MegGdr/MDBVNCNZr2US3CzfY?=
+ =?us-ascii?Q?qqmOX8Jh0tdvS+hmfP9WQgrbZGkxXh3IZSCRSdxEpfDPOI9aOmiiUOz30gm6?=
+ =?us-ascii?Q?Lm9DS5E5wKkXB+aXIcghl92bvkoYXOls1CW0gx8tsDUrlGhLlEmKKBwU2+Me?=
+ =?us-ascii?Q?dST5vEpP4GY0GQdABoD3mdsKIqCazmO+QPTQBu9ohJlK0uJFHGrfbGFM6QDh?=
+ =?us-ascii?Q?IE2nHS7rZ6TRrt0Nmz/7PlLAbKUM6oYLcXMo?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH3PPFA59B5AE6C.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(38070700021)(4053099003)(8096899003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?/K73LyjAfl7veqX7laseOXaVhs1h0BlOTCgDudwqZAyHavoOjNzJJyPAN9cp?=
+ =?us-ascii?Q?Z67QVh3qVmEfXkGcAowpooFg4+qUFvUgqBf66ar7EB3UK8HqN4e6CeL5cSCH?=
+ =?us-ascii?Q?eZg+VypFFhbAvgA3LJEuNnGdLz+1Q5L/s49MK2XPf+ZZTmO76SutXaO7cjco?=
+ =?us-ascii?Q?uBjIRV9RkqwZ1CQf+6qK0hQEZW8dz1DxmiRP7Wa5hAyH7ut5ycjzApuJG7/J?=
+ =?us-ascii?Q?77eDJ4izF24d+W/xOty8sOGJfLeKsgs8qjSn6y93W7jqq8KBFnUeVFwR9Xux?=
+ =?us-ascii?Q?4X4h60F0FcLLUn3abKkTv9hoVRkucl+OCSXvj6aaCX8MfG0apz/qlx5ZnbcI?=
+ =?us-ascii?Q?Idql6gyGf6ELUqXyMlvpUK5GgRhFOx0kxzk7sZAa34t2fHCu8nip9fgQbb07?=
+ =?us-ascii?Q?T3PAVhN5kL/LLz8oMrjvxlqKnj9gxVtn61OjBpSqBKwPhfj7ltkXpo23CLCn?=
+ =?us-ascii?Q?a2sO8jPBahJOFlkf6CW99uKGZB0fC9nDHOmIbCXKybxI8Lt3uQAnPCqqvVx8?=
+ =?us-ascii?Q?LzUZ5DTqB4ji2NZp45HRmaw17T0/i8EjEwWt5CT1SOijcd2F2/RJB0oOqTG/?=
+ =?us-ascii?Q?XJCTMt/vjpDx+r85sHP8jkG330MNvJE962vV4PyfrYFV7Qsz0iH9Udx+R53i?=
+ =?us-ascii?Q?AuCA8+CCaNhaNuarIr9CDP9mEjpIE7AWbUa39WhDLVDvgLoQ+cYzToUz9G0e?=
+ =?us-ascii?Q?yv7mOvUfDZsWREv28unC8/pYBXlCHG05vpIM/0/wyEwOveVTtT3qkxB3+Ppx?=
+ =?us-ascii?Q?Sq4n7V65Emj/T0JV8owguo4Rm1fA6UBPvcavA4JEF8quG6HNnhv0aouacRyO?=
+ =?us-ascii?Q?K0S5+J/hf+2LM3scf0qblpbudPjaMC0Xi+WjWO56KeS2mSB8Fn7hbteqXWLt?=
+ =?us-ascii?Q?lxeD3MW8/IXDAjHcbm/zsYxhyWC+WmkR3tw7/efw6A1F0DU8UUfrwDcSxc63?=
+ =?us-ascii?Q?7e5V0cKppi3qbeQO2cADkbGzos/iznhUcdrFGMYoyTP6LtU6Oh8hve2AlLvy?=
+ =?us-ascii?Q?nd7EBCWOSQNSLTUTdlY0g+C+ExZX8Js+PfQNJ+VfcrHgVkXhNch0Xx+QeW0P?=
+ =?us-ascii?Q?jFIFtVbAbL2AFU6qG3etxPQle7HyFSdLv+DdBW+DlR2M1TgkaUyLXxMKOocw?=
+ =?us-ascii?Q?1NcU68UNvBcFkhUDLRnTY58mddCs8gmzm7DzUs3UkwjS2M43Vp7zOZBRf5ne?=
+ =?us-ascii?Q?euvBBM3bPaiNswMqQyWon2NgffoEGoAjI7NUzM62p64ELuKjl3Y15yEG9m+l?=
+ =?us-ascii?Q?kOBKp7Y4ArbgJX7/LfzQsg+lwC1wi1lW6bgKZoTwQwcyFafXqsg7+L5Lf6cG?=
+ =?us-ascii?Q?AuPl7NuNOf/m4TgmS/yfVnxZbKhRb0GFvl6CxLPLtvwnan5HxzBiPsViV7Tt?=
+ =?us-ascii?Q?PPwsgcUyqwYOwcG5NCq9KMKgHGHKHI5Ov0oKHyQa4T6AoDHQHXwxvwG37GqG?=
+ =?us-ascii?Q?9+cOUq+WJEYJvHyFpzXd/BICVflqRw8lJNDMcG+4YvRE8riLAsfn8IAjmHiK?=
+ =?us-ascii?Q?EVXhrXph+M5Qhr3dhow+6CtHlpaT7q+77uUlzeCxb2leEIaxy8kx/irciVeP?=
+ =?us-ascii?Q?ngs9eqJ/6uTM1n1hmM5so8FVa5PE1Qsbo97QDzpEtsh+lPV/JeqjmLTrRm1X?=
+ =?us-ascii?Q?Dg=3D=3D?=
+Content-Type: multipart/related;
+	boundary="_004_PH3PPFA59B5AE6CA0A6E93C46E31FFAC40799FBAPH3PPFA59B5AE6C_";
+	type="multipart/alternative"
+MIME-Version: 1.0
+X-OriginatorOrg: keystone.edu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH3PPFA59B5AE6C.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6dec8cc5-b403-458e-d40a-08de17eb4d27
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2025 19:34:11.2141
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: db90f1ed-2b2d-428c-b856-3477460d2065
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3ZsQad/lY2XmQEB385EPixaSo6fg2Eo0GhoiE7OtSwg7B5mB/kLbE3N5y/vYR05fPtF6vwTrFzZOmPLnaQWPSlqRcTRUqQBmh03x/1Vku9k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR18MB5487
+
+--_004_PH3PPFA59B5AE6CA0A6E93C46E31FFAC40799FBAPH3PPFA59B5AE6C_
+Content-Type: multipart/alternative;
+	boundary="_000_PH3PPFA59B5AE6CA0A6E93C46E31FFAC40799FBAPH3PPFA59B5AE6C_"
+
+--_000_PH3PPFA59B5AE6CA0A6E93C46E31FFAC40799FBAPH3PPFA59B5AE6C_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+KC Jazz Ensemble,
+
+First, remember that we only have FOUR remaining Jazz Ensemble rehearsals, =
+provided we have no snow days.  So, as musical colleagues, make sure that Y=
+OU are doing what you need to do in order to be ready for rehearsals, prepa=
+red, and productive.
+
+From last night's sectionals:
+
+  1.  Low brass:  you have the most work to do regarding entrances, vertica=
+l alignment, accuracy of pitch and rhythm.  The exception would be trombone=
+ 1.
+     *   NEW MEMBERS, especially:  be patient with yourself, take small ste=
+ps forward, and approach practice sessions with manageable expectations.  D=
+on't try to learn an entire tune in one session.  You can do this!
+
+  1.  Specific areas of note:
+     *   LOW BRASS:
+
+                                                               i.      Most=
+ Wonderful:  m. 46 intonation, m. 76-79, m. 96-99
+
+                                                             ii.      Waiti=
+n':  road map
+
+                                                           iii.      Silver=
+: m. 11, entrances or solis / featured sections / , road map
+
+                                                           iv.      Sugar P=
+lum:  m. 24-25 - intonation, m. 32-33 intonation, 121-129 RHYTHM
+
+     *   WOODWINDS:
+
+                                                               i.      Most=
+ Wonderful:  m. 52 - 56 SPEED, m. 98-99 technical aspects
+
+                                                             ii.      Silve=
+r Bells:  check triplets, such as m. 25,
+
+                                                           iii.      GENERA=
+L:   bari sax and alto II intonation - just check a few notes. ,  if new to=
+ these charts:  play through rhythmically demanding solis slowly so as to e=
+nsure understanding.
+
+     *   TRUMPETS:
+
+                                                               i.      I do=
+n't have a specific section, but what we need to ensure is that ALL FOUR PA=
+RTS are represented confidently and correctly.  In the trumpet section, we =
+need to start thinking of ways to lessen the divide between the two stronge=
+st players and the two weakest so as to gain cohesion in the section.  You'=
+ve got this !  Just keep taking small steps forward!
+
+
+11/5/25 Rehearsal Schedule - FULL - ALL IN ATTENDANCE
+7:00 - 8 :00
+
+  1.  Have Yourself a Merry
+     *   Angela, Simone, Erin, others?
+  2.  Man With A Bag
+     *   Angela, Hannah, Simone, others?
+  3.  All I Want for Christmas
+     *   Angela
+
+8:10 - 9 :00
+
+  1.  Most Wonderful Time
+     *   Vocalist ?? - someone is singing it!)
+  2.  Silver Bells:
+     *   Alexia, others?
+  3.  Sugar Plum:  ALL
+
+
+[cid:image001.jpg@01DC49B1.16B2D510]
+Mr. Jeffrey A. Tylutki
+Director of Bands & Performance Music
+Secretary- PCBA
+jeffrey.tylutki@keystone.edu<mailto:jeffrey.tylutki@keystone.edu>
+570-945-8599
+Office: 109 Brooks Hall
+One College Green
+PO Box 247
+LaPlume, PA 18440
+
+
+--_000_PH3PPFA59B5AE6CA0A6E93C46E31FFAC40799FBAPH3PPFA59B5AE6C_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<!--[if !mso]><style>v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style><![endif]--><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Garamond;
+	panose-1:2 2 4 4 3 3 1 1 8 3;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{mso-style-priority:34;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+/* List Definitions */
+@list l0
+	{mso-list-id:215557645;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1373591370 67698703 67698713 67698715 67698703 6769=
+8713 67698715 67698703 67698713 67698715;}
+@list l0:level1
+	{mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l0:level4
+	{mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l0:level7
+	{mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l1
+	{mso-list-id:1495755171;
+	mso-list-type:hybrid;
+	mso-list-template-ids:43566788 67698703 67698713 67698715 67698703 6769871=
+3 67698715 67698703 67698713 67698715;}
+@list l1:level1
+	{mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l1:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l1:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l1:level4
+	{mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l1:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l1:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l1:level7
+	{mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l1:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l1:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l2
+	{mso-list-id:2137675740;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-614818236 67698703 67698713 67698715 67698703 67698=
+713 67698715 67698703 67698713 67698715;}
+@list l2:level1
+	{mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l2:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l2:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l2:level4
+	{mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l2:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l2:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l2:level7
+	{mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l2:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l2:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72" style=3D"word-wrap:=
+break-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">KC Jazz Ensemble, <o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">First, remember that we only have FOUR remaining Jaz=
+z Ensemble rehearsals, provided we have no snow days.&nbsp; So, as musical =
+colleagues, make sure that YOU are doing what you need to do in order to be=
+ ready for rehearsals, prepared, and productive.&nbsp;
+<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">From last night&#8217;s sectionals: <o:p></o:p></p>
+<ol style=3D"margin-top:0in" start=3D"1" type=3D"1">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l0 level1 =
+lfo1">Low brass:&nbsp; you have the most work to do regarding entrances, ve=
+rtical alignment, accuracy of pitch and rhythm.&nbsp; The exception would b=
+e trombone 1.&nbsp;
+<o:p></o:p></li><ol style=3D"margin-top:0in" start=3D"1" type=3D"a">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l0 level2 =
+lfo1">NEW MEMBERS, especially:&nbsp; be patient with yourself, take small s=
+teps forward, and approach practice sessions with manageable expectations.&=
+nbsp; Don&#8217;t try to learn an entire tune in one
+ session.&nbsp; You can do this!<o:p></o:p></li></ol>
+</ol>
+<p class=3D"MsoListParagraph" style=3D"margin-left:1.0in"><o:p></o:p></p>
+<ol style=3D"margin-top:0in" start=3D"2" type=3D"1">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l0 level1 =
+lfo1">Specific areas of note:
+<o:p></o:p></li><ol style=3D"margin-top:0in" start=3D"1" type=3D"a">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l0 level2 =
+lfo1">LOW BRASS:
+<o:p></o:p></li></ol>
+</ol>
+<p class=3D"MsoListParagraph" style=3D"margin-left:1.5in;text-indent:-1.5in=
+;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1">
+<![if !supportLists]><span style=3D"mso-list:Ignore"><span style=3D"font:7.=
+0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>i.<span style=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp; </span></span><![endif]>Most Wonderful:&nbsp; m. 46 int=
+onation, m. 76-79, m. 96-99<o:p></o:p></p>
+<p class=3D"MsoListParagraph" style=3D"margin-left:1.5in;text-indent:-1.5in=
+;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1">
+<![if !supportLists]><span style=3D"mso-list:Ignore"><span style=3D"font:7.=
+0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;
+</span>ii.<span style=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp; </span></span><![endif]>Waitin&#8217;:&nbsp; road map<=
+o:p></o:p></p>
+<p class=3D"MsoListParagraph" style=3D"margin-left:1.5in;text-indent:-1.5in=
+;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1">
+<![if !supportLists]><span style=3D"mso-list:Ignore"><span style=3D"font:7.=
+0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;
+</span>iii.<span style=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>Silver: m. 11, entrances or s=
+olis / featured sections / , road map<o:p></o:p></p>
+<p class=3D"MsoListParagraph" style=3D"margin-left:1.5in;text-indent:-1.5in=
+;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1">
+<![if !supportLists]><span style=3D"mso-list:Ignore"><span style=3D"font:7.=
+0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;
+</span>iv.<span style=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp; </span></span><![endif]>Sugar Plum:&nbsp; m. 24-25 &#8=
+211; intonation, m. 32-33 intonation, 121-129 RHYTHM<o:p></o:p></p>
+<ol style=3D"margin-top:0in" start=3D"2" type=3D"1">
+<ol style=3D"margin-top:0in" start=3D"2" type=3D"a">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l0 level2 =
+lfo1">WOODWINDS:&nbsp;
+<o:p></o:p></li></ol>
+</ol>
+<p class=3D"MsoListParagraph" style=3D"margin-left:1.5in;text-indent:-1.5in=
+;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1">
+<![if !supportLists]><span style=3D"mso-list:Ignore"><span style=3D"font:7.=
+0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>i.<span style=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp; </span></span><![endif]>Most Wonderful:&nbsp; m. 52 &#8=
+211; 56 SPEED, m. 98-99 technical aspects<o:p></o:p></p>
+<p class=3D"MsoListParagraph" style=3D"margin-left:1.5in;text-indent:-1.5in=
+;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1">
+<![if !supportLists]><span style=3D"mso-list:Ignore"><span style=3D"font:7.=
+0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;
+</span>ii.<span style=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp; </span></span><![endif]>Silver Bells:&nbsp; check trip=
+lets, such as m. 25,&nbsp;
+<o:p></o:p></p>
+<p class=3D"MsoListParagraph" style=3D"margin-left:1.5in;text-indent:-1.5in=
+;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1">
+<![if !supportLists]><span style=3D"mso-list:Ignore"><span style=3D"font:7.=
+0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;
+</span>iii.<span style=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>GENERAL:&nbsp;&nbsp; bari sax=
+ and alto II intonation &#8211; just check a few notes. ,&nbsp; if new to t=
+hese charts:&nbsp; play through rhythmically demanding solis slowly so as t=
+o ensure understanding.&nbsp;
+<o:p></o:p></p>
+<ol style=3D"margin-top:0in" start=3D"2" type=3D"1">
+<ol style=3D"margin-top:0in" start=3D"3" type=3D"a">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l0 level2 =
+lfo1">TRUMPETS:&nbsp;
+<o:p></o:p></li></ol>
+</ol>
+<p class=3D"MsoListParagraph" style=3D"margin-left:1.5in;text-indent:-1.5in=
+;mso-text-indent-alt:-9.0pt;mso-list:l0 level3 lfo1">
+<![if !supportLists]><span style=3D"mso-list:Ignore"><span style=3D"font:7.=
+0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>i.<span style=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp; </span></span><![endif]>I don&#8217;t have a specific s=
+ection, but what we need to ensure is that ALL FOUR PARTS are represented c=
+onfidently and correctly.&nbsp; In the trumpet section, we need to start th=
+inking
+ of ways to lessen the divide between the two strongest players and the two=
+ weakest so as to gain cohesion in the section.&nbsp; You&#8217;ve got this=
+ !&nbsp; Just keep taking small steps forward!
+<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><b><u>11/5/25 Rehearsal Schedule &#8211; FULL &#8211=
+; ALL IN ATTENDANCE</u></b><o:p></o:p></p>
+<p class=3D"MsoNormal">7:00 &#8211; 8 :00<o:p></o:p></p>
+<ol style=3D"margin-top:0in" start=3D"1" type=3D"1">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l1 level1 =
+lfo2">Have Yourself a Merry<o:p></o:p></li><ol style=3D"margin-top:0in" sta=
+rt=3D"1" type=3D"a">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l1 level2 =
+lfo2">Angela, Simone, Erin, others?
+<o:p></o:p></li></ol>
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l1 level1 =
+lfo2">Man With A Bag<o:p></o:p></li><ol style=3D"margin-top:0in" start=3D"1=
+" type=3D"a">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l1 level2 =
+lfo2">Angela, Hannah, Simone, others?
+<o:p></o:p></li></ol>
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l1 level1 =
+lfo2">All I Want for Christmas<o:p></o:p></li><ol style=3D"margin-top:0in" =
+start=3D"1" type=3D"a">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l1 level2 =
+lfo2">Angela<o:p></o:p></li></ol>
+</ol>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">8:10 &#8211; 9 :00<o:p></o:p></p>
+<ol style=3D"margin-top:0in" start=3D"1" type=3D"1">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l2 level1 =
+lfo3">Most Wonderful Time<o:p></o:p></li><ol style=3D"margin-top:0in" start=
+=3D"1" type=3D"a">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l2 level2 =
+lfo3">Vocalist ??&nbsp;&#8211; someone is singing it!)<o:p></o:p></li></ol>
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l2 level1 =
+lfo3">Silver Bells:<o:p></o:p></li><ol style=3D"margin-top:0in" start=3D"1"=
+ type=3D"a">
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l2 level2 =
+lfo3">Alexia, others?
+<o:p></o:p></li></ol>
+<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l2 level1 =
+lfo3">Sugar Plum:&nbsp; ALL
+<o:p></o:p></li></ol>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><span style=3D"color:#1F497D"><img width=3D"274" hei=
+ght=3D"62" style=3D"width:2.8541in;height:.6458in" id=3D"Picture_x0020_1" s=
+rc=3D"cid:image001.jpg@01DC49B1.16B2D510"></span><span style=3D"font-size:1=
+2.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#1F497D"><o:p></o=
+:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ga=
+ramond&quot;,serif;color:#1F497D">Mr. Jeffrey A. Tylutki<o:p></o:p></span><=
+/p>
+<p class=3D"MsoNormal"><b><span style=3D"font-size:12.0pt;font-family:&quot=
+;Garamond&quot;,serif;color:#1F497D">Director of Bands &amp; Performance Mu=
+sic
+<o:p></o:p></span></b></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ga=
+ramond&quot;,serif;color:#1F497D">Secretary&#8211; PCBA<o:p></o:p></span></=
+p>
+<p class=3D"MsoNormal"><i><span style=3D"font-size:12.0pt;font-family:&quot=
+;Garamond&quot;,serif;color:#1F497D"><a href=3D"mailto:jeffrey.tylutki@keys=
+tone.edu"><span style=3D"color:blue">jeffrey.tylutki@keystone.edu</span></a=
+></span></i><span style=3D"font-size:12.0pt;font-family:&quot;Garamond&quot=
+;,serif;color:#1F497D"><o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ga=
+ramond&quot;,serif;color:#1F497D">570-945-8599<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ga=
+ramond&quot;,serif;color:#1F497D">Office: 109 Brooks Hall<o:p></o:p></span>=
+</p>
+<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ga=
+ramond&quot;,serif;color:#1F497D">One College Green<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ga=
+ramond&quot;,serif;color:#1F497D">PO Box 247<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ga=
+ramond&quot;,serif;color:#1F497D">LaPlume, PA 18440<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</body>
+</html>
+
+--_000_PH3PPFA59B5AE6CA0A6E93C46E31FFAC40799FBAPH3PPFA59B5AE6C_--
+
+--_004_PH3PPFA59B5AE6CA0A6E93C46E31FFAC40799FBAPH3PPFA59B5AE6C_
+Content-Type: image/jpeg; name="image001.jpg"
+Content-Description: image001.jpg
+Content-Disposition: inline; filename="image001.jpg"; size=6351;
+	creation-date="Thu, 30 Oct 2025 19:34:10 GMT";
+	modification-date="Thu, 30 Oct 2025 19:34:10 GMT"
+Content-ID: <image001.jpg@01DC49B1.16B2D510>
+Content-Transfer-Encoding: base64
+
+/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAoHBwkHBgoJCAkLCwoMDxkQDw4ODx4WFxIZJCAmJSMg
+IyIoLTkwKCo2KyIjMkQyNjs9QEBAJjBGS0U+Sjk/QD3/2wBDAQsLCw8NDx0QEB09KSMpPT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT3/wAARCAA+ARIDASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD0Pxf4
+jvvC9g+oJYQXVkm1X/0gpICTjptII5Heqfg7xlfeMBJPDpkFtaQyeXKz3JZ87c/KoTB6jqRTPiv/
+AMiBef8AXSL/ANDFedeEfG6eEfCGoR28Ym1G4ucwowO1BsA3MfwOB3xXVCkp0rpa3Ibsz0rWvFmq
+aXr8GlWmkW+oT3OWiSG7IdEH8UgKYUe+e1dHp73slvu1GCCCYnhIZTIAPclRz+FYnga2sG0OPVLS
+d7u5vwJLm7l/1kj9Cp9ApyAo4GKk8WeM9P8ACdvH9pDz3c3ENrF99/f2Ge/86xau+WK1K8zoaK5o
+3/ipdNa9bTdNDhPM+xee5kx1278Y3fhj3rlJ/jOqW0d1Do5kgclSPtGHjcDO1ht79QQefqDRGlKX
+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
+qk+wyeKlopSk5bglYKKKKkYUUUUAf//Z
+
+--_004_PH3PPFA59B5AE6CA0A6E93C46E31FFAC40799FBAPH3PPFA59B5AE6C_--
