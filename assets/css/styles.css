@@ -31,7 +31,7 @@ img {
 }
 
 .page {
-  max-width: 1160px;
+  max-width: 110ch;
   margin: 0 auto;
   padding: 32px 20px 64px;
 }
