@@ -1,0 +1,6 @@
+<svg width="360" height="110" viewBox="0 0 360 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Keystone College">
+  <rect width="360" height="110" fill="none" />
+  <text x="0" y="58" font-family="Georgia, 'Times New Roman', serif" font-size="54" font-weight="700" fill="#243660">Keystone</text>
+  <text x="4" y="94" font-family="Georgia, 'Times New Roman', serif" font-size="30" font-weight="600" fill="#243660">College</text>
+  <rect x="6" y="99" width="190" height="4" fill="#f79239" />
+</svg>

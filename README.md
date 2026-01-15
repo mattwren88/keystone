@@ -13,4 +13,5 @@ A lightweight, static page that lets you paste band director emails or upload a 
 
 Notes:
 - PDF extraction uses PDF.js from a CDN; you'll need internet access the first time it loads.
+- Date/time extraction is improved with chrono-node (loaded from a CDN); it will fall back to regexes if offline.
 - Nothing is sent to any server; the page runs entirely on the client.
