@@ -160,7 +160,7 @@ img {
 
 .detail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: 1fr 2fr;
   gap: 16px;
 }
 
@@ -170,6 +170,10 @@ img {
   border-radius: 14px;
   padding: 14px 16px;
   background: #ffffff;
+}
+
+.detail-card-wide {
+  grid-column: 1 / -1;
 }
 
 .detail-card h3 {
@@ -230,6 +234,14 @@ img {
   align-self: start;
 }
 
+.dates-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
 .dates-card h2 {
   margin: 0 0 6px;
   font-family: "Fraunces", "Times New Roman", serif;
@@ -237,7 +249,7 @@ img {
 }
 
 .dates-card p {
-  margin: 0 0 16px;
+  margin: 0;
   color: var(--ink-muted);
   font-size: 14px;
 }
@@ -254,7 +266,7 @@ img {
   font-size: 13px;
   text-decoration: none;
   border: 1px solid rgba(247, 146, 57, 0.5);
-  margin-bottom: 16px;
+  margin: 0;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   box-shadow: 0 8px 18px rgba(247, 146, 57, 0.2);
 }
@@ -332,6 +344,15 @@ img {
 @media (max-width: 640px) {
   .site-header {
     grid-template-columns: 1fr;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dates-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .meta-row {
