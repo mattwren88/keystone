@@ -1,0 +1,6 @@
+.DS_Store
+.venv/
+emails/
+.env
+scripts/gmail_oauth_client.json
+scripts/client_secret_*.json
