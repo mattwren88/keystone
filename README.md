@@ -1,17 +1,73 @@
-# Band Briefing (single-page app)
+# Keystone College Band Briefing
 
-A lightweight, static page that lets you paste band director emails or upload a PDF and instantly surfaces dates, rehearsals, and action items. All parsing happens locally in the browser.
+A focused, static one-page summary for Symphonic Band, Jazz Band, and upcoming concert dates. The content is curated from director emails and rendered as clean, readable detail cards.
 
 ## Quick start
 
-1. Open `index.html` directly in your browser, or serve the folder with something like:
-   ```bash
-   python3 -m http.server 3000
-   ```
-   then visit `http://localhost:3000`.
-2. Paste an email into the text area or drop a PDF. Hit **Parse now** to see dates, rehearsal times, tasks, and links.
+Open `index.html` directly in your browser, or serve the folder:
 
-Notes:
-- PDF extraction uses PDF.js from a CDN; you'll need internet access the first time it loads.
-- Date/time extraction is improved with chrono-node (loaded from a CDN); it will fall back to regexes if offline.
-- Nothing is sent to any server; the page runs entirely on the client.
+```bash
+python3 -m http.server 3000
+```
+
+Then visit `http://localhost:3000`.
+
+## Project layout
+
+- `index.html`: main page content
+- `assets/css/styles.css`: site styles
+- `assets/keystone-concerts.ics`: calendar download
+- `assets/Handbook KC Performance Music Spring 2026.pdf`: handbook link
+- `emails/`: local email cache (ignored by git)
+
+## Updating content
+
+Plain terms:
+- New director emails (labeled `Keystone College`) are pulled once a day.
+- The latest emails are summarized into the Symphonic/Jazz cards.
+- The page updates itself automatically; if automation fails, you can run one command locally.
+
+Manual updates:
+- Edit `index.html` directly.
+
+Automated updates (local):
+- `scripts/fetch_gmail_emails.py` downloads labeled Gmail messages as `.eml` files into `emails/`.
+- `scripts/update_site.py` parses recent `.eml` files and updates the summary sections in `index.html`.
+
+Token helper:
+- `scripts/get_gmail_refresh_token.py` generates the Gmail OAuth refresh token needed by GitHub Actions.
+
+## GitHub Actions automation
+
+A daily workflow runs at 12:00 UTC (7:00 AM EST / 8:00 AM EDT) to pull labeled emails and refresh the page:
+- Label: `Keystone College`
+- Workflow: `.github/workflows/update-from-emails.yml`
+
+Required repository secrets:
+- `GMAIL_CLIENT_ID`
+- `GMAIL_CLIENT_SECRET`
+- `GMAIL_REFRESH_TOKEN`
+
+The workflow commits only `index.html` (email files remain local and ignored).
+
+## Manual fallback (local)
+
+If the Action doesn’t run, you can update locally:
+
+```bash
+python3 scripts/fetch_gmail_emails.py
+python3 scripts/update_site.py
+```
+
+If you need to set credentials for a local run, export:
+
+```bash
+export GMAIL_CLIENT_ID=...
+export GMAIL_CLIENT_SECRET=...
+export GMAIL_REFRESH_TOKEN=...
+```
+
+## Notes
+
+- The `emails/` folder and OAuth client JSON are gitignored.
+- Update the concert list in `assets/keystone-concerts.ics` if dates change.
