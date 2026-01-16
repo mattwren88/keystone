@@ -6,7 +6,7 @@
   --card: #ffffff;
   --line: rgba(36, 54, 96, 0.14);
   --shadow: 0 18px 45px rgba(36, 54, 96, 0.08);
-  --radius: 18px;
+  --radius: 10px;
 }
 
 * {
@@ -29,7 +29,12 @@ img {
   max-width: 100%;
   display: block;
 }
-
+svg{
+  --dimension: 1.2em; 
+  width: var(--dimension);
+  height: var(--dimension);
+  vertical-align: middle;
+}
 .page {
   max-width: 110ch;
   margin: 0 auto;
@@ -93,6 +98,9 @@ img {
   color: var(--primary);
   text-decoration: none;
   transition: background 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
 }
 
 .meta-chip:hover {
@@ -167,7 +175,7 @@ img {
 .detail-card {
   border: 1px solid rgba(36, 54, 96, 0.12);
   border-left: 4px solid var(--secondary);
-  border-radius: 14px;
+  border-radius: var(--radius);
   padding: 14px 16px;
   background: #ffffff;
 }
@@ -299,7 +307,7 @@ img {
 
 .date-pill {
   padding: 8px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--secondary);
   color: #2b1b06;
   font-weight: 700;
