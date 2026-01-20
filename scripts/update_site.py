@@ -82,7 +82,7 @@ def normalize_lines(text: str) -> list[str]:
 def clean_item(line: str) -> str:
     line = re.sub(r"^[-*]\s*", "", line)
     line = re.sub(r"^\d+\.\s*", "", line)
-    line = re.sub(r"^[a-zA-Z]\.?\s*", "", line)
+    line = re.sub(r"^[a-zA-Z][\.\)]\s*", "", line)
     return line.strip()
 
 
@@ -254,9 +254,57 @@ def is_valid_item(item: str) -> bool:
     lower = item.lower()
     if "http" in lower or "mailto" in lower or "@" in lower:
         return False
-    if len(item) > 180:
+    if len(item) > 140:
         return False
     return True
+
+
+PIECE_EXCLUDE_PATTERNS = [
+    r"\bplease\b",
+    r"\bwork\b",
+    r"\blisten\b",
+    r"\breview\b",
+    r"\bsign\b",
+    r"\barrive\b",
+    r"\bdownload\b",
+    r"\bsheet\b",
+    r"\blink\b",
+    r"\bemail\b",
+    r"\bchart\b",
+    r"\bnew members\b",
+]
+
+
+def normalize_piece_item(item: str) -> str:
+    for separator in (" - ", " – ", " — ", ": "):
+        if separator in item:
+            left, right = item.split(separator, 1)
+            if re.search(r"(make sure|review|please|listen|work|note)", right, re.I):
+                return left.strip()
+    return item.strip()
+
+
+def is_piece_title(item: str) -> bool:
+    cleaned = normalize_piece_item(item)
+    lower = cleaned.lower()
+    if not cleaned:
+        return False
+    if len(cleaned) > 70:
+        return False
+    if any(re.search(pattern, lower) for pattern in PIECE_EXCLUDE_PATTERNS):
+        return False
+    if re.search(r"\b\d{1,2}:\d{2}\b", cleaned):
+        return False
+    return True
+
+
+def filter_piece_items(items: list[str]) -> list[str]:
+    filtered = []
+    for item in items:
+        cleaned = normalize_piece_item(item)
+        if is_piece_title(cleaned) and cleaned not in filtered:
+            filtered.append(cleaned)
+    return filtered
 
 
 def extract_action_items(lines: list[str], keywords: list[str], limit: int = 4) -> list[str]:
@@ -311,16 +359,18 @@ def email_target_date(email: ParsedEmail) -> datetime | None:
 def sort_by_relevance(emails: list[ParsedEmail]) -> list[ParsedEmail]:
     today = datetime.now().date()
 
-    def score(email: ParsedEmail) -> tuple[int, int, datetime]:
+    def score(email: ParsedEmail) -> tuple[int, int, int, datetime]:
         target = email_target_date(email)
+        subject = email.subject.lower()
+        schedule_hint = 0 if "rehearsal schedule" in subject or "schedule for" in subject else 1
         if not target:
-            return (3, 9999, email.date or datetime.min)
+            return (schedule_hint, 3, 9999, email.date or datetime.min)
         delta = (target.date() - today).days
         if 0 <= delta <= 14:
-            return (0, delta, target)
+            return (schedule_hint, 0, delta, target)
         if -7 <= delta < 0:
-            return (1, abs(delta), target)
-        return (2, abs(delta), target)
+            return (schedule_hint, 1, abs(delta), target)
+        return (schedule_hint, 2, abs(delta), target)
 
     return sorted(emails, key=score)
 
@@ -336,8 +386,7 @@ def main() -> None:
     if not emails:
         raise SystemExit("No emails found to process")
 
-    latest_email = max((e for e in emails if e.date), key=lambda e: e.date, default=None)
-    updated_stamp = format_date(latest_email.date) if latest_email and latest_email.date else format_date(datetime.now())
+    updated_stamp = format_date(datetime.now())
 
     symphonic_emails = [e for e in emails if "symphonic" in e.subject.lower()]
     jazz_emails = [e for e in emails if "jazz" in e.subject.lower()]
@@ -353,6 +402,7 @@ def main() -> None:
         )
         if not symphonic_pieces:
             symphonic_pieces = extract_first_numbered_list(email_item.lines)
+        symphonic_pieces = filter_piece_items(symphonic_pieces)
         if symphonic_pieces:
             symphonic_primary = email_item
             break
@@ -378,6 +428,7 @@ def main() -> None:
             jazz_pieces = extract_numbered_list(email_item.lines, r"REHEARSAL SCHEDULE")
         if not jazz_pieces:
             jazz_pieces = extract_first_numbered_list(email_item.lines)
+        jazz_pieces = filter_piece_items(jazz_pieces)
         if jazz_pieces:
             jazz_primary = email_item
             break
