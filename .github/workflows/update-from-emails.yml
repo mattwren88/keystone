@@ -34,6 +34,9 @@ jobs:
           python scripts/fetch_gmail_emails.py
 
       - name: Update site content
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5-nano
         run: |
           python scripts/update_site.py
 

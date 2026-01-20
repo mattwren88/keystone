@@ -34,6 +34,11 @@ Automated updates (local):
 - `scripts/fetch_gmail_emails.py` downloads labeled Gmail messages as `.eml` files into `emails/`.
 - `scripts/update_site.py` parses recent `.eml` files and updates the summary sections in `index.html`.
 
+AI-assisted updates (optional):
+- If `OPENAI_API_KEY` is set, `scripts/update_site.py` sends recent `.eml` content to OpenAI and
+  uses the response to update the pieces, other details, and additional notes lists.
+- Optional knobs: `OPENAI_MODEL` (default `gpt-5-nano`), `OPENAI_EMAIL_LIMIT` (default `2`).
+
 Token helper:
 - `scripts/get_gmail_refresh_token.py` generates the Gmail OAuth refresh token needed by GitHub Actions.
 
@@ -47,6 +52,7 @@ Required repository secrets:
 - `GMAIL_CLIENT_ID`
 - `GMAIL_CLIENT_SECRET`
 - `GMAIL_REFRESH_TOKEN`
+- `OPENAI_API_KEY` (optional, enables AI summaries)
 
 The workflow commits only `index.html` (email files remain local and ignored).
 

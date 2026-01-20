@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import html
+import json
 import os
 import re
+import urllib.error
+import urllib.request
 from dataclasses import dataclass
 from datetime import datetime
 from email import policy
@@ -28,6 +31,10 @@ MONTHS = [
     "Nov",
     "Dec",
 ]
+
+OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
+DEFAULT_OPENAI_MODEL = "gpt-5-nano"
+DEFAULT_OPENAI_TIMEOUT = 30
 
 
 def format_date(dt: datetime) -> str:
@@ -191,6 +198,108 @@ def load_emails(folder: Path) -> list[ParsedEmail]:
         lines = cleanup_lines(normalize_lines(body))
         emails.append(ParsedEmail(subject=subject, date=date, body=body, lines=lines))
     return emails
+
+
+def clip_text(text: str, limit: int) -> str:
+    if len(text) <= limit:
+        return text
+    clipped = text[:limit].rsplit(" ", 1)[0]
+    return f"{clipped}..."
+
+
+def format_email_for_ai(email: ParsedEmail, limit: int = 3000) -> str:
+    date = email.date.isoformat() if email.date else "unknown"
+    content = "\n".join(email.lines)
+    payload = f"Subject: {email.subject}\nDate: {date}\nContent:\n{content}"
+    return clip_text(payload, limit)
+
+
+def build_ai_context(symphonic_emails: list[ParsedEmail], jazz_emails: list[ParsedEmail]) -> str:
+    def pack(label: str, emails: list[ParsedEmail]) -> str:
+        if not emails:
+            return f"{label} emails: none."
+        chunks = [format_email_for_ai(email) for email in emails]
+        return f"{label} emails:\n" + "\n\n".join(chunks)
+
+    return f"{pack('Symphonic', symphonic_emails)}\n\n{pack('Jazz', jazz_emails)}"
+
+
+def call_openai(prompt: str) -> dict | None:
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        return None
+
+    model = os.environ.get("OPENAI_MODEL", DEFAULT_OPENAI_MODEL)
+    timeout = int(os.environ.get("OPENAI_TIMEOUT", str(DEFAULT_OPENAI_TIMEOUT)))
+    payload = {
+        "model": model,
+        "temperature": 0.2,
+        "response_format": {"type": "json_object"},
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "You summarize band rehearsal emails into short lists. "
+                    "Return ONLY valid JSON."
+                ),
+            },
+            {
+                "role": "user",
+                "content": (
+                    "From the emails, extract rehearsal info as JSON with this shape:\n"
+                    "{\n"
+                    '  "symphonic": {"pieces": [], "details": [], "notes": []},\n'
+                    '  "jazz": {"pieces": [], "details": [], "notes": []}\n'
+                    "}\n"
+                    "Rules:\n"
+                    "- Only use facts from the emails.\n"
+                    "- Lists should be 1-4 short bullets, no numbering.\n"
+                    "- Omit links, emails, and URLs.\n"
+                    "- If info is missing, return an empty list.\n"
+                    f"\nEmails:\n{prompt}"
+                ),
+            },
+        ],
+    }
+
+    request = urllib.request.Request(
+        OPENAI_API_URL,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.HTTPError, urllib.error.URLError, json.JSONDecodeError):
+        return None
+
+    try:
+        content = data["choices"][0]["message"]["content"]
+        return json.loads(content)
+    except (KeyError, IndexError, TypeError, json.JSONDecodeError):
+        return None
+
+
+def normalize_ai_list(items: object, max_items: int = 4) -> list[str]:
+    if not isinstance(items, list):
+        return []
+    cleaned_items = []
+    for item in items:
+        if not isinstance(item, str):
+            continue
+        cleaned = clean_item(item)
+        if not cleaned or not is_valid_item(cleaned):
+            continue
+        if cleaned not in cleaned_items:
+            cleaned_items.append(cleaned)
+        if len(cleaned_items) >= max_items:
+            break
+    return cleaned_items
 
 
 def extract_numbered_list(lines: list[str], header_regex: str) -> list[str]:
@@ -418,6 +527,8 @@ def main() -> None:
             ["handbook", "arrive", "listen", "sign", "lesson", "practice", "new", "recruit"],
         )
 
+    symphonic_notes: list[str] = []
+
     jazz_primary = None
     jazz_pieces: list[str] = []
     for email_item in jazz_sorted:
@@ -449,6 +560,40 @@ def main() -> None:
                 )
             )
 
+    jazz_notes: list[str] = []
+
+    ai_email_limit = int(os.environ.get("OPENAI_EMAIL_LIMIT", "2"))
+    ai_context = build_ai_context(
+        symphonic_sorted[:ai_email_limit],
+        jazz_sorted[:ai_email_limit],
+    )
+    ai_summary = call_openai(ai_context)
+    if isinstance(ai_summary, dict):
+        symphonic_ai = ai_summary.get("symphonic", {}) if isinstance(ai_summary.get("symphonic"), dict) else {}
+        jazz_ai = ai_summary.get("jazz", {}) if isinstance(ai_summary.get("jazz"), dict) else {}
+
+        symphonic_pieces_ai = normalize_ai_list(symphonic_ai.get("pieces", []))
+        symphonic_details_ai = normalize_ai_list(symphonic_ai.get("details", []))
+        symphonic_notes_ai = normalize_ai_list(symphonic_ai.get("notes", []))
+
+        jazz_pieces_ai = normalize_ai_list(jazz_ai.get("pieces", []))
+        jazz_details_ai = normalize_ai_list(jazz_ai.get("details", []))
+        jazz_notes_ai = normalize_ai_list(jazz_ai.get("notes", []))
+
+        if symphonic_pieces_ai:
+            symphonic_pieces = symphonic_pieces_ai
+        if symphonic_details_ai:
+            symphonic_details = symphonic_details_ai
+        if symphonic_notes_ai:
+            symphonic_notes = symphonic_notes_ai
+
+        if jazz_pieces_ai:
+            jazz_pieces = jazz_pieces_ai
+        if jazz_details_ai:
+            jazz_details = jazz_details_ai
+        if jazz_notes_ai:
+            jazz_notes = jazz_notes_ai
+
     html_text = index_path.read_text(encoding="utf-8")
     html_text = update_simple_tag(html_text, "data-updated", f"Updated: {updated_stamp}")
 
@@ -467,8 +612,10 @@ def main() -> None:
 
     html_text = replace_list(html_text, "symphonic-pieces", symphonic_pieces)
     html_text = replace_list(html_text, "symphonic-details", symphonic_details)
+    html_text = replace_list(html_text, "symphonic-notes", symphonic_notes)
     html_text = replace_list(html_text, "jazz-pieces", jazz_pieces)
     html_text = replace_list(html_text, "jazz-details", jazz_details)
+    html_text = replace_list(html_text, "jazz-notes", jazz_notes)
 
     index_path.write_text(html_text, encoding="utf-8")
 
