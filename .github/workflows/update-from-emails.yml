@@ -12,7 +12,6 @@ jobs:
       contents: write
     env:
       GMAIL_LABEL: Keystone College
-      EMAIL_DIR: emails
     steps:
       - uses: actions/checkout@v4
 
@@ -25,16 +24,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install google-api-python-client google-auth google-auth-oauthlib
 
-      - name: Fetch labeled emails
+      - name: Update site content
         env:
           GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID }}
           GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_CLIENT_SECRET }}
           GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
-        run: |
-          python scripts/fetch_gmail_emails.py
-
-      - name: Update site content
-        env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5-nano
         run: |

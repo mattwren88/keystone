@@ -18,12 +18,12 @@ Then visit `http://localhost:3000`.
 - `assets/css/styles.css`: site styles
 - `assets/keystone-concerts.ics`: calendar download
 - `assets/Handbook KC Performance Music Spring 2026.pdf`: handbook link
-- `emails/`: local email cache (ignored by git)
+- `emails/`: optional local email cache (ignored by git)
 
 ## Updating content
 
 Plain terms:
-- New director emails (labeled `Keystone College`) are pulled once a day.
+- New director emails (labeled `Keystone College`) are pulled via the Gmail API once a day.
 - The latest emails are summarized into the Symphonic/Jazz cards.
 - The page updates itself automatically; if automation fails, you can run one command locally.
 
@@ -31,11 +31,12 @@ Manual updates:
 - Edit `index.html` directly.
 
 Automated updates (local):
-- `scripts/fetch_gmail_emails.py` downloads labeled Gmail messages as `.eml` files into `emails/`.
-- `scripts/update_site.py` parses recent `.eml` files and updates the summary sections in `index.html`.
+- `scripts/update_site.py` pulls labeled Gmail messages (if Gmail env vars are set) and updates `index.html`.
+- `scripts/fetch_gmail_emails.py` is optional; it caches `.eml` files in `emails/` for offline parsing.
+- Optional Gmail knobs: `GMAIL_LABEL` (default `Keystone College`), `GMAIL_LABEL_ID` (overrides name), `MAX_RESULTS`.
 
 AI-assisted updates (optional):
-- If `OPENAI_API_KEY` is set, `scripts/update_site.py` sends recent `.eml` content to OpenAI and
+- If `OPENAI_API_KEY` is set, `scripts/update_site.py` sends recent email content to OpenAI and
   uses the response to update the pieces, other details, and additional notes lists.
 - Optional knobs: `OPENAI_MODEL` (default `gpt-5-nano`), `OPENAI_EMAIL_LIMIT` (default `2`).
 
@@ -61,7 +62,6 @@ The workflow commits only `index.html` (email files remain local and ignored).
 If the Action doesn’t run, you can update locally:
 
 ```bash
-python3 scripts/fetch_gmail_emails.py
 python3 scripts/update_site.py
 ```
 
@@ -71,6 +71,12 @@ If you need to set credentials for a local run, export:
 export GMAIL_CLIENT_ID=...
 export GMAIL_CLIENT_SECRET=...
 export GMAIL_REFRESH_TOKEN=...
+```
+
+If you prefer an `.eml` cache for offline runs:
+
+```bash
+python3 scripts/fetch_gmail_emails.py
 ```
 
 ## Notes

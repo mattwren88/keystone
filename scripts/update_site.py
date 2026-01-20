@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import base64
 import html
 import json
 import os
@@ -35,6 +36,9 @@ MONTHS = [
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 DEFAULT_OPENAI_MODEL = "gpt-5-nano"
 DEFAULT_OPENAI_TIMEOUT = 30
+GMAIL_SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
+GMAIL_TOKEN_URI = "https://oauth2.googleapis.com/token"
+DEFAULT_MAX_RESULTS = 50
 
 
 def format_date(dt: datetime) -> str:
@@ -189,6 +193,85 @@ def load_emails(folder: Path) -> list[ParsedEmail]:
     emails: list[ParsedEmail] = []
     for path in sorted(folder.glob("*.eml")):
         raw = path.read_bytes()
+        message = BytesParser(policy=policy.default).parsebytes(raw)
+        subject = decode_subject(message.get("subject", ""))
+        date = parsedate_to_datetime(message.get("date")) if message.get("date") else None
+        if date and date.tzinfo:
+            date = date.replace(tzinfo=None)
+        body = extract_body(message)
+        lines = cleanup_lines(normalize_lines(body))
+        emails.append(ParsedEmail(subject=subject, date=date, body=body, lines=lines))
+    return emails
+
+
+def gmail_credentials_available() -> bool:
+    return all(
+        os.environ.get(key)
+        for key in ("GMAIL_CLIENT_ID", "GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN")
+    )
+
+
+def build_gmail_service():
+    try:
+        from google.oauth2.credentials import Credentials
+        from googleapiclient.discovery import build
+    except ImportError as exc:
+        raise RuntimeError(
+            "Missing Google API dependencies. Install google-api-python-client."
+        ) from exc
+
+    client_id = os.environ.get("GMAIL_CLIENT_ID")
+    client_secret = os.environ.get("GMAIL_CLIENT_SECRET")
+    refresh_token = os.environ.get("GMAIL_REFRESH_TOKEN")
+    if not client_id or not client_secret or not refresh_token:
+        raise RuntimeError("Missing Gmail OAuth environment variables.")
+
+    creds = Credentials(
+        None,
+        refresh_token=refresh_token,
+        token_uri=GMAIL_TOKEN_URI,
+        client_id=client_id,
+        client_secret=client_secret,
+        scopes=GMAIL_SCOPES,
+    )
+    return build("gmail", "v1", credentials=creds, cache_discovery=False)
+
+
+def get_label_id(service, label_name: str) -> str | None:
+    labels = service.users().labels().list(userId="me").execute().get("labels", [])
+    for label in labels:
+        if label.get("name", "").lower() == label_name.lower():
+            return label.get("id")
+    return None
+
+
+def load_emails_from_gmail(label_name: str, max_results: int) -> list[ParsedEmail]:
+    service = build_gmail_service()
+    label_id = os.environ.get("GMAIL_LABEL_ID") or get_label_id(service, label_name)
+    if not label_id:
+        raise RuntimeError(f"Label not found: {label_name}")
+
+    messages: list[dict] = []
+    request = service.users().messages().list(
+        userId="me", labelIds=[label_id], maxResults=max_results
+    )
+    while request and len(messages) < max_results:
+        response = request.execute()
+        messages.extend(response.get("messages", []))
+        request = service.users().messages().list_next(request, response)
+
+    emails: list[ParsedEmail] = []
+    for msg in messages[:max_results]:
+        msg_id = msg.get("id")
+        if not msg_id:
+            continue
+        full = (
+            service.users()
+            .messages()
+            .get(userId="me", id=msg_id, format="raw")
+            .execute()
+        )
+        raw = base64.urlsafe_b64decode(full.get("raw", "").encode("utf-8"))
         message = BytesParser(policy=policy.default).parsebytes(raw)
         subject = decode_subject(message.get("subject", ""))
         date = parsedate_to_datetime(message.get("date")) if message.get("date") else None
@@ -488,10 +571,19 @@ def main() -> None:
     email_dir = Path(os.environ.get("EMAIL_DIR", "emails"))
     index_path = Path(os.environ.get("INDEX_PATH", "index.html"))
 
-    if not email_dir.exists() or not index_path.exists():
-        raise SystemExit("Missing emails directory or index.html")
+    if not index_path.exists():
+        raise SystemExit("Missing index.html")
 
-    emails = load_emails(email_dir)
+    label_name = os.environ.get("GMAIL_LABEL", "Keystone College")
+    max_results = int(os.environ.get("MAX_RESULTS", str(DEFAULT_MAX_RESULTS)))
+
+    if gmail_credentials_available():
+        emails = load_emails_from_gmail(label_name, max_results)
+    else:
+        if not email_dir.exists():
+            raise SystemExit("Missing Gmail credentials or emails directory")
+        emails = load_emails(email_dir)
+
     if not emails:
         raise SystemExit("No emails found to process")
 
