@@ -86,6 +86,50 @@ def clean_item(line: str) -> str:
     return line.strip()
 
 
+SIGNATURE_PATTERNS = [
+    r"mr\.\s+jeffrey",
+    r"director of bands",
+    r"keystone\.edu",
+    r"office:",
+    r"one college green",
+]
+
+NOISE_PATTERNS = [
+    r"^subject:",
+    r"^from:",
+    r"^to:",
+    r"^cc:",
+    r"^sent:",
+    r"^delivered-to:",
+    r"^reply$",
+    r"^reply all$",
+    r"^forward$",
+]
+
+
+def strip_signature(lines: list[str]) -> list[str]:
+    for idx, line in enumerate(lines):
+        if any(re.search(pattern, line, re.I) for pattern in SIGNATURE_PATTERNS):
+            return lines[:idx]
+    return lines
+
+
+def is_noise_line(line: str) -> bool:
+    lower = line.lower()
+    if "http://" in lower or "https://" in lower or "mailto:" in lower:
+        return True
+    if any(re.search(pattern, line, re.I) for pattern in NOISE_PATTERNS):
+        return True
+    if lower.startswith("unsubscribe"):
+        return True
+    return False
+
+
+def cleanup_lines(lines: list[str]) -> list[str]:
+    trimmed = strip_signature(lines)
+    return [line for line in trimmed if line and not is_noise_line(line)]
+
+
 def extract_date_from_text(text: str) -> datetime | None:
     mmddyy = re.search(r"(\d{1,2})/(\d{1,2})/(\d{2,4})", text)
     if mmddyy:
@@ -144,7 +188,7 @@ def load_emails(folder: Path) -> list[ParsedEmail]:
         if date and date.tzinfo:
             date = date.replace(tzinfo=None)
         body = extract_body(message)
-        lines = normalize_lines(body)
+        lines = cleanup_lines(normalize_lines(body))
         emails.append(ParsedEmail(subject=subject, date=date, body=body, lines=lines))
     return emails
 
@@ -164,6 +208,23 @@ def extract_numbered_list(lines: list[str], header_regex: str) -> list[str]:
             if item and item not in items:
                 items.append(item)
         elif items and not re.match(r"^[a-zA-Z]\.", line):
+            break
+    return items
+
+
+def extract_first_numbered_list(lines: list[str]) -> list[str]:
+    items = []
+    in_list = False
+    for line in lines:
+        if re.match(r"^\d+\.", line):
+            in_list = True
+            item = clean_item(line)
+            if item and item not in items:
+                items.append(item)
+            continue
+        if in_list:
+            if re.match(r"^[a-zA-Z]\.", line):
+                continue
             break
     return items
 
@@ -189,13 +250,24 @@ def extract_lettered_list(lines: list[str], anchor_regex: str) -> list[str]:
     return items
 
 
+def is_valid_item(item: str) -> bool:
+    lower = item.lower()
+    if "http" in lower or "mailto" in lower or "@" in lower:
+        return False
+    if len(item) > 180:
+        return False
+    return True
+
+
 def extract_action_items(lines: list[str], keywords: list[str], limit: int = 4) -> list[str]:
     results = []
     for line in lines:
         lower = line.lower()
+        if not re.match(r"^(\d+\.|[-*]\s|[a-zA-Z]\.)", line):
+            continue
         if any(keyword in lower for keyword in keywords):
             cleaned = clean_item(line)
-            if cleaned and cleaned not in results:
+            if cleaned and cleaned not in results and is_valid_item(cleaned):
                 results.append(cleaned)
         if len(results) >= limit:
             break
@@ -232,6 +304,27 @@ def replace_list(html_text: str, list_name: str, items: list[str]) -> str:
     return html_text[: match.start(2)] + list_markup + html_text[match.end(2) :]
 
 
+def email_target_date(email: ParsedEmail) -> datetime | None:
+    return extract_date_from_text(f"{email.subject} {email.body}") or email.date
+
+
+def sort_by_relevance(emails: list[ParsedEmail]) -> list[ParsedEmail]:
+    today = datetime.now().date()
+
+    def score(email: ParsedEmail) -> tuple[int, int, datetime]:
+        target = email_target_date(email)
+        if not target:
+            return (3, 9999, email.date or datetime.min)
+        delta = (target.date() - today).days
+        if 0 <= delta <= 14:
+            return (0, delta, target)
+        if -7 <= delta < 0:
+            return (1, abs(delta), target)
+        return (2, abs(delta), target)
+
+    return sorted(emails, key=score)
+
+
 def main() -> None:
     email_dir = Path(os.environ.get("EMAIL_DIR", "emails"))
     index_path = Path(os.environ.get("INDEX_PATH", "index.html"))
@@ -249,54 +342,58 @@ def main() -> None:
     symphonic_emails = [e for e in emails if "symphonic" in e.subject.lower()]
     jazz_emails = [e for e in emails if "jazz" in e.subject.lower()]
 
-    symphonic_emails.sort(key=lambda e: e.date or datetime.min, reverse=True)
-    jazz_emails.sort(key=lambda e: e.date or datetime.min, reverse=True)
+    symphonic_sorted = sort_by_relevance(symphonic_emails)
+    jazz_sorted = sort_by_relevance(jazz_emails)
 
-    symphonic_week = None
-    if symphonic_emails:
-        sym_text = symphonic_emails[0].subject + " " + symphonic_emails[0].body
-        symphonic_week = extract_date_from_text(sym_text) or symphonic_emails[0].date
-
-    jazz_week = None
-    if jazz_emails:
-        jazz_text = jazz_emails[0].subject + " " + jazz_emails[0].body
-        jazz_week = extract_date_from_text(jazz_text) or jazz_emails[0].date
-
+    symphonic_primary = None
     symphonic_pieces: list[str] = []
-    symphonic_details: list[str] = []
-    for email_item in symphonic_emails:
+    for email_item in symphonic_sorted:
         symphonic_pieces = extract_numbered_list(
             email_item.lines, r"Symphonic Band Rehearsal Schedule"
         )
+        if not symphonic_pieces:
+            symphonic_pieces = extract_first_numbered_list(email_item.lines)
         if symphonic_pieces:
+            symphonic_primary = email_item
             break
-    if symphonic_emails:
+    if not symphonic_primary and symphonic_sorted:
+        symphonic_primary = symphonic_sorted[0]
+
+    symphonic_week = email_target_date(symphonic_primary) if symphonic_primary else None
+
+    symphonic_details: list[str] = []
+    if symphonic_primary:
         symphonic_details = extract_action_items(
-            symphonic_emails[0].lines,
-            ["handbook", "arrive", "listen", "sign", "lesson", "practice", "new"],
+            symphonic_primary.lines,
+            ["handbook", "arrive", "listen", "sign", "lesson", "practice", "new", "recruit"],
         )
 
+    jazz_primary = None
     jazz_pieces: list[str] = []
-    for email_item in jazz_emails:
+    for email_item in jazz_sorted:
         jazz_pieces = extract_lettered_list(
             email_item.lines, r"keep these charts"  # spring email list
         )
+        if not jazz_pieces:
+            jazz_pieces = extract_numbered_list(email_item.lines, r"REHEARSAL SCHEDULE")
+        if not jazz_pieces:
+            jazz_pieces = extract_first_numbered_list(email_item.lines)
         if jazz_pieces:
+            jazz_primary = email_item
             break
-    if not jazz_pieces:
-        for email_item in jazz_emails:
-            jazz_pieces = extract_numbered_list(email_item.lines, r"REVIEW")
-            if jazz_pieces:
-                break
+    if not jazz_primary and jazz_sorted:
+        jazz_primary = jazz_sorted[0]
+
+    jazz_week = email_target_date(jazz_primary) if jazz_primary else None
 
     jazz_details: list[str] = []
-    if jazz_emails:
-        jazz_details.extend(extract_jazz_timing_details(jazz_emails[0].body))
+    if jazz_primary:
+        jazz_details.extend(extract_jazz_timing_details(jazz_primary.body))
         if len(jazz_details) < 4:
             jazz_details.extend(
                 extract_action_items(
-                    jazz_emails[0].lines,
-                    ["chart", "listen", "sheet", "new", "review"],
+                    jazz_primary.lines,
+                    ["chart", "listen", "sheet", "new", "review", "recruit"],
                     limit=4 - len(jazz_details),
                 )
             )
