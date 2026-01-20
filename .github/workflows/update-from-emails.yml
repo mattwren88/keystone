@@ -11,7 +11,7 @@ jobs:
     permissions:
       contents: write
     env:
-      GMAIL_LABEL: Keystone College
+      GMAIL_LABEL: keystone-college
       EMAIL_DIR: emails
     steps:
       - uses: actions/checkout@v4
