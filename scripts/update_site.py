@@ -11,7 +11,7 @@ import re
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from email import policy
 from email.header import decode_header
 from email.parser import BytesParser
@@ -686,74 +686,27 @@ def main() -> None:
 
     updated_stamp = format_date(datetime.now())
 
-    symphonic_emails = [e for e in emails if "symphonic" in e.subject.lower()]
-    jazz_emails = [e for e in emails if "jazz" in e.subject.lower()]
-
-    symphonic_sorted = sort_by_relevance(symphonic_emails)
-    jazz_sorted = sort_by_relevance(jazz_emails)
+    recent_days = int(os.environ.get("RECENT_DAYS", "21"))
+    recent_cutoff = datetime.now() - timedelta(days=recent_days)
+    emails_recent = [email_item for email_item in emails if email_item.date and email_item.date >= recent_cutoff]
+    if not emails_recent:
+        emails_recent = emails
 
     symphonic_primary = None
+    symphonic_week = None
     symphonic_pieces: list[str] = []
-    for email_item in symphonic_sorted:
-        symphonic_pieces = extract_numbered_list(
-            email_item.lines, r"Symphonic Band Rehearsal Schedule"
-        )
-        if not symphonic_pieces:
-            symphonic_pieces = extract_first_numbered_list(email_item.lines)
-        symphonic_pieces = filter_piece_items(symphonic_pieces)
-        if symphonic_pieces:
-            symphonic_primary = email_item
-            break
-    if not symphonic_primary and symphonic_sorted:
-        symphonic_primary = symphonic_sorted[0]
-
-    symphonic_week = email_target_date(symphonic_primary) if symphonic_primary else None
-
     symphonic_details: list[str] = []
-    if symphonic_primary:
-        symphonic_details = extract_action_items(
-            symphonic_primary.lines,
-            ["handbook", "arrive", "listen", "sign", "lesson", "practice", "new", "recruit"],
-        )
-
     symphonic_notes: list[str] = []
 
     jazz_primary = None
+    jazz_week = None
     jazz_pieces: list[str] = []
-    for email_item in jazz_sorted:
-        jazz_pieces = extract_lettered_list(
-            email_item.lines, r"keep these charts"  # spring email list
-        )
-        if not jazz_pieces:
-            jazz_pieces = extract_numbered_list(email_item.lines, r"REHEARSAL SCHEDULE")
-        if not jazz_pieces:
-            jazz_pieces = extract_first_numbered_list(email_item.lines)
-        jazz_pieces = filter_piece_items(jazz_pieces)
-        if jazz_pieces:
-            jazz_primary = email_item
-            break
-    if not jazz_primary and jazz_sorted:
-        jazz_primary = jazz_sorted[0]
-
-    jazz_week = email_target_date(jazz_primary) if jazz_primary else None
-
     jazz_details: list[str] = []
-    if jazz_primary:
-        jazz_details.extend(extract_jazz_timing_details(jazz_primary.body))
-        if len(jazz_details) < 4:
-            jazz_details.extend(
-                extract_action_items(
-                    jazz_primary.lines,
-                    ["chart", "listen", "sheet", "new", "review", "recruit"],
-                    limit=4 - len(jazz_details),
-                )
-            )
-
     jazz_notes: list[str] = []
 
     ai_email_limit = int(os.environ.get("OPENAI_EMAIL_LIMIT", "6"))
     ai_candidates = sorted(
-        emails,
+        emails_recent,
         key=lambda email: email.date or datetime.min,
         reverse=True,
     )[:ai_email_limit]
@@ -803,6 +756,8 @@ def main() -> None:
             symphonic_primary = symphonic_primary_ai
         if symphonic_week_ai:
             symphonic_week = symphonic_week_ai
+        elif symphonic_primary:
+            symphonic_week = email_target_date(symphonic_primary)
 
         if jazz_pieces_ai:
             jazz_pieces = jazz_pieces_ai
@@ -814,8 +769,66 @@ def main() -> None:
             jazz_primary = jazz_primary_ai
         if jazz_week_ai:
             jazz_week = jazz_week_ai
+        elif jazz_primary:
+            jazz_week = email_target_date(jazz_primary)
     else:
         print("AI summary unavailable; using heuristic extraction.")
+        symphonic_emails_recent = [e for e in emails_recent if "symphonic" in e.subject.lower()]
+        jazz_emails_recent = [e for e in emails_recent if "jazz" in e.subject.lower()]
+        if not symphonic_emails_recent:
+            symphonic_emails_recent = [e for e in emails if "symphonic" in e.subject.lower()]
+        if not jazz_emails_recent:
+            jazz_emails_recent = [e for e in emails if "jazz" in e.subject.lower()]
+
+        symphonic_sorted = sort_by_relevance(symphonic_emails_recent)
+        jazz_sorted = sort_by_relevance(jazz_emails_recent)
+
+        for email_item in symphonic_sorted:
+            symphonic_pieces = extract_numbered_list(
+                email_item.lines, r"Symphonic Band Rehearsal Schedule"
+            )
+            if not symphonic_pieces:
+                symphonic_pieces = extract_first_numbered_list(email_item.lines)
+            symphonic_pieces = filter_piece_items(symphonic_pieces)
+            if symphonic_pieces:
+                symphonic_primary = email_item
+                break
+        if not symphonic_primary and symphonic_sorted:
+            symphonic_primary = symphonic_sorted[0]
+
+        if symphonic_primary:
+            symphonic_week = email_target_date(symphonic_primary)
+            symphonic_details = extract_action_items(
+                symphonic_primary.lines,
+                ["handbook", "arrive", "listen", "sign", "lesson", "practice", "new", "recruit"],
+            )
+
+        for email_item in jazz_sorted:
+            jazz_pieces = extract_lettered_list(
+                email_item.lines, r"keep these charts"  # spring email list
+            )
+            if not jazz_pieces:
+                jazz_pieces = extract_numbered_list(email_item.lines, r"REHEARSAL SCHEDULE")
+            if not jazz_pieces:
+                jazz_pieces = extract_first_numbered_list(email_item.lines)
+            jazz_pieces = filter_piece_items(jazz_pieces)
+            if jazz_pieces:
+                jazz_primary = email_item
+                break
+        if not jazz_primary and jazz_sorted:
+            jazz_primary = jazz_sorted[0]
+
+        if jazz_primary:
+            jazz_week = email_target_date(jazz_primary)
+            jazz_details.extend(extract_jazz_timing_details(jazz_primary.body))
+            if len(jazz_details) < 4:
+                jazz_details.extend(
+                    extract_action_items(
+                        jazz_primary.lines,
+                        ["chart", "listen", "sheet", "new", "review", "recruit"],
+                        limit=4 - len(jazz_details),
+                    )
+                )
 
     html_text = index_path.read_text(encoding="utf-8")
     html_text = update_simple_tag(html_text, "data-updated", f"Updated: {updated_stamp}")
