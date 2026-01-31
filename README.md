@@ -23,8 +23,9 @@ Then visit `http://localhost:3000`.
 ## Updating content
 
 Plain terms:
-- New director emails (labeled `Keystone College`) are pulled via the Gmail API once a day.
-- The latest emails are summarized into the Symphonic/Jazz cards.
+- New director emails (labeled `Keystone College`) are pulled via the Gmail API twice a day.
+- If no new email is detected, the run stops early.
+- Recent emails (last 21 days) are summarized into the Symphonic/Jazz cards by AI, with heuristics as a fallback.
 - The page updates itself automatically; if automation fails, you can run one command locally.
 
 Manual updates:
@@ -35,17 +36,19 @@ Automated updates (local):
 - `scripts/fetch_gmail_emails.py` is optional; it caches `.eml` files in `emails/` for offline parsing.
 - Optional Gmail knobs: `GMAIL_LABEL` (default `Keystone College`), `GMAIL_LABEL_ID` (overrides name), `MAX_RESULTS`.
 
-AI-assisted updates (optional):
+AI-assisted updates (recommended):
 - If `OPENAI_API_KEY` is set, `scripts/update_site.py` sends recent email content to OpenAI and
   uses the response to update the pieces, other details, and additional notes lists.
-- Optional knobs: `OPENAI_MODEL` (default `gpt-5-nano`), `OPENAI_EMAIL_LIMIT` (default `2`).
+- Optional knobs: `OPENAI_MODEL` (default `gpt-5-mini`), `OPENAI_EMAIL_LIMIT` (default `6`),
+  `RECENT_DAYS` (default `21`).
+- If the AI returns empty lists, the existing schedule is preserved. If the AI call fails, heuristics kick in.
 
 Token helper:
 - `scripts/get_gmail_refresh_token.py` generates the Gmail OAuth refresh token needed by GitHub Actions.
 
 ## GitHub Actions automation
 
-A daily workflow runs at 12:00 UTC (7:00 AM EST / 8:00 AM EDT) to pull labeled emails and refresh the page:
+A twice-daily workflow runs at 00:00 and 12:00 UTC to pull labeled emails and refresh the page:
 - Label: `Keystone College`
 - Workflow: `.github/workflows/update-from-emails.yml`
 
@@ -55,7 +58,8 @@ Required repository secrets:
 - `GMAIL_REFRESH_TOKEN`
 - `OPENAI_API_KEY` (optional, enables AI summaries)
 
-The workflow commits only `index.html` (email files remain local and ignored).
+The workflow caches the last processed email id and commits only `index.html`
+(email files remain local and ignored).
 
 ## Manual fallback (local)
 
@@ -77,6 +81,30 @@ If you prefer an `.eml` cache for offline runs:
 
 ```bash
 python3 scripts/fetch_gmail_emails.py
+```
+
+## Workflow diagram
+
+```text
+GitHub Action (00:00, 12:00 UTC)
+  |
+  v
+Gmail API: newest id for label
+  |
+  +-- no new id --> stop
+  |
+  v
+Fetch recent emails (last 21 days)
+  |
+  v
+OpenAI classify + extract
+  |
+  +-- AI ok --> update weekly blocks in index.html
+  |
+  +-- AI fails --> heuristic extraction (recent emails)
+  |
+  v
+Commit index.html (only if changed)
 ```
 
 ## Notes
