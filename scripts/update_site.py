@@ -34,7 +34,7 @@ MONTHS = [
 ]
 
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
-DEFAULT_OPENAI_MODEL = "gpt-5-nano"
+DEFAULT_OPENAI_MODEL = "gpt-5-mini"
 DEFAULT_OPENAI_TIMEOUT = 30
 GMAIL_SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 GMAIL_TOKEN_URI = "https://oauth2.googleapis.com/token"
@@ -183,6 +183,7 @@ def extract_date_from_text(text: str) -> datetime | None:
 
 @dataclass
 class ParsedEmail:
+    source_id: str
     subject: str
     date: datetime | None
     body: str
@@ -200,7 +201,15 @@ def load_emails(folder: Path) -> list[ParsedEmail]:
             date = date.replace(tzinfo=None)
         body = extract_body(message)
         lines = cleanup_lines(normalize_lines(body))
-        emails.append(ParsedEmail(subject=subject, date=date, body=body, lines=lines))
+        emails.append(
+            ParsedEmail(
+                source_id=path.stem,
+                subject=subject,
+                date=date,
+                body=body,
+                lines=lines,
+            )
+        )
     return emails
 
 
@@ -245,12 +254,7 @@ def get_label_id(service, label_name: str) -> str | None:
     return None
 
 
-def load_emails_from_gmail(label_name: str, max_results: int) -> list[ParsedEmail]:
-    service = build_gmail_service()
-    label_id = os.environ.get("GMAIL_LABEL_ID") or get_label_id(service, label_name)
-    if not label_id:
-        raise RuntimeError(f"Label not found: {label_name}")
-
+def load_emails_from_gmail(service, label_id: str, max_results: int) -> list[ParsedEmail]:
     messages: list[dict] = []
     request = service.users().messages().list(
         userId="me", labelIds=[label_id], maxResults=max_results
@@ -279,7 +283,15 @@ def load_emails_from_gmail(label_name: str, max_results: int) -> list[ParsedEmai
             date = date.replace(tzinfo=None)
         body = extract_body(message)
         lines = cleanup_lines(normalize_lines(body))
-        emails.append(ParsedEmail(subject=subject, date=date, body=body, lines=lines))
+        emails.append(
+            ParsedEmail(
+                source_id=msg_id,
+                subject=subject,
+                date=date,
+                body=body,
+                lines=lines,
+            )
+        )
     return emails
 
 
@@ -293,18 +305,17 @@ def clip_text(text: str, limit: int) -> str:
 def format_email_for_ai(email: ParsedEmail, limit: int = 3000) -> str:
     date = email.date.isoformat() if email.date else "unknown"
     content = "\n".join(email.lines)
-    payload = f"Subject: {email.subject}\nDate: {date}\nContent:\n{content}"
+    payload = (
+        f"Id: {email.source_id}\nSubject: {email.subject}\nDate: {date}\nContent:\n{content}"
+    )
     return clip_text(payload, limit)
 
 
-def build_ai_context(symphonic_emails: list[ParsedEmail], jazz_emails: list[ParsedEmail]) -> str:
-    def pack(label: str, emails: list[ParsedEmail]) -> str:
-        if not emails:
-            return f"{label} emails: none."
-        chunks = [format_email_for_ai(email) for email in emails]
-        return f"{label} emails:\n" + "\n\n".join(chunks)
-
-    return f"{pack('Symphonic', symphonic_emails)}\n\n{pack('Jazz', jazz_emails)}"
+def build_ai_context(emails: list[ParsedEmail]) -> str:
+    if not emails:
+        return "Emails: none."
+    chunks = [format_email_for_ai(email) for email in emails]
+    return "Emails:\n" + "\n\n".join(chunks)
 
 
 def call_openai(prompt: str) -> dict | None:
@@ -322,7 +333,7 @@ def call_openai(prompt: str) -> dict | None:
             {
                 "role": "system",
                 "content": (
-                    "You summarize band rehearsal emails into short lists. "
+                    "You summarize band rehearsal emails into short lists and classify content by ensemble. "
                     "Return ONLY valid JSON."
                 ),
             },
@@ -331,13 +342,18 @@ def call_openai(prompt: str) -> dict | None:
                 "content": (
                     "From the emails, extract rehearsal info as JSON with this shape:\n"
                     "{\n"
-                    '  "symphonic": {"pieces": [], "details": [], "notes": []},\n'
-                    '  "jazz": {"pieces": [], "details": [], "notes": []}\n'
+                    '  "symphonic": {"pieces": [], "details": [], "notes": [], "week_of": ""},\n'
+                    '  "jazz": {"pieces": [], "details": [], "notes": [], "week_of": ""},\n'
+                    '  "meta": {"symphonic_email_ids": [], "jazz_email_ids": []}\n'
                     "}\n"
                     "Rules:\n"
                     "- Only use facts from the emails.\n"
                     "- Lists should be 1-4 short bullets, no numbering.\n"
                     "- Omit links, emails, and URLs.\n"
+                    "- Classify content even if subject lines are inconsistent.\n"
+                    "- Focus on the next rehearsal week; ignore older schedules unless explicitly referenced.\n"
+                    '- "week_of" should be an ISO date (YYYY-MM-DD) if you can infer it, otherwise empty.\n'
+                    "- Include the source email Ids used in meta lists (from the Id field).\n"
                     "- If info is missing, return an empty list.\n"
                     f"\nEmails:\n{prompt}"
                 ),
@@ -383,6 +399,35 @@ def normalize_ai_list(items: object, max_items: int = 4) -> list[str]:
         if len(cleaned_items) >= max_items:
             break
     return cleaned_items
+
+
+def normalize_ai_ids(items: object, max_items: int = 6) -> list[str]:
+    if not isinstance(items, list):
+        return []
+    cleaned_items = []
+    for item in items:
+        if not isinstance(item, str):
+            continue
+        cleaned = item.strip()
+        if not cleaned:
+            continue
+        if cleaned not in cleaned_items:
+            cleaned_items.append(cleaned)
+        if len(cleaned_items) >= max_items:
+            break
+    return cleaned_items
+
+
+def parse_ai_week(value: object) -> datetime | None:
+    if not isinstance(value, str):
+        return None
+    cleaned = value.strip()
+    if not cleaned:
+        return None
+    try:
+        return datetime.strptime(cleaned[:10], "%Y-%m-%d")
+    except ValueError:
+        return extract_date_from_text(cleaned)
 
 
 def extract_numbered_list(lines: list[str], header_regex: str) -> list[str]:
@@ -567,9 +612,49 @@ def sort_by_relevance(emails: list[ParsedEmail]) -> list[ParsedEmail]:
     return sorted(emails, key=score)
 
 
+def find_email_by_id(emails: list[ParsedEmail], ids: list[str]) -> ParsedEmail | None:
+    if not ids:
+        return None
+    lookup = {email.source_id: email for email in emails}
+    for source_id in ids:
+        if source_id in lookup:
+            return lookup[source_id]
+    return None
+
+
+def load_last_state(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def save_last_state(path: Path, latest_id: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "latest_id": latest_id,
+        "updated_at": datetime.utcnow().isoformat() + "Z",
+    }
+    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+def get_latest_message_id(service, label_id: str) -> str | None:
+    response = (
+        service.users().messages().list(userId="me", labelIds=[label_id], maxResults=1).execute()
+    )
+    messages = response.get("messages", [])
+    if not messages:
+        return None
+    return messages[0].get("id")
+
+
 def main() -> None:
     email_dir = Path(os.environ.get("EMAIL_DIR", "emails"))
     index_path = Path(os.environ.get("INDEX_PATH", "index.html"))
+    last_state_path_raw = os.environ.get("LAST_STATE_PATH", "").strip()
+    last_state_path = Path(last_state_path_raw) if last_state_path_raw else None
 
     if not index_path.exists():
         raise SystemExit("Missing index.html")
@@ -578,7 +663,19 @@ def main() -> None:
     max_results = int(os.environ.get("MAX_RESULTS", str(DEFAULT_MAX_RESULTS)))
 
     if gmail_credentials_available():
-        emails = load_emails_from_gmail(label_name, max_results)
+        service = build_gmail_service()
+        label_id = os.environ.get("GMAIL_LABEL_ID") or get_label_id(service, label_name)
+        if not label_id:
+            raise RuntimeError(f"Label not found: {label_name}")
+        if last_state_path:
+            latest_id = get_latest_message_id(service, label_id)
+            if latest_id:
+                last_state = load_last_state(last_state_path)
+                if last_state.get("latest_id") == latest_id:
+                    save_last_state(last_state_path, latest_id)
+                    print("No new emails detected; skipping update.")
+                    return
+        emails = load_emails_from_gmail(service, label_id, max_results)
     else:
         if not email_dir.exists():
             raise SystemExit("Missing Gmail credentials or emails directory")
@@ -654,23 +751,47 @@ def main() -> None:
 
     jazz_notes: list[str] = []
 
-    ai_email_limit = int(os.environ.get("OPENAI_EMAIL_LIMIT", "2"))
-    ai_context = build_ai_context(
-        symphonic_sorted[:ai_email_limit],
-        jazz_sorted[:ai_email_limit],
-    )
+    ai_email_limit = int(os.environ.get("OPENAI_EMAIL_LIMIT", "6"))
+    ai_candidates = sorted(
+        emails,
+        key=lambda email: email.date or datetime.min,
+        reverse=True,
+    )[:ai_email_limit]
+    if ai_candidates:
+        print("AI candidates:")
+        for email_item in ai_candidates:
+            print(f"- {email_item.source_id} | {email_item.subject}")
+    ai_context = build_ai_context(ai_candidates)
     ai_summary = call_openai(ai_context)
     if isinstance(ai_summary, dict):
-        symphonic_ai = ai_summary.get("symphonic", {}) if isinstance(ai_summary.get("symphonic"), dict) else {}
-        jazz_ai = ai_summary.get("jazz", {}) if isinstance(ai_summary.get("jazz"), dict) else {}
+        symphonic_ai = (
+            ai_summary.get("symphonic", {}) if isinstance(ai_summary.get("symphonic"), dict) else {}
+        )
+        jazz_ai = (
+            ai_summary.get("jazz", {}) if isinstance(ai_summary.get("jazz"), dict) else {}
+        )
+        meta_ai = ai_summary.get("meta", {}) if isinstance(ai_summary.get("meta"), dict) else {}
 
         symphonic_pieces_ai = normalize_ai_list(symphonic_ai.get("pieces", []))
         symphonic_details_ai = normalize_ai_list(symphonic_ai.get("details", []))
         symphonic_notes_ai = normalize_ai_list(symphonic_ai.get("notes", []))
+        symphonic_week_ai = parse_ai_week(symphonic_ai.get("week_of"))
+        symphonic_ids_ai = normalize_ai_ids(meta_ai.get("symphonic_email_ids", []))
 
         jazz_pieces_ai = normalize_ai_list(jazz_ai.get("pieces", []))
         jazz_details_ai = normalize_ai_list(jazz_ai.get("details", []))
         jazz_notes_ai = normalize_ai_list(jazz_ai.get("notes", []))
+        jazz_week_ai = parse_ai_week(jazz_ai.get("week_of"))
+        jazz_ids_ai = normalize_ai_ids(meta_ai.get("jazz_email_ids", []))
+
+        symphonic_primary_ai = find_email_by_id(emails, symphonic_ids_ai)
+        jazz_primary_ai = find_email_by_id(emails, jazz_ids_ai)
+        if symphonic_ids_ai or jazz_ids_ai:
+            print(
+                "AI email ids:",
+                f"symphonic={symphonic_ids_ai}" if symphonic_ids_ai else "symphonic=[]",
+                f"jazz={jazz_ids_ai}" if jazz_ids_ai else "jazz=[]",
+            )
 
         if symphonic_pieces_ai:
             symphonic_pieces = symphonic_pieces_ai
@@ -678,6 +799,10 @@ def main() -> None:
             symphonic_details = symphonic_details_ai
         if symphonic_notes_ai:
             symphonic_notes = symphonic_notes_ai
+        if symphonic_primary_ai:
+            symphonic_primary = symphonic_primary_ai
+        if symphonic_week_ai:
+            symphonic_week = symphonic_week_ai
 
         if jazz_pieces_ai:
             jazz_pieces = jazz_pieces_ai
@@ -685,6 +810,12 @@ def main() -> None:
             jazz_details = jazz_details_ai
         if jazz_notes_ai:
             jazz_notes = jazz_notes_ai
+        if jazz_primary_ai:
+            jazz_primary = jazz_primary_ai
+        if jazz_week_ai:
+            jazz_week = jazz_week_ai
+    else:
+        print("AI summary unavailable; using heuristic extraction.")
 
     html_text = index_path.read_text(encoding="utf-8")
     html_text = update_simple_tag(html_text, "data-updated", f"Updated: {updated_stamp}")
@@ -710,6 +841,11 @@ def main() -> None:
     html_text = replace_list(html_text, "jazz-notes", jazz_notes)
 
     index_path.write_text(html_text, encoding="utf-8")
+
+    if gmail_credentials_available() and last_state_path:
+        latest_id = get_latest_message_id(service, label_id)
+        if latest_id:
+            save_last_state(last_state_path, latest_id)
 
 
 if __name__ == "__main__":
