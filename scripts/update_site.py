@@ -346,9 +346,18 @@ def call_openai(prompt: str) -> dict | None:
                     '  "jazz": {"pieces": [], "details": [], "notes": [], "week_of": ""},\n'
                     '  "meta": {"symphonic_email_ids": [], "jazz_email_ids": []}\n'
                     "}\n"
+                    "Field definitions (distribute content across ALL three lists):\n"
+                    '- "pieces": EVERY musical piece or composition mentioned for rehearsal. '
+                    "Just the title — no measure numbers, instructions, or descriptions. "
+                    'Examples: "Holst Mvt. I", "Galante", "Carter", "Too Many Things", "Fly Me to the Moon". '
+                    "If a note references a piece by name (e.g. 'Galante 1-55: horns prepare...'), "
+                    "that piece name MUST also appear in pieces. Aim for up to 6 items.\n"
+                    '- "details": logistical and action items (arrival times, things to sign or bring, schedule changes, new member info, announcements).\n'
+                    '- "notes": musical/practice guidance from the director (section-specific assignments, measure references, tempo/dynamic tips, recordings to review, practice instructions).\n'
                     "Rules:\n"
                     "- Only use facts from the emails.\n"
-                    "- Lists should be 1-4 short bullets, no numbering.\n"
+                    "- details and notes should be 1-4 short bullets, no numbering.\n"
+                    "- pieces can have up to 6 items.\n"
                     "- Omit links, emails, and URLs.\n"
                     "- Classify content even if subject lines are inconsistent.\n"
                     "- Focus on the next rehearsal week; ignore older schedules unless explicitly referenced.\n"
@@ -416,6 +425,22 @@ def normalize_ai_ids(items: object, max_items: int = 6) -> list[str]:
         if len(cleaned_items) >= max_items:
             break
     return cleaned_items
+
+
+def extract_pieces_from_notes(notes: list[str], existing_pieces: list[str], limit: int = 6) -> list[str]:
+    """Pull piece names from notes that follow 'Title: instructions' or 'Title Mvt/mvt' patterns."""
+    added = list(existing_pieces)
+    for note in notes:
+        match = re.match(r"^([A-Z][^:]{2,30}):", note)
+        if match:
+            name = match.group(1).strip()
+            # Strip trailing measure ranges like "1-55" or "Mvt. II (A-C)"
+            name = re.sub(r"\s+\d+-\d+$", "", name)
+            name = re.sub(r"\s*\([^)]+\)\s*$", "", name)
+            name = name.rstrip(".")
+            if name and name not in added and len(added) < limit:
+                added.append(name)
+    return added
 
 
 def parse_ai_week(value: object) -> datetime | None:
@@ -571,8 +596,8 @@ def extract_jazz_timing_details(text: str) -> list[str]:
 
 
 def update_simple_tag(html_text: str, attr: str, new_text: str) -> str:
-    pattern = re.compile(rf"(<[^>]*{attr}[^>]*>)([^<]*)(</[^>]+>)")
-    return pattern.sub(rf"\1{new_text}\3", html_text, count=1)
+    pattern = re.compile(rf"(<([a-z]+)[^>]*{attr}[^>]*>)(.*?)(</\2>)", re.S)
+    return pattern.sub(rf"\1{new_text}\4", html_text, count=1)
 
 
 def replace_list(html_text: str, list_name: str, items: list[str]) -> str:
@@ -725,15 +750,17 @@ def main() -> None:
         )
         meta_ai = ai_summary.get("meta", {}) if isinstance(ai_summary.get("meta"), dict) else {}
 
-        symphonic_pieces_ai = normalize_ai_list(symphonic_ai.get("pieces", []))
+        symphonic_pieces_ai = normalize_ai_list(symphonic_ai.get("pieces", []), max_items=6)
         symphonic_details_ai = normalize_ai_list(symphonic_ai.get("details", []))
         symphonic_notes_ai = normalize_ai_list(symphonic_ai.get("notes", []))
+        symphonic_pieces_ai = extract_pieces_from_notes(symphonic_notes_ai, symphonic_pieces_ai)
         symphonic_week_ai = parse_ai_week(symphonic_ai.get("week_of"))
         symphonic_ids_ai = normalize_ai_ids(meta_ai.get("symphonic_email_ids", []))
 
-        jazz_pieces_ai = normalize_ai_list(jazz_ai.get("pieces", []))
+        jazz_pieces_ai = normalize_ai_list(jazz_ai.get("pieces", []), max_items=6)
         jazz_details_ai = normalize_ai_list(jazz_ai.get("details", []))
         jazz_notes_ai = normalize_ai_list(jazz_ai.get("notes", []))
+        jazz_pieces_ai = extract_pieces_from_notes(jazz_notes_ai, jazz_pieces_ai)
         jazz_week_ai = parse_ai_week(jazz_ai.get("week_of"))
         jazz_ids_ai = normalize_ai_ids(meta_ai.get("jazz_email_ids", []))
 
@@ -837,13 +864,13 @@ def main() -> None:
         html_text = update_simple_tag(
             html_text,
             'data-week="symphonic"',
-            f"Week of {format_date(symphonic_week)}",
+            f"Week of <strong>{format_date(symphonic_week)}</strong>",
         )
     if jazz_week:
         html_text = update_simple_tag(
             html_text,
             'data-week="jazz"',
-            f"Week of {format_date(jazz_week)}",
+            f"Week of <strong>{format_date(jazz_week)}</strong>",
         )
 
     html_text = replace_list(html_text, "symphonic-pieces", symphonic_pieces)
