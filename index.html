@@ -1,162 +1,874 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
-  <title>Keystone College Bands</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concert Day Reference — Sunday, April 26</title>
+<style>
+  :root {
+    --ink: #1f1a2e;
+    --ink-soft: #5a5266;
+    --paper: #fbf7ee;
+    --paper-warm: #f5ecda;
+    --accent: #a83d2a;
+    --accent-deep: #6b2418;
+    --gold: #c08a3e;
+    --gold-soft: #e6c896;
+    --rule: #ddd2bc;
+    --tint: #f0e6d2;
+    --shadow: rgba(31, 26, 46, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background:
+      radial-gradient(ellipse at top, #f4a261 0%, transparent 50%),
+      linear-gradient(160deg, #2a1f3d 0%, #5a3d5c 40%, #a8624a 80%, #d49a6a 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: 32px 16px;
+    color: var(--ink);
+  }
+  .card {
+    max-width: 880px;
+    margin: 0 auto;
+    background: var(--paper);
+    border-radius: 6px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,0,0,0.05);
+    overflow: hidden;
+    animation: fadeUp 0.6s ease-out;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stagger > * { animation: fadeUp 0.5s ease-out backwards; }
+  .stagger > *:nth-child(1) { animation-delay: 0.1s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.2s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.3s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.4s; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #2a1f3d 0%, #6b3d4a 50%, #c47a4a 100%);
+    color: var(--paper);
+    padding: 36px 40px 30px;
+    position: relative;
+    border-bottom: 3px solid var(--gold);
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-soft) 50%, var(--gold) 100%);
+    z-index: 3;
+  }
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .header-bg svg { width: 100%; height: 100%; display: block; }
+  .header-content { position: relative; z-index: 2; }
+  .header-tag {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    margin-bottom: 10px;
+  }
+  .header-title {
+    font-size: 42px;
+    font-style: italic;
+    font-weight: normal;
+    line-height: 1.05;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+  .header-sub {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(251, 247, 238, 0.8);
+  }
+  .header-meta {
+    margin-top: 22px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+  }
+  .header-meta div { display: flex; flex-direction: column; gap: 2px; }
+  .header-meta .label {
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 10px;
+  }
+  .header-meta .val { font-weight: 500; }
+
+  /* STATUS BANNER */
+  .status {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: 'Helvetica Neue', sans-serif;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .status-left { display: flex; align-items: center; gap: 12px; }
+  .status-pulse {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold-soft);
+    box-shadow: 0 0 0 0 rgba(230, 200, 150, 0.8);
+    animation: pulse 2.2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(230, 200, 150, 0.8); }
+    70% { box-shadow: 0 0 0 12px rgba(230, 200, 150, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(230, 200, 150, 0); }
+  }
+  .status-text {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .status-text strong {
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .status-countdown {
+    font-size: 12px;
+    color: rgba(251, 247, 238, 0.7);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .status-countdown strong {
+    color: var(--paper);
+    font-size: 16px;
+    font-weight: 700;
+    display: block;
+    letter-spacing: 0.02em;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    padding: 32px 40px 28px;
+    background: var(--paper-warm);
+    border-bottom: 1px solid var(--rule);
+  }
+  .timeline h2 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+    text-align: center;
+  }
+  .timeline-track {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .timeline-track::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--rule) 0%, var(--gold) 30%, var(--accent) 50%, var(--gold) 70%, var(--rule) 100%);
+    z-index: 0;
+  }
+  .tl-stop { text-align: center; position: relative; z-index: 1; }
+  .tl-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 3px solid var(--ink-soft);
+    margin: 16px auto 12px;
+    transition: all 0.3s ease;
+  }
+  .tl-stop.highlight .tl-dot {
+    width: 20px;
+    height: 20px;
+    margin: 13px auto 9px;
+    background: var(--accent);
+    border-color: var(--accent-deep);
+    box-shadow: 0 0 0 5px rgba(168, 61, 42, 0.18), 0 2px 8px rgba(168, 61, 42, 0.4);
+  }
+  .tl-stop.passed .tl-dot {
+    background: var(--ink-soft);
+    border-color: var(--ink-soft);
+    opacity: 0.55;
+  }
+  .tl-stop.current .tl-dot {
+    background: var(--gold);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 5px rgba(192, 138, 62, 0.25);
+    animation: glow 2s ease-in-out infinite;
+  }
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 0 5px rgba(192, 138, 62, 0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(192, 138, 62, 0.05); }
+  }
+  .tl-time {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .tl-stop.highlight .tl-time { color: var(--accent-deep); font-size: 20px; }
+  .tl-stop.passed .tl-time { color: var(--ink-soft); opacity: 0.6; }
+  .tl-label {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+    line-height: 1.4;
+    padding: 0 6px;
+  }
+  .tl-stop.highlight .tl-label { color: var(--accent); font-weight: 600; }
+  .tl-stop.passed .tl-label { opacity: 0.55; }
+
+  /* BODY */
+  .body {
+    padding: 32px 40px 36px;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 32px;
+  }
+  .col h3 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .icon {
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .icon svg { width: 18px; height: 18px; }
+  .block + .block { margin-top: 24px; }
+
+  /* ARRIVAL CALLOUT */
+  .arrival {
+    background: linear-gradient(135deg, var(--ink) 0%, #3a2d4d 100%);
+    color: var(--paper);
+    padding: 22px 24px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 6px 16px var(--shadow);
+    border-left: 4px solid var(--gold);
+  }
+  .arrival-time {
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--gold-soft);
+    font-family: 'Helvetica Neue', sans-serif;
+    letter-spacing: -0.02em;
+  }
+  .arrival-text {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+    color: rgba(251, 247, 238, 0.85);
+  }
+  .arrival-text strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 4px;
+    color: var(--paper);
+    letter-spacing: 0.02em;
+  }
+
+  /* CHECKLIST */
+  .checklist {
+    background: var(--paper-warm);
+    border-radius: 4px;
+    padding: 16px 18px;
+    border: 1px solid var(--rule);
+  }
+  .checklist-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 14px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 6px 4px;
+    border-radius: 3px;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .check-item:hover { background: rgba(168, 61, 42, 0.06); }
+  .check-box {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--accent);
+    border-radius: 3px;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.2s;
+    background: var(--paper);
+  }
+  .check-item.checked .check-box {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .check-item.checked .check-box::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 5px;
+    height: 9px;
+    border: solid var(--paper);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .check-item.checked .check-label {
+    text-decoration: line-through;
+    color: var(--ink-soft);
+    opacity: 0.7;
+  }
+  .check-label { transition: all 0.2s; }
+  .check-reset {
+    background: none;
+    border: none;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    margin-top: 8px;
+    padding: 4px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+  }
+  .check-reset:hover { color: var(--accent); }
+
+  /* LISTS */
+  ul.tidy {
+    list-style: none;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  ul.tidy li {
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  ul.tidy li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  /* ATTIRE */
+  .attire-card {
+    background: var(--paper-warm);
+    border: 1px solid var(--rule);
+    padding: 16px 18px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .attire-swatch {
+    width: 52px;
+    height: 52px;
+    background: var(--ink);
+    border-radius: 4px;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.05), 0 2px 4px var(--shadow);
+  }
+  .attire-text {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .attire-text strong { color: var(--ink); display: block; margin-bottom: 2px; font-size: 14px; }
+
+  /* INFO GRID */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+  .info-cell {
+    background: var(--paper-warm);
+    padding: 12px 14px;
+    border-radius: 4px;
+    border-left: 3px solid var(--gold);
+  }
+  .info-cell .label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .info-cell .val { font-size: 13px; color: var(--ink); line-height: 1.4; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 24px 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    font-family: 'Helvetica Neue', sans-serif;
+    border-top: 3px solid var(--gold);
+  }
+  .footer-block .label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    margin-bottom: 5px;
+  }
+  .footer-block .val { font-size: 14px; color: var(--paper); font-weight: 500; }
+  .footer-block .val small {
+    display: block;
+    font-size: 12px;
+    color: rgba(251, 247, 238, 0.55);
+    margin-top: 3px;
+    font-weight: 400;
+  }
+  .footer-block a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(251, 247, 238, 0.3);
+  }
+  .footer-block a:hover { border-bottom-color: var(--gold-soft); }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    body { padding: 12px 8px; }
+    .header { padding: 26px 22px 22px; }
+    .header-title { font-size: 30px; }
+    .header-meta { gap: 18px; }
+    .status { padding: 12px 22px; }
+    .status-countdown { text-align: left; }
+    .timeline { padding: 24px 18px 22px; }
+    .timeline-track { grid-template-columns: 1fr; gap: 14px; }
+    .timeline-track::before { display: none; }
+    .tl-stop { display: flex; align-items: center; gap: 14px; text-align: left; }
+    .tl-dot, .tl-stop.highlight .tl-dot { margin: 0; flex-shrink: 0; }
+    .tl-label { padding: 0; }
+    .body { grid-template-columns: 1fr; gap: 24px; padding: 24px 22px; }
+    .info-grid { grid-template-columns: 1fr; }
+    .checklist-items { grid-template-columns: 1fr; }
+    .footer { grid-template-columns: 1fr; padding: 20px 22px; gap: 14px; }
+    .arrival-time { font-size: 36px; }
+  }
+
+  /* PRINT */
+  @media print {
+    @page { margin: 0.5in; }
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; max-width: 100%; }
+    .status { background: white; color: black; border-bottom: 1px solid #ccc; padding: 8px 20px; }
+    .status-pulse { display: none; }
+    .status-text strong { color: #6b2418; }
+    .status-countdown strong, .status-text { color: black; }
+    .header { background: #2a1f3d !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .header-bg { display: none; }
+    .footer { background: #2a1f3d !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .arrival { background: #2a1f3d !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .check-reset { display: none; }
+    .body { padding: 20px 24px; }
+    .stagger > *, .card { animation: none; }
+    .tl-stop.current .tl-dot { animation: none; }
+  }
+</style>
 </head>
 <body>
-  <div class="page">
-    <header class="site-header">
-      <div>
-        <img class="logo" src="assets/logo.png" alt="Keystone College">
-      </div>
-      <div class="header-copy">
-        <p class="eyebrow">Weekly rehearsal briefs</p>
-        <h1>Band rehearsal summaries</h1>
-        <p>Condensed updates from the director emails, organized into a clean snapshot for each ensemble.</p>
-        <div class="meta-row">
-          <span class="meta-chip" data-updated>Updated: Apr 26, 2026</span>
-          <span class="meta-chip">Archive: /emails</span>
-          <a class="meta-chip" href="assets/Handbook%20KC%20Performance%20Music%20Spring%202026.pdf" target="_blank" rel="noopener">Handbook PDF <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-Download"><path d="M12 15V3m0 12l-4-4m4 4l4-4"/><path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21H19.439a2 2 0 0 0 1.94-1.515L22 17"/></svg></a>
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-bg" aria-hidden="true">
+      <svg viewBox="0 0 880 220" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="sun" cx="50%" cy="100%" r="60%">
+            <stop offset="0%" stop-color="#ffd9a3" stop-opacity="0.95"/>
+            <stop offset="40%" stop-color="#f4a261" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#f4a261" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="rays" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#ffd9a3" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#ffd9a3" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- Sun glow -->
+        <ellipse cx="440" cy="220" rx="280" ry="160" fill="url(#sun)"/>
+        <circle cx="440" cy="218" r="48" fill="#ffd9a3" opacity="0.85"/>
+        <!-- Rays -->
+        <g stroke="url(#rays)" stroke-width="1.5" opacity="0.6">
+          <line x1="440" y1="218" x2="200" y2="40"/>
+          <line x1="440" y1="218" x2="320" y2="20"/>
+          <line x1="440" y1="218" x2="440" y2="0"/>
+          <line x1="440" y1="218" x2="560" y2="20"/>
+          <line x1="440" y1="218" x2="680" y2="40"/>
+          <line x1="440" y1="218" x2="100" y2="120"/>
+          <line x1="440" y1="218" x2="780" y2="120"/>
+        </g>
+        <!-- Bare trees silhouette -->
+        <g fill="#1f1a2e" opacity="0.85">
+          <path d="M 60 220 L 60 130 L 55 100 L 60 90 L 50 80 L 62 75 M 60 130 L 75 110 M 60 145 L 48 120 M 60 160 L 72 130 M 60 175 L 50 155" stroke="#1f1a2e" stroke-width="1.5" fill="none"/>
+          <path d="M 130 220 L 130 110 L 125 90 L 132 70 L 124 60 M 130 110 L 145 95 M 130 125 L 118 100 M 130 140 L 142 115" stroke="#1f1a2e" stroke-width="1.5" fill="none"/>
+          <path d="M 760 220 L 760 100 L 755 80 L 762 60 M 760 100 L 775 80 M 760 115 L 745 90 M 760 130 L 772 105" stroke="#1f1a2e" stroke-width="1.5" fill="none"/>
+          <path d="M 820 220 L 820 130 L 815 110 L 822 95 M 820 130 L 832 115 M 820 145 L 808 125" stroke="#1f1a2e" stroke-width="1.5" fill="none"/>
+        </g>
+        <!-- Horizon -->
+        <line x1="0" y1="220" x2="880" y2="220" stroke="#1f1a2e" stroke-width="1" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="header-content">
+      <div class="header-tag">Keystone College · Department of Performance Music</div>
+      <h1 class="header-title">Our Requiem of Light</h1>
+      <div class="header-sub">Spring Concert · Concert Day Reference</div>
+      <div class="header-meta">
+        <div>
+          <span class="label">Date</span>
+          <span class="val">Sunday, April 26, 2026</span>
+        </div>
+        <div>
+          <span class="label">Curtain</span>
+          <span class="val">7:00 PM</span>
+        </div>
+        <div>
+          <span class="label">Venue</span>
+          <span class="val">The Theatre at Brooks Hall</span>
         </div>
       </div>
-    </header>
-
-    <main class="content-grid">
-      <section class="group-card" id="symphonic-band">
-        <div class="group-header">
-          <div>
-            <!-- <p class="eyebrow">Symphonic Band</p> -->
-            <h2>Symphonic Band</h2>
-            <p data-week="symphonic" >Week of <strong>Apr 14, 2026</strong></p>
-            <p class="schedule-line"><strong>Rehearsal:</strong> Tuesdays <strong>7:00-8:30 PM</strong></p>
-          </div>
-
-        </div>
-        <div class="detail-grid">
-          <article class="detail-card">
-            <h3>Pieces this week</h3>
-            <ul class="detail-list" data-list="symphonic-pieces">
-              <li>Run &quot;Adrenaline&quot;</li>
-              <li>Soft dynamic exercise / discussion</li>
-</ul>
-          </article>
-          <article class="detail-card">
-            <h3>Other details</h3>
-            <ul class="detail-list" data-list="symphonic-details">
-              <li>First, I want you to know what we will be working on as soon as possible in case your practice schedule is unique:</li>
-              <li>Please try the resources below to help you practice and prepare.</li>
-              <li>Please make note of any time signature changes - 4/4 , ¾, 2/4 - write BIG NUMBERS above those measures if you&#x27;re having trouble (4, 3, or 2)</li>
-              <li>To be a bit blunt, it&#x27;s an easy grade 2.5 piece. Just listen to this link, and practice your part along with it.</li>
-</ul>
-          </article>
-          <article class="detail-card detail-card-wide">
-            <h3>Additional notes</h3>
-            <ul class="detail-list" data-list="symphonic-notes">
-              <li>Carter: woodwinds should keep pushing 16th-note runs closer to tempo; euphonium/bassoon focus on m. 41-73 intonation and soft dynamics.</li>
-              <li>Holst Mvt. I: lows align the intro rhythm and check low C natural intonation; add an accelerando 2 bars before A; tongue the start of each slur at B; prepare solos 8 after C (flute/oboe/alto sax).</li>
-              <li>Holst Mvt. II (A-C): work technical 16ths and repeated-pitch tonguing for endurance.</li>
-              <li>Galante 1-55: horns prepare the opening melody; practice 8ths vs quarter-note triplets; review m. 20 rhythms (except trumpets/trombones), upper woodwinds 4 before 29, horns/tenor saxes m. 27 run, and flutes/clarinets/oboes m. 50-55 articulation.</li>
-              <li>Tuesday goal: complete Holst Mvt. I; review the referenced recording/score ahead of rehearsal.</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="group-card" id="jazz-band">
-        <div class="group-header">
-          <div>
-            <!-- <p class="eyebrow">Jazz Band</p> -->
-            <h2>Jazz Band</h2>
-            <p data-week="jazz">Week of <strong>Apr 15, 2026</strong></p>
-            <p class="schedule-line"><strong>Rehearsal:</strong> Wednesdays <strong>7:00-9:00 PM</strong></p>
-          </div>
-
-        </div>
-        <div class="detail-grid">
-          <article class="detail-card">
-            <h3>Pieces this week</h3>
-            <ul class="detail-list" data-list="jazz-pieces">
-              <li>That Old Black Magic (vocal) - Angela &amp; (Hannah?)</li>
-              <li>Feelin&#x27; Good - Angela</li>
-              <li>Critical Mass</li>
-              <li>Pieces</li>
-</ul>
-          </article>
-          <article class="detail-card">
-            <h3>Other details</h3>
-            <ul class="detail-list" data-list="jazz-details">
-              <li>RU Chicken review of 79 - END</li>
-              <li>&quot;NEW&quot; Chart: &quot;Witchcraft&quot; with Will on vocals:</li>
-</ul>
-          </article>
-          <article class="detail-card detail-card-wide">
-            <h3>Additional notes</h3>
-            <ul class="detail-list" data-list="jazz-notes">
-              <li>"Too Many Things" is challenging; work it in small sections.</li>
-              <li>Mp3 recording is attached for "Too Many Things."</li>
-              <li>Parts are posted in the shared Google Drive folder.</li>
-              <li>Expect vocalist pairs to rotate; Hannah/Simone feature on 2/4.</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <aside class="dates-card">
-        <p class="eyebrow">Concert dates</p>
-        <div class="dates-header">
-          <div>
-            <h2>Upcoming performances</h2>
-            <p>Keep this list steady week to week for quick reference.</p>
-          </div>
-          <a class="calendar-button" href="assets/keystone-concerts.ics" download>Add to calendar</a>
-        </div>
-        <ul class="dates-list">
-          <li>
-            <span class="date-pill">Mar 01</span>
-            <div>
-              <p class="date-title">Recruiting Concert</p>
-              <p class="date-meta">7:00 PM - Weather date Tue Mar 3 at 7:30 PM</p>
-            </div>
-          </li>
-          <li>
-            <span class="date-pill">Apr 26</span>
-            <div>
-              <p class="date-title">Symphonic + Vocal Concert</p>
-              <p class="date-meta">7:00 PM - Dress rehearsal Sat Apr 25, 8-10 AM</p>
-            </div>
-          </li>
-          <li>
-            <span class="date-pill">May 03</span>
-            <div>
-              <p class="date-title">Jazz Ensemble Concert</p>
-              <p class="date-meta">7:00 PM</p>
-            </div>
-          </li>
-          <li>
-            <span class="date-pill">May 16</span>
-            <div>
-              <p class="date-title">Commencement</p>
-              <p class="date-meta">Saturday morning - all must attend, typically done by 1:00 PM</p>
-            </div>
-          </li>
-        </ul>
-      </aside>
-    </main>
-
-    <footer class="site-footer">
-      Update rehearsal details here each week after reviewing the latest director emails.
-    </footer>
+    </div>
   </div>
+
+  <!-- LIVE STATUS -->
+  <div class="status" id="status">
+    <div class="status-left">
+      <div class="status-pulse"></div>
+      <div class="status-text">
+        <strong id="status-label">Loading…</strong>
+        <span id="status-detail">Checking the time</span>
+      </div>
+    </div>
+    <div class="status-countdown">
+      <strong id="status-count">—</strong>
+      <span id="status-count-label">until call time</span>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+    <h2>The Day at a Glance</h2>
+    <div class="timeline-track">
+      <div class="tl-stop" data-time="540"><div class="tl-dot"></div><div class="tl-time">9:00 AM</div><div class="tl-label">Practice rooms<br>open</div></div>
+      <div class="tl-stop highlight" data-time="1040"><div class="tl-dot"></div><div class="tl-time">5:20 PM</div><div class="tl-label">Your call time</div></div>
+      <div class="tl-stop" data-time="1050"><div class="tl-dot"></div><div class="tl-time">5:30 PM</div><div class="tl-label">On stage · Maslanka recording</div></div>
+      <div class="tl-stop" data-time="1110"><div class="tl-dot"></div><div class="tl-time">6:30 PM</div><div class="tl-label">Theatre doors<br>open</div></div>
+      <div class="tl-stop" data-time="1140"><div class="tl-dot"></div><div class="tl-time">7:00 PM</div><div class="tl-label">Performance<br>begins</div></div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+    <div class="col stagger">
+
+      <div class="arrival">
+        <div class="arrival-time">5:20</div>
+        <div class="arrival-text">
+          <strong>Your Call Time</strong>
+          On stage with instruments out by 5:30. Maslanka recording runs 5:30–6:00 PM.
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          Before You Leave
+        </h3>
+        <div class="checklist">
+          <div class="checklist-items" id="checklist">
+            <div class="check-item" data-id="instrument"><span class="check-box"></span><span class="check-label">Instrument</span></div>
+            <div class="check-item" data-id="attire"><span class="check-box"></span><span class="check-label">All-black attire</span></div>
+            <div class="check-item" data-id="music"><span class="check-box"></span><span class="check-label">Music / folder</span></div>
+            <div class="check-item" data-id="water"><span class="check-box"></span><span class="check-label">Water bottle</span></div>
+            <div class="check-item" data-id="phone"><span class="check-box"></span><span class="check-label">Phone charged</span></div>
+            <div class="check-item" data-id="reeds"><span class="check-box"></span><span class="check-label">Reeds / mutes</span></div>
+          </div>
+          <button class="check-reset" id="check-reset">Reset checklist</button>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg></span>
+          Musician Parking
+        </h3>
+        <ul class="tidy">
+          <li>Behind the Art Building, up the hill from Brooks</li>
+          <li>Behind Capwell Science Hall / alongside Ward Hall</li>
+          <li>Along the tree line by the Library</li>
+          <li>Near any of the Residence Halls</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <h3>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
+          Attire
+        </h3>
+        <div class="attire-card">
+          <div class="attire-swatch"></div>
+          <div class="attire-text">
+            <strong>All black concert attire</strong>
+            No controversial symbolism or written messages on clothing.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col stagger">
+
+      <div class="block">
+        <h3>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></span>
+          Day-Of Reminders
+        </h3>
+        <ul class="tidy">
+          <li>Personal items go in the loading dock or hallway</li>
+          <li>Water provided — no food (not an early call)</li>
+          <li>Not too late to invite guests! Doors open at 6:30</li>
+          <li>Flag any guest accessibility needs in advance</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <h3>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          Venue Details
+        </h3>
+        <div class="info-grid">
+          <div class="info-cell"><div class="label">Address</div><div class="val">One College Green<br>La Plume, PA 18440</div></div>
+          <div class="info-cell"><div class="label">Building</div><div class="val">Brooks Hall<br>(white, past Gambal)</div></div>
+          <div class="info-cell"><div class="label">Guest Doors</div><div class="val">6:30 PM</div></div>
+          <div class="info-cell"><div class="label">Performance</div><div class="val">7:00 PM</div></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          Guest Parking
+        </h3>
+        <ul class="tidy">
+          <li>Brooks parking lot or behind Brooks Hall</li>
+          <li>Gardner Hall (Fornicola Wellness Center)</li>
+          <li>Gambal Athletic Building lot</li>
+          <li>Visitor's lot at the main entrance</li>
+          <li>Lots near Steak 'n Shake / Starbucks</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-block">
+      <div class="label">Director</div>
+      <div class="val">Jeffrey A. Tylutki<small>Director of Bands & Performance Music</small></div>
+    </div>
+    <div class="footer-block">
+      <div class="label">Music Office</div>
+      <div class="val"><a href="tel:5709458599">570-945-8599</a><small><a href="mailto:music@keystone.edu">music@keystone.edu</a></small></div>
+    </div>
+    <div class="footer-block">
+      <div class="label">Campus Safety</div>
+      <div class="val"><a href="tel:5709458989">570-945-8989</a><small>Backup if Music office is unreachable</small></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ============ LIVE STATUS BANNER ============
+  const concertDate = new Date(2026, 3, 26); // April 26, 2026
+  const callTimeMin = 17 * 60 + 20; // 5:20 PM in minutes from midnight
+
+  function getPhase(now) {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dayDiff = Math.round((today - concertDate) / (1000 * 60 * 60 * 24));
+
+    if (dayDiff < 0) {
+      return { label: 'Concert Day Approaches', detail: `${Math.abs(dayDiff)} day${Math.abs(dayDiff) === 1 ? '' : 's'} until performance`, count: null };
+    }
+    if (dayDiff > 0) {
+      return { label: 'After the Performance', detail: 'Hope it went well!', count: null, postShow: true };
+    }
+
+    // Concert day — figure out the phase by minute
+    const min = now.getHours() * 60 + now.getMinutes();
+    const callDate = new Date(now); callDate.setHours(17, 20, 0, 0);
+    const diffMs = callDate - now;
+    const countText = formatCountdown(diffMs);
+
+    if (min < 540) return { label: 'Early Morning', detail: 'Practice rooms open at 9:00 AM', count: countText };
+    if (min < 1020) return { label: 'Daytime · Get Ready', detail: 'Practice rooms are open for warm-up', count: countText };
+    if (min < 1040) return { label: 'On Your Way', detail: 'Heading to Brooks Hall — get there by 5:20', count: countText };
+    if (min < 1050) return { label: 'It\u2019s Time', detail: 'On stage with instruments out by 5:30', count: 'NOW', countLabel: 'call time' };
+    if (min < 1080) return { label: 'Recording in Progress', detail: 'Maslanka recording runs until 6:00 PM', count: 'LIVE', countLabel: 'recording' };
+    if (min < 1110) return { label: 'Settle In', detail: 'Chorale arriving with music in hand', count: null };
+    if (min < 1140) return { label: 'Doors Are Open', detail: 'Theatre doors opened at 6:30 — guests arriving', count: formatCountdown(new Date(now).setHours(19, 0, 0, 0) - now), countLabel: 'until curtain' };
+    if (min < 1320) return { label: 'Performance', detail: 'Break a leg! 🎶', count: 'LIVE', countLabel: 'on stage' };
+    return { label: 'After the Performance', detail: 'Beautifully done. Time to celebrate.', count: null, postShow: true };
+  }
+
+  function formatCountdown(ms) {
+    if (ms <= 0) return 'NOW';
+    const totalMin = Math.floor(ms / 60000);
+    const h = Math.floor(totalMin / 60);
+    const m = totalMin % 60;
+    if (h > 0) return `${h}h ${m}m`;
+    return `${m}m`;
+  }
+
+  function updateStatus() {
+    const now = new Date();
+    const phase = getPhase(now);
+    document.getElementById('status-label').textContent = phase.label;
+    document.getElementById('status-detail').textContent = phase.detail;
+    const countEl = document.getElementById('status-count');
+    const countLabelEl = document.getElementById('status-count-label');
+    if (phase.count) {
+      countEl.textContent = phase.count;
+      countLabelEl.textContent = phase.countLabel || 'until call time';
+      countEl.parentElement.style.display = '';
+    } else {
+      countEl.parentElement.style.display = 'none';
+    }
+    updateTimelineState(now);
+  }
+
+  function updateTimelineState(now) {
+    const isToday = now.getFullYear() === concertDate.getFullYear() &&
+                    now.getMonth() === concertDate.getMonth() &&
+                    now.getDate() === concertDate.getDate();
+    const min = now.getHours() * 60 + now.getMinutes();
+    document.querySelectorAll('.tl-stop').forEach(stop => {
+      stop.classList.remove('passed', 'current');
+      if (!isToday) return;
+      const stopTime = parseInt(stop.dataset.time, 10);
+      const nextStop = stop.nextElementSibling ? parseInt(stop.nextElementSibling.dataset.time, 10) : 24*60;
+      if (min >= stopTime && min < nextStop) stop.classList.add('current');
+      else if (min >= nextStop) stop.classList.add('passed');
+    });
+  }
+
+  updateStatus();
+  setInterval(updateStatus, 30000); // refresh every 30s
+
+  // ============ PERSISTENT CHECKLIST ============
+  const STORAGE_KEY = 'concert-checklist-2026-04-26';
+
+  async function loadChecklist() {
+    try {
+      const result = await window.storage.get(STORAGE_KEY);
+      if (result && result.value) {
+        const checked = JSON.parse(result.value);
+        document.querySelectorAll('.check-item').forEach(item => {
+          if (checked[item.dataset.id]) item.classList.add('checked');
+        });
+      }
+    } catch (e) {
+      // Storage not available or key doesn't exist — that's fine, fall back to in-memory
+    }
+  }
+
+  async function saveChecklist() {
+    const state = {};
+    document.querySelectorAll('.check-item').forEach(item => {
+      state[item.dataset.id] = item.classList.contains('checked');
+    });
+    try {
+      await window.storage.set(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      // Silent fail — checks still work in-session
+    }
+  }
+
+  document.querySelectorAll('.check-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('checked');
+      saveChecklist();
+    });
+  });
+
+  document.getElementById('check-reset').addEventListener('click', async () => {
+    document.querySelectorAll('.check-item').forEach(item => item.classList.remove('checked'));
+    try { await window.storage.delete(STORAGE_KEY); } catch (e) {}
+  });
+
+  if (window.storage) loadChecklist();
+</script>
 </body>
 </html>
