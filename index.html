@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Concert Day Reference — Sunday, April 26</title>
+<title>Concert Day Reference — Sunday, May 3</title>
 <style>
   :root {
     --ink: #1f1a2e;
@@ -17,6 +17,9 @@
     --rule: #ddd2bc;
     --tint: #f0e6d2;
     --shadow: rgba(31, 26, 46, 0.12);
+    --amber: #b8761a;
+    --amber-bg: #faecc8;
+    --amber-rule: #e8c98a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -65,72 +68,48 @@
     background: linear-gradient(90deg, var(--gold) 0%, var(--gold-soft) 50%, var(--gold) 100%);
     z-index: 3;
   }
-  .header-bg {
-    position: absolute;
-    inset: 0;
-    opacity: 0.35;
-    pointer-events: none;
-  }
+  .header-bg { position: absolute; inset: 0; opacity: 0.28; pointer-events: none; }
   .header-bg svg { width: 100%; height: 100%; display: block; }
   .header-content { position: relative; z-index: 2; }
   .header-tag {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold-soft);
-    margin-bottom: 10px;
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold-soft); margin-bottom: 10px;
   }
   .header-title {
-    font-size: 42px;
-    font-style: italic;
-    font-weight: normal;
-    line-height: 1.05;
-    margin-bottom: 8px;
+    font-size: 42px; font-style: italic; font-weight: normal;
+    line-height: 1.05; margin-bottom: 8px;
     text-shadow: 0 2px 12px rgba(0,0,0,0.4);
   }
   .header-sub {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 13px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
     color: rgba(251, 247, 238, 0.8);
   }
   .header-meta {
-    margin-top: 22px;
-    display: flex;
-    gap: 32px;
-    flex-wrap: wrap;
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 14px;
+    margin-top: 22px; display: flex; gap: 32px; flex-wrap: wrap;
+    font-family: 'Helvetica Neue', sans-serif; font-size: 14px;
   }
   .header-meta div { display: flex; flex-direction: column; gap: 2px; }
   .header-meta .label {
-    color: var(--gold-soft);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-size: 10px;
+    color: var(--gold-soft); text-transform: uppercase;
+    letter-spacing: 0.15em; font-size: 10px;
   }
   .header-meta .val { font-weight: 500; }
+  .header-meta .tbd { color: var(--gold-soft); font-style: italic; font-weight: 400; }
 
-  /* STATUS BANNER */
+  /* STATUS */
   .status {
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--ink); color: var(--paper);
     padding: 14px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
     font-family: 'Helvetica Neue', sans-serif;
     border-bottom: 1px solid rgba(255,255,255,0.08);
   }
   .status-left { display: flex; align-items: center; gap: 12px; }
   .status-pulse {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
+    width: 10px; height: 10px; border-radius: 50%;
     background: var(--gold-soft);
     box-shadow: 0 0 0 0 rgba(230, 200, 150, 0.8);
     animation: pulse 2.2s infinite;
@@ -140,30 +119,40 @@
     70% { box-shadow: 0 0 0 12px rgba(230, 200, 150, 0); }
     100% { box-shadow: 0 0 0 0 rgba(230, 200, 150, 0); }
   }
-  .status-text {
-    font-size: 13px;
-    line-height: 1.4;
-  }
+  .status-text { font-size: 13px; line-height: 1.4; }
   .status-text strong {
-    color: var(--gold-soft);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 11px;
-    display: block;
-    margin-bottom: 2px;
+    color: var(--gold-soft); text-transform: uppercase;
+    letter-spacing: 0.12em; font-size: 11px;
+    display: block; margin-bottom: 2px;
   }
   .status-countdown {
-    font-size: 12px;
-    color: rgba(251, 247, 238, 0.7);
-    font-variant-numeric: tabular-nums;
-    text-align: right;
+    font-size: 12px; color: rgba(251, 247, 238, 0.7);
+    font-variant-numeric: tabular-nums; text-align: right;
   }
   .status-countdown strong {
-    color: var(--paper);
-    font-size: 16px;
-    font-weight: 700;
-    display: block;
-    letter-spacing: 0.02em;
+    color: var(--paper); font-size: 16px; font-weight: 700;
+    display: block; letter-spacing: 0.02em;
+  }
+
+  /* PLAN B BANNER */
+  .planb {
+    background: var(--amber-bg);
+    border-bottom: 1px solid var(--amber-rule);
+    padding: 14px 40px;
+    display: flex; align-items: flex-start; gap: 14px;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+  .planb-icon { width: 22px; height: 22px; color: var(--amber); flex-shrink: 0; margin-top: 1px; }
+  .planb-icon svg { width: 100%; height: 100%; }
+  .planb-text { font-size: 13px; line-height: 1.55; color: #5a3a0e; }
+  .planb-text strong {
+    display: block; color: var(--amber); text-transform: uppercase;
+    letter-spacing: 0.15em; font-size: 10.5px; margin-bottom: 3px;
+  }
+  .planb-text .addr { color: var(--ink); font-weight: 500; }
+  .planb-text .small {
+    display: block; font-size: 12px; color: #6b4a18;
+    margin-top: 4px; font-style: italic;
   }
 
   /* TIMELINE */
@@ -174,55 +163,35 @@
   }
   .timeline h2 {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    margin-bottom: 22px;
-    text-align: center;
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 22px; text-align: center;
   }
   .timeline-track {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0;
-    position: relative;
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 0; position: relative;
   }
   .timeline-track::before {
-    content: '';
-    position: absolute;
-    top: 22px;
-    left: 10%;
-    right: 10%;
-    height: 2px;
+    content: ''; position: absolute; top: 22px;
+    left: 10%; right: 10%; height: 2px;
     background: linear-gradient(90deg, var(--rule) 0%, var(--gold) 30%, var(--accent) 50%, var(--gold) 70%, var(--rule) 100%);
     z-index: 0;
   }
   .tl-stop { text-align: center; position: relative; z-index: 1; }
   .tl-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--paper);
-    border: 3px solid var(--ink-soft);
-    margin: 16px auto 12px;
-    transition: all 0.3s ease;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--paper); border: 3px solid var(--ink-soft);
+    margin: 16px auto 12px; transition: all 0.3s ease;
   }
   .tl-stop.highlight .tl-dot {
-    width: 20px;
-    height: 20px;
-    margin: 13px auto 9px;
-    background: var(--accent);
-    border-color: var(--accent-deep);
+    width: 20px; height: 20px; margin: 13px auto 9px;
+    background: var(--accent); border-color: var(--accent-deep);
     box-shadow: 0 0 0 5px rgba(168, 61, 42, 0.18), 0 2px 8px rgba(168, 61, 42, 0.4);
   }
   .tl-stop.passed .tl-dot {
-    background: var(--ink-soft);
-    border-color: var(--ink-soft);
-    opacity: 0.55;
+    background: var(--ink-soft); border-color: var(--ink-soft); opacity: 0.55;
   }
   .tl-stop.current .tl-dot {
-    background: var(--gold);
-    border-color: var(--accent);
+    background: var(--gold); border-color: var(--accent);
     box-shadow: 0 0 0 5px rgba(192, 138, 62, 0.25);
     animation: glow 2s ease-in-out infinite;
   }
@@ -232,163 +201,182 @@
   }
   .tl-time {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--ink);
+    font-size: 18px; font-weight: 700; color: var(--ink);
     letter-spacing: 0.02em;
   }
   .tl-stop.highlight .tl-time { color: var(--accent-deep); font-size: 20px; }
   .tl-stop.passed .tl-time { color: var(--ink-soft); opacity: 0.6; }
+  .tl-stop .tl-time.tba {
+    font-size: 13px; color: var(--ink-soft);
+    letter-spacing: 0.15em; text-transform: uppercase;
+  }
   .tl-label {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 11px;
-    color: var(--ink-soft);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-top: 4px;
-    line-height: 1.4;
-    padding: 0 6px;
+    font-size: 11px; color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-top: 4px; line-height: 1.4; padding: 0 6px;
   }
   .tl-stop.highlight .tl-label { color: var(--accent); font-weight: 600; }
   .tl-stop.passed .tl-label { opacity: 0.55; }
 
+  /* SETLIST */
+  .setlist-section {
+    padding: 36px 40px 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .setlist-section h2 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent-deep); margin-bottom: 4px; text-align: center;
+  }
+  .setlist-section .ornament {
+    text-align: center; color: var(--gold);
+    margin-bottom: 22px; font-size: 18px; letter-spacing: 0.4em;
+  }
+  .pre-sort-banner {
+    background: var(--ink); color: var(--paper);
+    padding: 10px 16px; border-radius: 4px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px; letter-spacing: 0.05em;
+    text-align: center; margin: 0 auto 22px;
+    max-width: 480px;
+    border-left: 3px solid var(--gold);
+  }
+  .pre-sort-banner strong {
+    color: var(--gold-soft); text-transform: uppercase;
+    letter-spacing: 0.18em; font-size: 10.5px;
+    display: block; margin-bottom: 3px;
+  }
+  .setlist {
+    list-style: none; counter-reset: piece;
+    max-width: 640px; margin: 0 auto;
+  }
+  .setlist > li {
+    counter-increment: piece;
+    display: grid; grid-template-columns: 36px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 4px;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .setlist > li:last-child { border-bottom: none; }
+  .setlist > li::before {
+    content: counter(piece, decimal-leading-zero);
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.05em;
+  }
+  .setlist .piece {
+    font-family: 'Georgia', serif; font-style: italic;
+    font-size: 18px; color: var(--ink); line-height: 1.3;
+  }
+  .setlist .vocalist {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 10.5px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent);
+    font-weight: 600; white-space: nowrap;
+  }
+  .interlude {
+    padding: 8px 4px 8px 56px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px; color: var(--ink-soft); font-style: italic;
+    border-bottom: 1px dotted var(--rule);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .interlude::before {
+    content: ''; width: 24px; height: 1px;
+    background: var(--gold); flex-shrink: 0;
+  }
+  .interlude .reader {
+    font-style: normal; font-weight: 600;
+    color: var(--accent); text-transform: uppercase;
+    letter-spacing: 0.1em; font-size: 10.5px;
+    margin-left: 4px;
+  }
+
   /* BODY */
   .body {
     padding: 32px 40px 36px;
-    display: grid;
-    grid-template-columns: 1.05fr 1fr;
-    gap: 32px;
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 32px;
   }
   .col h3 {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--accent-deep);
-    margin-bottom: 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--rule);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--accent-deep); margin-bottom: 14px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; gap: 10px;
   }
   .icon {
-    display: inline-flex;
-    width: 20px;
-    height: 20px;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent);
-    flex-shrink: 0;
+    display: inline-flex; width: 20px; height: 20px;
+    align-items: center; justify-content: center;
+    color: var(--accent); flex-shrink: 0;
   }
   .icon svg { width: 18px; height: 18px; }
   .block + .block { margin-top: 24px; }
 
-  /* ARRIVAL CALLOUT */
-  .arrival {
-    background: linear-gradient(135deg, var(--ink) 0%, #3a2d4d 100%);
-    color: var(--paper);
-    padding: 22px 24px;
-    border-radius: 4px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    box-shadow: 0 6px 16px var(--shadow);
-    border-left: 4px solid var(--gold);
-  }
-  .arrival-time {
-    font-size: 44px;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--gold-soft);
-    font-family: 'Helvetica Neue', sans-serif;
-    letter-spacing: -0.02em;
-  }
-  .arrival-text {
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 13px;
-    line-height: 1.55;
-    color: rgba(251, 247, 238, 0.85);
-  }
-  .arrival-text strong {
-    display: block;
-    font-size: 15px;
-    margin-bottom: 4px;
-    color: var(--paper);
-    letter-spacing: 0.02em;
-  }
-
   /* CHECKLIST */
   .checklist {
     background: var(--paper-warm);
-    border-radius: 4px;
-    padding: 16px 18px;
+    border-radius: 4px; padding: 16px 18px;
     border: 1px solid var(--rule);
   }
   .checklist-items {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: grid; grid-template-columns: 1fr 1fr;
     gap: 6px 14px;
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 13px;
-    color: var(--ink);
+    font-size: 13px; color: var(--ink);
   }
   .check-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    padding: 6px 4px;
-    border-radius: 3px;
-    user-select: none;
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-radius: 3px; user-select: none;
     transition: background 0.15s;
   }
+  .check-item.priority {
+    background: rgba(168, 61, 42, 0.08);
+    grid-column: span 2;
+    border: 1px solid rgba(168, 61, 42, 0.2);
+    padding: 8px 10px;
+    margin-bottom: 4px;
+  }
+  .check-item.priority .check-label {
+    font-weight: 600;
+  }
+  .check-item.priority .check-label::after {
+    content: ' · do before Sunday';
+    font-weight: 400; font-style: italic;
+    color: var(--accent); font-size: 11px;
+  }
   .check-item:hover { background: rgba(168, 61, 42, 0.06); }
+  .check-item.priority:hover { background: rgba(168, 61, 42, 0.12); }
   .check-box {
-    width: 16px;
-    height: 16px;
-    border: 1.5px solid var(--accent);
-    border-radius: 3px;
-    flex-shrink: 0;
-    position: relative;
-    transition: all 0.2s;
-    background: var(--paper);
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--accent); border-radius: 3px;
+    flex-shrink: 0; position: relative;
+    transition: all 0.2s; background: var(--paper);
   }
   .check-item.checked .check-box {
-    background: var(--accent);
-    border-color: var(--accent);
+    background: var(--accent); border-color: var(--accent);
   }
   .check-item.checked .check-box::after {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 1px;
-    width: 5px;
-    height: 9px;
-    border: solid var(--paper);
-    border-width: 0 2px 2px 0;
+    content: ''; position: absolute;
+    left: 4px; top: 1px; width: 5px; height: 9px;
+    border: solid var(--paper); border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
   .check-item.checked .check-label {
+    text-decoration: line-through; color: var(--ink-soft); opacity: 0.7;
+  }
+  .check-item.checked.priority .check-label::after {
     text-decoration: line-through;
-    color: var(--ink-soft);
-    opacity: 0.7;
   }
   .check-label { transition: all 0.2s; }
   .check-reset {
-    background: none;
-    border: none;
+    background: none; border: none;
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 11px;
-    color: var(--ink-soft);
-    cursor: pointer;
-    margin-top: 8px;
-    padding: 4px 0;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-decoration: underline;
-    text-decoration-color: var(--rule);
+    font-size: 11px; color: var(--ink-soft);
+    cursor: pointer; margin-top: 8px; padding: 4px 0;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    text-decoration: underline; text-decoration-color: var(--rule);
   }
   .check-reset:hover { color: var(--accent); }
 
@@ -396,103 +384,76 @@
   ul.tidy {
     list-style: none;
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--ink);
+    font-size: 14px; line-height: 1.6; color: var(--ink);
   }
   ul.tidy li {
-    padding-left: 20px;
-    position: relative;
-    margin-bottom: 6px;
+    padding-left: 20px; position: relative; margin-bottom: 6px;
   }
   ul.tidy li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 9px;
-    width: 6px;
-    height: 6px;
-    background: var(--accent);
-    transform: rotate(45deg);
+    content: ''; position: absolute;
+    left: 0; top: 9px; width: 6px; height: 6px;
+    background: var(--accent); transform: rotate(45deg);
   }
 
   /* ATTIRE */
   .attire-card {
     background: var(--paper-warm);
     border: 1px solid var(--rule);
-    padding: 16px 18px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
+    padding: 16px 18px; border-radius: 4px;
+    display: flex; align-items: center; gap: 16px;
   }
   .attire-swatch {
-    width: 52px;
-    height: 52px;
-    background: var(--ink);
-    border-radius: 4px;
-    flex-shrink: 0;
+    width: 52px; height: 52px;
+    background: var(--ink); border-radius: 4px; flex-shrink: 0;
     box-shadow: inset 0 0 0 2px rgba(255,255,255,0.05), 0 2px 4px var(--shadow);
   }
   .attire-text {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--ink-soft);
+    font-size: 13px; line-height: 1.5; color: var(--ink-soft);
   }
   .attire-text strong { color: var(--ink); display: block; margin-bottom: 2px; font-size: 14px; }
 
   /* INFO GRID */
   .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
     font-family: 'Helvetica Neue', sans-serif;
   }
   .info-cell {
     background: var(--paper-warm);
-    padding: 12px 14px;
-    border-radius: 4px;
+    padding: 12px 14px; border-radius: 4px;
     border-left: 3px solid var(--gold);
   }
-  .info-cell .label {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    margin-bottom: 4px;
+  .info-cell.alt {
+    border-left-color: var(--amber);
+    background: var(--amber-bg);
   }
+  .info-cell .label {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 4px;
+  }
+  .info-cell.alt .label { color: var(--amber); }
   .info-cell .val { font-size: 13px; color: var(--ink); line-height: 1.4; }
 
   /* FOOTER */
   .footer {
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--ink); color: var(--paper);
     padding: 24px 40px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
     font-family: 'Helvetica Neue', sans-serif;
     border-top: 3px solid var(--gold);
   }
   .footer-block .label {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold-soft);
-    margin-bottom: 5px;
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold-soft); margin-bottom: 5px;
   }
   .footer-block .val { font-size: 14px; color: var(--paper); font-weight: 500; }
   .footer-block .val small {
-    display: block;
-    font-size: 12px;
+    display: block; font-size: 12px;
     color: rgba(251, 247, 238, 0.55);
-    margin-top: 3px;
-    font-weight: 400;
+    margin-top: 3px; font-weight: 400;
   }
   .footer-block a {
-    color: inherit;
-    text-decoration: none;
+    color: inherit; text-decoration: none;
     border-bottom: 1px dotted rgba(251, 247, 238, 0.3);
   }
   .footer-block a:hover { border-bottom-color: var(--gold-soft); }
@@ -505,17 +466,22 @@
     .header-meta { gap: 18px; }
     .status { padding: 12px 22px; }
     .status-countdown { text-align: left; }
+    .planb { padding: 12px 22px; }
     .timeline { padding: 24px 18px 22px; }
     .timeline-track { grid-template-columns: 1fr; gap: 14px; }
     .timeline-track::before { display: none; }
     .tl-stop { display: flex; align-items: center; gap: 14px; text-align: left; }
     .tl-dot, .tl-stop.highlight .tl-dot { margin: 0; flex-shrink: 0; }
     .tl-label { padding: 0; }
+    .setlist-section { padding: 28px 22px 24px; }
+    .setlist > li { grid-template-columns: 28px 1fr; gap: 12px; }
+    .setlist .vocalist { grid-column: 2; margin-top: 2px; font-size: 9.5px; }
+    .interlude { padding-left: 40px; }
     .body { grid-template-columns: 1fr; gap: 24px; padding: 24px 22px; }
     .info-grid { grid-template-columns: 1fr; }
     .checklist-items { grid-template-columns: 1fr; }
+    .check-item.priority { grid-column: span 1; }
     .footer { grid-template-columns: 1fr; padding: 20px 22px; gap: 14px; }
-    .arrival-time { font-size: 36px; }
   }
 
   /* PRINT */
@@ -530,10 +496,10 @@
     .header { background: #2a1f3d !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .header-bg { display: none; }
     .footer { background: #2a1f3d !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .arrival { background: #2a1f3d !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .check-reset { display: none; }
     .body { padding: 20px 24px; }
     .stagger > *, .card { animation: none; }
+    .planb, .pre-sort-banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .tl-stop.current .tl-dot { animation: none; }
   }
 </style>
@@ -544,50 +510,61 @@
   <!-- HEADER -->
   <div class="header">
     <div class="header-bg" aria-hidden="true">
-      <svg viewBox="0 0 880 220" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 880 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <radialGradient id="sun" cx="50%" cy="100%" r="60%">
-            <stop offset="0%" stop-color="#ffd9a3" stop-opacity="0.95"/>
-            <stop offset="40%" stop-color="#f4a261" stop-opacity="0.5"/>
-            <stop offset="100%" stop-color="#f4a261" stop-opacity="0"/>
-          </radialGradient>
-          <linearGradient id="rays" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" stop-color="#ffd9a3" stop-opacity="0.4"/>
-            <stop offset="100%" stop-color="#ffd9a3" stop-opacity="0"/>
+          <linearGradient id="staffFade" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#fbf7ee" stop-opacity="0"/>
+            <stop offset="20%" stop-color="#fbf7ee" stop-opacity="0.7"/>
+            <stop offset="80%" stop-color="#fbf7ee" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#fbf7ee" stop-opacity="0"/>
           </linearGradient>
+          <radialGradient id="spot" cx="50%" cy="0%" r="60%">
+            <stop offset="0%" stop-color="#ffd9a3" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#ffd9a3" stop-opacity="0"/>
+          </radialGradient>
         </defs>
-        <!-- Sun glow -->
-        <ellipse cx="440" cy="220" rx="280" ry="160" fill="url(#sun)"/>
-        <circle cx="440" cy="218" r="48" fill="#ffd9a3" opacity="0.85"/>
-        <!-- Rays -->
-        <g stroke="url(#rays)" stroke-width="1.5" opacity="0.6">
-          <line x1="440" y1="218" x2="200" y2="40"/>
-          <line x1="440" y1="218" x2="320" y2="20"/>
-          <line x1="440" y1="218" x2="440" y2="0"/>
-          <line x1="440" y1="218" x2="560" y2="20"/>
-          <line x1="440" y1="218" x2="680" y2="40"/>
-          <line x1="440" y1="218" x2="100" y2="120"/>
-          <line x1="440" y1="218" x2="780" y2="120"/>
+        <ellipse cx="440" cy="0" rx="320" ry="180" fill="url(#spot)"/>
+        <g stroke="url(#staffFade)" stroke-width="1.2">
+          <line x1="0" y1="60" x2="880" y2="60"/>
+          <line x1="0" y1="80" x2="880" y2="80"/>
+          <line x1="0" y1="100" x2="880" y2="100"/>
+          <line x1="0" y1="120" x2="880" y2="120"/>
+          <line x1="0" y1="140" x2="880" y2="140"/>
         </g>
-        <!-- Bare trees silhouette -->
-        <g fill="#1f1a2e" opacity="0.85">
-          <path d="M 60 220 L 60 130 L 55 100 L 60 90 L 50 80 L 62 75 M 60 130 L 75 110 M 60 145 L 48 120 M 60 160 L 72 130 M 60 175 L 50 155" stroke="#1f1a2e" stroke-width="1.5" fill="none"/>
-          <path d="M 130 220 L 130 110 L 125 90 L 132 70 L 124 60 M 130 110 L 145 95 M 130 125 L 118 100 M 130 140 L 142 115" stroke="#1f1a2e" stroke-width="1.5" fill="none"/>
-          <path d="M 760 220 L 760 100 L 755 80 L 762 60 M 760 100 L 775 80 M 760 115 L 745 90 M 760 130 L 772 105" stroke="#1f1a2e" stroke-width="1.5" fill="none"/>
-          <path d="M 820 220 L 820 130 L 815 110 L 822 95 M 820 130 L 832 115 M 820 145 L 808 125" stroke="#1f1a2e" stroke-width="1.5" fill="none"/>
+        <g fill="#fbf7ee" opacity="0.55">
+          <ellipse cx="120" cy="120" rx="10" ry="7" transform="rotate(-18 120 120)"/>
+          <line x1="129" y1="118" x2="129" y2="70" stroke="#fbf7ee" stroke-width="1.5"/>
+          <ellipse cx="170" cy="100" rx="10" ry="7" transform="rotate(-18 170 100)"/>
+          <line x1="179" y1="98" x2="179" y2="50" stroke="#fbf7ee" stroke-width="1.5"/>
+          <path d="M 129 70 Q 155 60, 179 50" stroke="#fbf7ee" stroke-width="1.5" fill="none"/>
+          <ellipse cx="350" cy="80" rx="10" ry="7" transform="rotate(-18 350 80)"/>
+          <line x1="359" y1="78" x2="359" y2="30" stroke="#fbf7ee" stroke-width="1.5"/>
+          <ellipse cx="560" cy="140" rx="10" ry="7" transform="rotate(-18 560 140)"/>
+          <line x1="569" y1="138" x2="569" y2="90" stroke="#fbf7ee" stroke-width="1.5"/>
+          <path d="M 569 90 Q 580 95, 585 105" stroke="#fbf7ee" stroke-width="1.5" fill="none"/>
+          <ellipse cx="720" cy="100" rx="10" ry="7" transform="rotate(-18 720 100)"/>
+          <line x1="729" y1="98" x2="729" y2="50" stroke="#fbf7ee" stroke-width="1.5"/>
+          <ellipse cx="780" cy="80" rx="10" ry="7" transform="rotate(-18 780 80)"/>
+          <line x1="771" y1="82" x2="771" y2="130" stroke="#fbf7ee" stroke-width="1.5"/>
         </g>
-        <!-- Horizon -->
-        <line x1="0" y1="220" x2="880" y2="220" stroke="#1f1a2e" stroke-width="1" opacity="0.4"/>
+        <g fill="#fbf7ee" opacity="0.4" font-family="Georgia, serif" font-size="32">
+          <text x="60" y="92">♭</text>
+          <text x="455" y="115">♯</text>
+        </g>
       </svg>
     </div>
     <div class="header-content">
       <div class="header-tag">Keystone College · Department of Performance Music</div>
-      <h1 class="header-title">Our Requiem of Light</h1>
-      <div class="header-sub">Spring Concert · Concert Day Reference</div>
+      <h1 class="header-title">Spring Jazz Concert</h1>
+      <div class="header-sub">Jazz Ensemble · Concert Day Reference</div>
       <div class="header-meta">
         <div>
           <span class="label">Date</span>
-          <span class="val">Sunday, April 26, 2026</span>
+          <span class="val">Sunday, May 3, 2026</span>
+        </div>
+        <div>
+          <span class="label">Call Time</span>
+          <span class="val">5:30 PM</span>
         </div>
         <div>
           <span class="label">Curtain</span>
@@ -595,7 +572,7 @@
         </div>
         <div>
           <span class="label">Venue</span>
-          <span class="val">The Theatre at Brooks Hall</span>
+          <span class="val">Brooks Hall</span>
         </div>
       </div>
     </div>
@@ -616,29 +593,62 @@
     </div>
   </div>
 
+  <!-- PLAN B BANNER -->
+  <div class="planb">
+    <div class="planb-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+    <div class="planb-text">
+      <strong>Plan B Contingency · Confirmed by Saturday night</strong>
+      If the Saturday electric line repair runs over, the concert moves to <span class="addr">Lackawanna Trail HS — 28 Tunnel Hill Rd, Factoryville (7 min from Keystone) · 7:20 PM</span>.
+      <span class="small">If activated: load-in from Brooks → LTHS at 11 AM Sunday. All hands appreciated.</span>
+    </div>
+  </div>
+
   <!-- TIMELINE -->
   <div class="timeline">
     <h2>The Day at a Glance</h2>
     <div class="timeline-track">
-      <div class="tl-stop" data-time="540"><div class="tl-dot"></div><div class="tl-time">9:00 AM</div><div class="tl-label">Practice rooms<br>open</div></div>
-      <div class="tl-stop highlight" data-time="1040"><div class="tl-dot"></div><div class="tl-time">5:20 PM</div><div class="tl-label">Your call time</div></div>
-      <div class="tl-stop" data-time="1050"><div class="tl-dot"></div><div class="tl-time">5:30 PM</div><div class="tl-label">On stage · Maslanka recording</div></div>
-      <div class="tl-stop" data-time="1110"><div class="tl-dot"></div><div class="tl-time">6:30 PM</div><div class="tl-label">Theatre doors<br>open</div></div>
-      <div class="tl-stop" data-time="1140"><div class="tl-dot"></div><div class="tl-time">7:00 PM</div><div class="tl-label">Performance<br>begins</div></div>
+      <div class="tl-stop highlight" data-time="1050"><div class="tl-dot"></div><div class="tl-time">5:30 PM</div><div class="tl-label">Call time</div></div>
+      <div class="tl-stop" data-time="1055"><div class="tl-dot"></div><div class="tl-time">5:35 PM</div><div class="tl-label">Sound check<br>(Vocal Jazz first)</div></div>
+      <div class="tl-stop" data-time="1110"><div class="tl-dot"></div><div class="tl-time">6:30 PM</div><div class="tl-label">Doors<br>open</div></div>
+      <div class="tl-stop" data-time="1140"><div class="tl-dot"></div><div class="tl-time">7:00 PM</div><div class="tl-label">Curtain</div></div>
+      <div class="tl-stop" data-time="1320"><div class="tl-dot"></div><div class="tl-time tba">~9 PM</div><div class="tl-label">Wrap</div></div>
     </div>
+  </div>
+
+  <!-- SETLIST -->
+  <div class="setlist-section">
+    <h2>Set List</h2>
+    <div class="ornament">✦ ✦ ✦</div>
+    <div class="pre-sort-banner">
+      <strong>Important · Pre-Sort Charts</strong>
+      Get your tunes in this order BEFORE you arrive Sunday
+    </div>
+    <ol class="setlist">
+      <li><span class="piece">I Just Called To Say I Love You</span></li>
+      <li><span class="piece">Chicago</span><span class="vocalist">Angela</span></li>
+      <li><span class="piece">Chicken</span></li>
+      <div class="interlude">Poetry excerpt — <span class="reader">Prof. Urbanowicz</span></div>
+      <li><span class="piece">Can't Take That Away From Me</span></li>
+      <li><span class="piece">Moten Blue</span></li>
+      <li><span class="piece">Cry Me A River</span></li>
+      <li><span class="piece">Sway</span></li>
+      <li><span class="piece">Black Magic</span></li>
+      <li><span class="piece">I Can't Give You Anything But Love</span></li>
+      <div class="interlude">Poetry excerpt — <span class="reader">Click</span></div>
+      <li><span class="piece">Feelin' Good</span></li>
+      <li><span class="piece">Pick Up The Pieces</span></li>
+    </ol>
   </div>
 
   <!-- BODY -->
   <div class="body">
     <div class="col stagger">
-
-      <div class="arrival">
-        <div class="arrival-time">5:20</div>
-        <div class="arrival-text">
-          <strong>Your Call Time</strong>
-          On stage with instruments out by 5:30. Maslanka recording runs 5:30–6:00 PM.
-        </div>
-      </div>
 
       <div class="block">
         <h3>
@@ -647,12 +657,14 @@
         </h3>
         <div class="checklist">
           <div class="checklist-items" id="checklist">
-            <div class="check-item" data-id="instrument"><span class="check-box"></span><span class="check-label">Instrument</span></div>
+            <div class="check-item priority" data-id="charts-sorted"><span class="check-box"></span><span class="check-label">Charts sorted in concert order</span></div>
+            <div class="check-item" data-id="trumpet"><span class="check-box"></span><span class="check-label">Trumpet & case</span></div>
             <div class="check-item" data-id="attire"><span class="check-box"></span><span class="check-label">All-black attire</span></div>
-            <div class="check-item" data-id="music"><span class="check-box"></span><span class="check-label">Music / folder</span></div>
+            <div class="check-item" data-id="mutes"><span class="check-box"></span><span class="check-label">Mutes</span></div>
+            <div class="check-item" data-id="valve"><span class="check-box"></span><span class="check-label">Valve oil</span></div>
             <div class="check-item" data-id="water"><span class="check-box"></span><span class="check-label">Water bottle</span></div>
             <div class="check-item" data-id="phone"><span class="check-box"></span><span class="check-label">Phone charged</span></div>
-            <div class="check-item" data-id="reeds"><span class="check-box"></span><span class="check-label">Reeds / mutes</span></div>
+            <div class="check-item" data-id="meds"><span class="check-box"></span><span class="check-label">Pseudoephedrine</span></div>
           </div>
           <button class="check-reset" id="check-reset">Reset checklist</button>
         </div>
@@ -695,10 +707,10 @@
           Day-Of Reminders
         </h3>
         <ul class="tidy">
+          <li>Charts pre-sorted in concert order before you walk in</li>
+          <li>Vocal Jazz goes first on the 5:35 sound check</li>
           <li>Personal items go in the loading dock or hallway</li>
-          <li>Water provided — no food (not an early call)</li>
-          <li>Not too late to invite guests! Doors open at 6:30</li>
-          <li>Flag any guest accessibility needs in advance</li>
+          <li>Watch email Saturday night for Plan B confirmation</li>
         </ul>
       </div>
 
@@ -708,10 +720,22 @@
           Venue Details
         </h3>
         <div class="info-grid">
-          <div class="info-cell"><div class="label">Address</div><div class="val">One College Green<br>La Plume, PA 18440</div></div>
-          <div class="info-cell"><div class="label">Building</div><div class="val">Brooks Hall<br>(white, past Gambal)</div></div>
-          <div class="info-cell"><div class="label">Guest Doors</div><div class="val">6:30 PM</div></div>
-          <div class="info-cell"><div class="label">Performance</div><div class="val">7:00 PM</div></div>
+          <div class="info-cell">
+            <div class="label">Primary · Brooks Hall</div>
+            <div class="val">One College Green<br>La Plume, PA 18440</div>
+          </div>
+          <div class="info-cell alt">
+            <div class="label">Plan B · Lackawanna Trail HS</div>
+            <div class="val">28 Tunnel Hill Rd<br>Factoryville, PA 18419</div>
+          </div>
+          <div class="info-cell">
+            <div class="label">Building</div>
+            <div class="val">Brooks Hall<br>(white, past Gambal)</div>
+          </div>
+          <div class="info-cell alt">
+            <div class="label">Plan B Curtain</div>
+            <div class="val">7:20 PM<br>(if activated)</div>
+          </div>
         </div>
       </div>
 
@@ -752,35 +776,39 @@
 
 <script>
   // ============ LIVE STATUS BANNER ============
-  const concertDate = new Date(2026, 3, 26); // April 26, 2026
-  const callTimeMin = 17 * 60 + 20; // 5:20 PM in minutes from midnight
+  const concertDate = new Date(2026, 4, 3); // May 3, 2026
 
   function getPhase(now) {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const dayDiff = Math.round((today - concertDate) / (1000 * 60 * 60 * 24));
 
     if (dayDiff < 0) {
-      return { label: 'Concert Day Approaches', detail: `${Math.abs(dayDiff)} day${Math.abs(dayDiff) === 1 ? '' : 's'} until performance`, count: null };
+      const d = Math.abs(dayDiff);
+      return {
+        label: 'Concert Day Approaches',
+        detail: d === 1 ? 'Tomorrow is the day' : 'Spring Jazz Concert is Sunday',
+        count: String(d),
+        countLabel: d === 1 ? 'day until concert' : 'days until concert'
+      };
     }
     if (dayDiff > 0) {
-      return { label: 'After the Performance', detail: 'Hope it went well!', count: null, postShow: true };
+      return { label: 'After the Performance', detail: 'Hope it went beautifully', count: null };
     }
 
-    // Concert day — figure out the phase by minute
     const min = now.getHours() * 60 + now.getMinutes();
-    const callDate = new Date(now); callDate.setHours(17, 20, 0, 0);
+    const callDate = new Date(now); callDate.setHours(17, 30, 0, 0);
     const diffMs = callDate - now;
     const countText = formatCountdown(diffMs);
 
-    if (min < 540) return { label: 'Early Morning', detail: 'Practice rooms open at 9:00 AM', count: countText };
-    if (min < 1020) return { label: 'Daytime · Get Ready', detail: 'Practice rooms are open for warm-up', count: countText };
-    if (min < 1040) return { label: 'On Your Way', detail: 'Heading to Brooks Hall — get there by 5:20', count: countText };
-    if (min < 1050) return { label: 'It\u2019s Time', detail: 'On stage with instruments out by 5:30', count: 'NOW', countLabel: 'call time' };
-    if (min < 1080) return { label: 'Recording in Progress', detail: 'Maslanka recording runs until 6:00 PM', count: 'LIVE', countLabel: 'recording' };
-    if (min < 1110) return { label: 'Settle In', detail: 'Chorale arriving with music in hand', count: null };
-    if (min < 1140) return { label: 'Doors Are Open', detail: 'Theatre doors opened at 6:30 — guests arriving', count: formatCountdown(new Date(now).setHours(19, 0, 0, 0) - now), countLabel: 'until curtain' };
-    if (min < 1320) return { label: 'Performance', detail: 'Break a leg! 🎶', count: 'LIVE', countLabel: 'on stage' };
-    return { label: 'After the Performance', detail: 'Beautifully done. Time to celebrate.', count: null, postShow: true };
+    if (min < 660) return { label: 'Concert Day Morning', detail: 'Charts sorted? Plan B status confirmed?', count: countText, countLabel: 'until call time' };
+    if (min < 900) return { label: 'Afternoon · Get Ready', detail: 'Warm up, eat early, double-check chart order', count: countText, countLabel: 'until call time' };
+    if (min < 1020) return { label: 'Almost Time', detail: 'Heading to Brooks Hall — 5:30 call', count: countText, countLabel: 'until call time' };
+    if (min < 1030) return { label: 'On Your Way', detail: 'Get to Brooks for 5:30 call', count: countText, countLabel: 'until call time' };
+    if (min < 1055) return { label: 'Call Time', detail: 'Sound check starts at 5:35 (Vocal Jazz first)', count: 'NOW', countLabel: 'call time' };
+    if (min < 1110) return { label: 'Sound Check', detail: 'Vocal Jazz first on the check', count: 'LIVE', countLabel: 'sound check' };
+    if (min < 1140) return { label: 'Settle In', detail: 'Doors open at 6:30 — guests arriving', count: formatCountdown(new Date(now).setHours(19, 0, 0, 0) - now), countLabel: 'until curtain' };
+    if (min < 1320) return { label: 'Performance', detail: 'Break a leg! 🎺', count: 'LIVE', countLabel: 'on stage' };
+    return { label: 'After the Performance', detail: 'Beautifully done. Time to celebrate.', count: null };
   }
 
   function formatCountdown(ms) {
@@ -814,21 +842,23 @@
                     now.getMonth() === concertDate.getMonth() &&
                     now.getDate() === concertDate.getDate();
     const min = now.getHours() * 60 + now.getMinutes();
-    document.querySelectorAll('.tl-stop').forEach(stop => {
+    const stops = document.querySelectorAll('.tl-stop');
+    stops.forEach((stop, i) => {
       stop.classList.remove('passed', 'current');
       if (!isToday) return;
       const stopTime = parseInt(stop.dataset.time, 10);
-      const nextStop = stop.nextElementSibling ? parseInt(stop.nextElementSibling.dataset.time, 10) : 24*60;
-      if (min >= stopTime && min < nextStop) stop.classList.add('current');
-      else if (min >= nextStop) stop.classList.add('passed');
+      const next = stops[i + 1];
+      const nextTime = next ? parseInt(next.dataset.time, 10) : 24*60;
+      if (min >= stopTime && min < nextTime) stop.classList.add('current');
+      else if (min >= nextTime) stop.classList.add('passed');
     });
   }
 
   updateStatus();
-  setInterval(updateStatus, 30000); // refresh every 30s
+  setInterval(updateStatus, 30000);
 
   // ============ PERSISTENT CHECKLIST ============
-  const STORAGE_KEY = 'concert-checklist-2026-04-26';
+  const STORAGE_KEY = 'concert-checklist-2026-05-03-jazz-v2';
 
   async function loadChecklist() {
     try {
@@ -839,9 +869,7 @@
           if (checked[item.dataset.id]) item.classList.add('checked');
         });
       }
-    } catch (e) {
-      // Storage not available or key doesn't exist — that's fine, fall back to in-memory
-    }
+    } catch (e) {}
   }
 
   async function saveChecklist() {
@@ -849,11 +877,7 @@
     document.querySelectorAll('.check-item').forEach(item => {
       state[item.dataset.id] = item.classList.contains('checked');
     });
-    try {
-      await window.storage.set(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) {
-      // Silent fail — checks still work in-session
-    }
+    try { await window.storage.set(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
   }
 
   document.querySelectorAll('.check-item').forEach(item => {
