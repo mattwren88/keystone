@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Concert Day Reference — Sunday, May 3</title>
+<title>Commencement Day Reference — Saturday, May 16</title>
 <style>
   :root {
     --ink: #1f1a2e;
@@ -134,7 +134,7 @@
     display: block; letter-spacing: 0.02em;
   }
 
-  /* PLAN B BANNER */
+  /* CHAIRS BANNER */
   .planb {
     background: var(--amber-bg);
     border-bottom: 1px solid var(--amber-rule);
@@ -167,12 +167,12 @@
     color: var(--ink-soft); margin-bottom: 22px; text-align: center;
   }
   .timeline-track {
-    display: grid; grid-template-columns: repeat(5, 1fr);
+    display: grid; grid-template-columns: repeat(8, 1fr);
     gap: 0; position: relative;
   }
   .timeline-track::before {
     content: ''; position: absolute; top: 22px;
-    left: 10%; right: 10%; height: 2px;
+    left: 6%; right: 6%; height: 2px;
     background: linear-gradient(90deg, var(--rule) 0%, var(--gold) 30%, var(--accent) 50%, var(--gold) 70%, var(--rule) 100%);
     z-index: 0;
   }
@@ -201,20 +201,16 @@
   }
   .tl-time {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 18px; font-weight: 700; color: var(--ink);
+    font-size: 15px; font-weight: 700; color: var(--ink);
     letter-spacing: 0.02em;
   }
-  .tl-stop.highlight .tl-time { color: var(--accent-deep); font-size: 20px; }
+  .tl-stop.highlight .tl-time { color: var(--accent-deep); font-size: 17px; }
   .tl-stop.passed .tl-time { color: var(--ink-soft); opacity: 0.6; }
-  .tl-stop .tl-time.tba {
-    font-size: 13px; color: var(--ink-soft);
-    letter-spacing: 0.15em; text-transform: uppercase;
-  }
   .tl-label {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 11px; color: var(--ink-soft);
-    text-transform: uppercase; letter-spacing: 0.08em;
-    margin-top: 4px; line-height: 1.4; padding: 0 6px;
+    font-size: 10.5px; color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-top: 4px; line-height: 1.35; padding: 0 4px;
   }
   .tl-stop.highlight .tl-label { color: var(--accent); font-weight: 600; }
   .tl-stop.passed .tl-label { opacity: 0.55; }
@@ -239,7 +235,7 @@
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 12px; letter-spacing: 0.05em;
     text-align: center; margin: 0 auto 22px;
-    max-width: 480px;
+    max-width: 520px;
     border-left: 3px solid var(--gold);
   }
   .pre-sort-banner strong {
@@ -274,23 +270,6 @@
     font-size: 10.5px; letter-spacing: 0.18em;
     text-transform: uppercase; color: var(--accent);
     font-weight: 600; white-space: nowrap;
-  }
-  .interlude {
-    padding: 8px 4px 8px 56px;
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 12px; color: var(--ink-soft); font-style: italic;
-    border-bottom: 1px dotted var(--rule);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .interlude::before {
-    content: ''; width: 24px; height: 1px;
-    background: var(--gold); flex-shrink: 0;
-  }
-  .interlude .reader {
-    font-style: normal; font-weight: 600;
-    color: var(--accent); text-transform: uppercase;
-    letter-spacing: 0.1em; font-size: 10.5px;
-    margin-left: 4px;
   }
 
   /* BODY */
@@ -341,11 +320,6 @@
   .check-item.priority .check-label {
     font-weight: 600;
   }
-  .check-item.priority .check-label::after {
-    content: ' · do before Sunday';
-    font-weight: 400; font-style: italic;
-    color: var(--accent); font-size: 11px;
-  }
   .check-item:hover { background: rgba(168, 61, 42, 0.06); }
   .check-item.priority:hover { background: rgba(168, 61, 42, 0.12); }
   .check-box {
@@ -365,9 +339,6 @@
   }
   .check-item.checked .check-label {
     text-decoration: line-through; color: var(--ink-soft); opacity: 0.7;
-  }
-  .check-item.checked.priority .check-label::after {
-    text-decoration: line-through;
   }
   .check-label { transition: all 0.2s; }
   .check-reset {
@@ -404,14 +375,16 @@
   }
   .attire-swatch {
     width: 52px; height: 52px;
-    background: var(--ink); border-radius: 4px; flex-shrink: 0;
-    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.05), 0 2px 4px var(--shadow);
+    background: linear-gradient(135deg, #4a3520 0%, #8a6a3e 100%);
+    border-radius: 4px; flex-shrink: 0;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.08), 0 2px 4px var(--shadow);
   }
   .attire-text {
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 13px; line-height: 1.5; color: var(--ink-soft);
   }
   .attire-text strong { color: var(--ink); display: block; margin-bottom: 2px; font-size: 14px; }
+  .attire-text .nope { color: var(--accent); font-weight: 600; }
 
   /* INFO GRID */
   .info-grid {
@@ -476,7 +449,6 @@
     .setlist-section { padding: 28px 22px 24px; }
     .setlist > li { grid-template-columns: 28px 1fr; gap: 12px; }
     .setlist .vocalist { grid-column: 2; margin-top: 2px; font-size: 9.5px; }
-    .interlude { padding-left: 40px; }
     .body { grid-template-columns: 1fr; gap: 24px; padding: 24px 22px; }
     .info-grid { grid-template-columns: 1fr; }
     .checklist-items { grid-template-columns: 1fr; }
@@ -555,24 +527,24 @@
     </div>
     <div class="header-content">
       <div class="header-tag">Keystone College · Department of Performance Music</div>
-      <h1 class="header-title">Spring Jazz Concert</h1>
-      <div class="header-sub">Jazz Ensemble · Concert Day Reference</div>
+      <h1 class="header-title">Commencement</h1>
+      <div class="header-sub">KC Performance Music · Performance Day Reference</div>
       <div class="header-meta">
         <div>
           <span class="label">Date</span>
-          <span class="val">Sunday, May 3, 2026</span>
+          <span class="val">Saturday, May 16, 2026</span>
         </div>
         <div>
           <span class="label">Call Time</span>
-          <span class="val">5:30 PM</span>
+          <span class="val">8:30 AM</span>
         </div>
         <div>
-          <span class="label">Curtain</span>
-          <span class="val">7:00 PM</span>
+          <span class="label">Ceremony</span>
+          <span class="val">11:00 AM</span>
         </div>
         <div>
           <span class="label">Venue</span>
-          <span class="val">Brooks Hall</span>
+          <span class="val">Gambal Athletic Center</span>
         </div>
       </div>
     </div>
@@ -593,7 +565,7 @@
     </div>
   </div>
 
-  <!-- PLAN B BANNER -->
+  <!-- CHAIR REQUEST BANNER -->
   <div class="planb">
     <div class="planb-icon" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -603,9 +575,9 @@
       </svg>
     </div>
     <div class="planb-text">
-      <strong>Plan B Contingency · Confirmed by Saturday night</strong>
-      If the Saturday electric line repair runs over, the concert moves to <span class="addr">Lackawanna Trail HS — 28 Tunnel Hill Rd, Factoryville (7 min from Keystone) · 7:20 PM</span>.
-      <span class="small">If activated: load-in from Brooks → LTHS at 11 AM Sunday. All hands appreciated.</span>
+      <strong>Chair Request · Deadline 6 PM Friday</strong>
+      Email <span class="addr">jeffrey.tylutki@keystone.edu</span> by 6 PM today if you need a padded chair (medical / body-habitus reason) — or if your instrument requires a larger base (tubas, etc.).
+      <span class="small">Default seating for the ensemble is black folding chairs, same as the audience.</span>
     </div>
   </div>
 
@@ -613,36 +585,30 @@
   <div class="timeline">
     <h2>The Day at a Glance</h2>
     <div class="timeline-track">
-      <div class="tl-stop highlight" data-time="1050"><div class="tl-dot"></div><div class="tl-time">5:30 PM</div><div class="tl-label">Call time</div></div>
-      <div class="tl-stop" data-time="1055"><div class="tl-dot"></div><div class="tl-time">5:35 PM</div><div class="tl-label">Sound check<br>(Vocal Jazz first)</div></div>
-      <div class="tl-stop" data-time="1110"><div class="tl-dot"></div><div class="tl-time">6:30 PM</div><div class="tl-label">Doors<br>open</div></div>
-      <div class="tl-stop" data-time="1140"><div class="tl-dot"></div><div class="tl-time">7:00 PM</div><div class="tl-label">Curtain</div></div>
-      <div class="tl-stop" data-time="1320"><div class="tl-dot"></div><div class="tl-time tba">~9 PM</div><div class="tl-label">Wrap</div></div>
+      <div class="tl-stop highlight" data-time="510"><div class="tl-dot"></div><div class="tl-time">8:30</div><div class="tl-label">Call time<br>Parked + walking</div></div>
+      <div class="tl-stop" data-time="540"><div class="tl-dot"></div><div class="tl-time">9:00</div><div class="tl-label">Sound check<br>/ rehearsal</div></div>
+      <div class="tl-stop" data-time="580"><div class="tl-dot"></div><div class="tl-time">9:40</div><div class="tl-label">Break</div></div>
+      <div class="tl-stop" data-time="595"><div class="tl-dot"></div><div class="tl-time">9:55</div><div class="tl-label">Warm-up<br>2.0</div></div>
+      <div class="tl-stop" data-time="610"><div class="tl-dot"></div><div class="tl-time">10:10</div><div class="tl-label">Doughnuts<br>+ coffee</div></div>
+      <div class="tl-stop" data-time="640"><div class="tl-dot"></div><div class="tl-time">10:40</div><div class="tl-label">In your<br>chairs</div></div>
+      <div class="tl-stop" data-time="660"><div class="tl-dot"></div><div class="tl-time">11:00</div><div class="tl-label">Ceremony<br>begins</div></div>
+      <div class="tl-stop" data-time="780"><div class="tl-dot"></div><div class="tl-time">~1:00</div><div class="tl-label">Expected<br>wrap</div></div>
     </div>
   </div>
 
   <!-- SETLIST -->
   <div class="setlist-section">
-    <h2>Set List</h2>
+    <h2>Ceremony Music</h2>
     <div class="ornament">✦ ✦ ✦</div>
     <div class="pre-sort-banner">
       <strong>Important · Pre-Sort Charts</strong>
-      Get your tunes in this order BEFORE you arrive Sunday
+      Have your music in order before you walk into Gambal
     </div>
     <ol class="setlist">
-      <li><span class="piece">I Just Called To Say I Love You</span></li>
-      <li><span class="piece">Chicago</span><span class="vocalist">Angela</span></li>
-      <li><span class="piece">Chicken</span></li>
-      <div class="interlude">Poetry excerpt — <span class="reader">Prof. Urbanowicz</span></div>
-      <li><span class="piece">Can't Take That Away From Me</span></li>
-      <li><span class="piece">Moten Blue</span></li>
-      <li><span class="piece">Cry Me A River</span></li>
-      <li><span class="piece">Sway</span></li>
-      <li><span class="piece">Black Magic</span></li>
-      <li><span class="piece">I Can't Give You Anything But Love</span></li>
-      <div class="interlude">Poetry excerpt — <span class="reader">Click</span></div>
-      <li><span class="piece">Feelin' Good</span></li>
-      <li><span class="piece">Pick Up The Pieces</span></li>
+      <li><span class="piece">The Star-Spangled Banner</span></li>
+      <li><span class="piece">Pomp and Circumstance</span><span class="vocalist">Processional</span></li>
+      <li><span class="piece">Azalea</span></li>
+      <li><span class="piece">Alma Mater</span><span class="vocalist">Chorale + Symphonic</span></li>
     </ol>
   </div>
 
@@ -657,14 +623,14 @@
         </h3>
         <div class="checklist">
           <div class="checklist-items" id="checklist">
-            <div class="check-item priority" data-id="charts-sorted"><span class="check-box"></span><span class="check-label">Charts sorted in concert order</span></div>
+            <div class="check-item priority" data-id="charts-sorted"><span class="check-box"></span><span class="check-label">Charts pre-sorted in order</span></div>
             <div class="check-item" data-id="trumpet"><span class="check-box"></span><span class="check-label">Trumpet & case</span></div>
-            <div class="check-item" data-id="attire"><span class="check-box"></span><span class="check-label">All-black attire</span></div>
+            <div class="check-item" data-id="attire"><span class="check-box"></span><span class="check-label">Business-casual attire</span></div>
             <div class="check-item" data-id="mutes"><span class="check-box"></span><span class="check-label">Mutes</span></div>
             <div class="check-item" data-id="valve"><span class="check-box"></span><span class="check-label">Valve oil</span></div>
             <div class="check-item" data-id="water"><span class="check-box"></span><span class="check-label">Water bottle</span></div>
             <div class="check-item" data-id="phone"><span class="check-box"></span><span class="check-label">Phone charged</span></div>
-            <div class="check-item" data-id="meds"><span class="check-box"></span><span class="check-label">Pseudoephedrine</span></div>
+            <div class="check-item" data-id="sunscreen"><span class="check-box"></span><span class="check-label">Sunglasses for the walk</span></div>
           </div>
           <button class="check-reset" id="check-reset">Reset checklist</button>
         </div>
@@ -673,13 +639,13 @@
       <div class="block">
         <h3>
           <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg></span>
-          Musician Parking
+          Parking & Shuttle
         </h3>
         <ul class="tidy">
-          <li>Behind the Art Building, up the hill from Brooks</li>
-          <li>Behind Capwell Science Hall / alongside Ward Hall</li>
-          <li>Along the tree line by the Library</li>
-          <li>Near any of the Residence Halls</li>
+          <li>Park <strong>behind the Art Center</strong> — same as concerts</li>
+          <li>Shuttles run from the Art Center to Gambal</li>
+          <li>Drop heavy items at Gambal ahead of time if you'd like</li>
+          <li>Gambal is the gym visible from the highway — silver "Keystone College" lettering</li>
         </ul>
       </div>
 
@@ -691,8 +657,8 @@
         <div class="attire-card">
           <div class="attire-swatch"></div>
           <div class="attire-text">
-            <strong>All black concert attire</strong>
-            No controversial symbolism or written messages on clothing.
+            <strong>Business casual · "Sunday best"</strong>
+            Job-interview attire. <span class="nope">No jeans. No sneakers.</span>
           </div>
         </div>
       </div>
@@ -707,10 +673,11 @@
           Day-Of Reminders
         </h3>
         <ul class="tidy">
-          <li>Charts pre-sorted in concert order before you walk in</li>
-          <li>Vocal Jazz goes first on the 5:35 sound check</li>
-          <li>Personal items go in the loading dock or hallway</li>
-          <li>Watch email Saturday night for Plan B confirmation</li>
+          <li><strong>Parked and walking by 8:30 AM</strong> — that's the call</li>
+          <li>Brooks storage opens at 7:30 AM if you want to arrive early</li>
+          <li>Breakfast is provided — doughnuts + coffee at 10:10</li>
+          <li>Everyone in chairs by 10:40 sharp</li>
+          <li>Tear-down help appreciated after 1 PM</li>
         </ul>
       </div>
 
@@ -721,20 +688,20 @@
         </h3>
         <div class="info-grid">
           <div class="info-cell">
-            <div class="label">Primary · Brooks Hall</div>
-            <div class="val">One College Green<br>La Plume, PA 18440</div>
+            <div class="label">Performance · Gambal</div>
+            <div class="val">Gambal Athletic Center<br>(the gym off the highway)</div>
           </div>
           <div class="info-cell alt">
-            <div class="label">Plan B · Lackawanna Trail HS</div>
-            <div class="val">28 Tunnel Hill Rd<br>Factoryville, PA 18419</div>
+            <div class="label">Park Here · Art Center</div>
+            <div class="val">Behind the Art Center<br>Shuttle to Gambal</div>
           </div>
           <div class="info-cell">
-            <div class="label">Building</div>
-            <div class="val">Brooks Hall<br>(white, past Gambal)</div>
+            <div class="label">Storage</div>
+            <div class="val">Brooks Hall<br>Open 7:30 AM</div>
           </div>
           <div class="info-cell alt">
-            <div class="label">Plan B Curtain</div>
-            <div class="val">7:20 PM<br>(if activated)</div>
+            <div class="label">Wrap</div>
+            <div class="val">Before 1:00 PM<br>(expected)</div>
           </div>
         </div>
       </div>
@@ -742,14 +709,13 @@
       <div class="block">
         <h3>
           <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-          Guest Parking
+          Ceremony Order
         </h3>
         <ul class="tidy">
-          <li>Brooks parking lot or behind Brooks Hall</li>
-          <li>Gardner Hall (Fornicola Wellness Center)</li>
-          <li>Gambal Athletic Building lot</li>
-          <li>Visitor's lot at the main entrance</li>
-          <li>Lots near Steak 'n Shake / Starbucks</li>
+          <li>Star-Spangled Banner opens the ceremony</li>
+          <li>Pomp and Circumstance — processional</li>
+          <li>Azalea — featured piece</li>
+          <li>Alma Mater — Chorale leads; Symphonic joins</li>
         </ul>
       </div>
 
@@ -763,8 +729,8 @@
       <div class="val">Jeffrey A. Tylutki<small>Director of Bands & Performance Music</small></div>
     </div>
     <div class="footer-block">
-      <div class="label">Music Office</div>
-      <div class="val"><a href="tel:5709458599">570-945-8599</a><small><a href="mailto:music@keystone.edu">music@keystone.edu</a></small></div>
+      <div class="label">Contact</div>
+      <div class="val"><a href="tel:5709458599">570-945-8599</a><small><a href="mailto:jeffrey.tylutki@keystone.edu">jeffrey.tylutki@keystone.edu</a></small></div>
     </div>
     <div class="footer-block">
       <div class="label">Campus Safety</div>
@@ -776,39 +742,41 @@
 
 <script>
   // ============ LIVE STATUS BANNER ============
-  const concertDate = new Date(2026, 4, 3); // May 3, 2026
+  const eventDate = new Date(2026, 4, 16); // May 16, 2026
 
   function getPhase(now) {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const dayDiff = Math.round((today - concertDate) / (1000 * 60 * 60 * 24));
+    const dayDiff = Math.round((today - eventDate) / (1000 * 60 * 60 * 24));
 
     if (dayDiff < 0) {
       const d = Math.abs(dayDiff);
       return {
-        label: 'Concert Day Approaches',
-        detail: d === 1 ? 'Tomorrow is the day' : 'Spring Jazz Concert is Sunday',
+        label: 'Commencement Approaches',
+        detail: d === 1 ? 'Tomorrow is the day — 8:30 AM call' : 'Commencement is Saturday',
         count: String(d),
-        countLabel: d === 1 ? 'day until concert' : 'days until concert'
+        countLabel: d === 1 ? 'day until commencement' : 'days until commencement'
       };
     }
     if (dayDiff > 0) {
-      return { label: 'After the Performance', detail: 'Hope it went beautifully', count: null };
+      return { label: 'After Commencement', detail: 'Nicely done.', count: null };
     }
 
     const min = now.getHours() * 60 + now.getMinutes();
-    const callDate = new Date(now); callDate.setHours(17, 30, 0, 0);
+    const callDate = new Date(now); callDate.setHours(8, 30, 0, 0);
+    const ceremonyDate = new Date(now); ceremonyDate.setHours(11, 0, 0, 0);
     const diffMs = callDate - now;
     const countText = formatCountdown(diffMs);
 
-    if (min < 660) return { label: 'Concert Day Morning', detail: 'Charts sorted? Plan B status confirmed?', count: countText, countLabel: 'until call time' };
-    if (min < 900) return { label: 'Afternoon · Get Ready', detail: 'Warm up, eat early, double-check chart order', count: countText, countLabel: 'until call time' };
-    if (min < 1020) return { label: 'Almost Time', detail: 'Heading to Brooks Hall — 5:30 call', count: countText, countLabel: 'until call time' };
-    if (min < 1030) return { label: 'On Your Way', detail: 'Get to Brooks for 5:30 call', count: countText, countLabel: 'until call time' };
-    if (min < 1055) return { label: 'Call Time', detail: 'Sound check starts at 5:35 (Vocal Jazz first)', count: 'NOW', countLabel: 'call time' };
-    if (min < 1110) return { label: 'Sound Check', detail: 'Vocal Jazz first on the check', count: 'LIVE', countLabel: 'sound check' };
-    if (min < 1140) return { label: 'Settle In', detail: 'Doors open at 6:30 — guests arriving', count: formatCountdown(new Date(now).setHours(19, 0, 0, 0) - now), countLabel: 'until curtain' };
-    if (min < 1320) return { label: 'Performance', detail: 'Break a leg! 🎺', count: 'LIVE', countLabel: 'on stage' };
-    return { label: 'After the Performance', detail: 'Beautifully done. Time to celebrate.', count: null };
+    if (min < 420) return { label: 'Commencement Morning', detail: 'Charts sorted? Attire ready? No jeans, no sneakers.', count: countText, countLabel: 'until call time' };
+    if (min < 510) return { label: 'Heading In', detail: 'Park behind the Art Center · shuttle to Gambal', count: countText, countLabel: 'until call time' };
+    if (min < 540) return { label: 'Call Time', detail: 'Parked + walking to Gambal', count: 'NOW', countLabel: 'call time' };
+    if (min < 580) return { label: 'Sound Check', detail: 'Rehearsal in progress', count: 'LIVE', countLabel: 'rehearsal' };
+    if (min < 595) return { label: 'Break', detail: 'Quick reset', count: 'BREAK', countLabel: '15 min' };
+    if (min < 610) return { label: 'Warm-Up 2.0', detail: 'Second warm-up before doors', count: 'LIVE', countLabel: 'warm-up' };
+    if (min < 640) return { label: 'Doughnuts & Coffee', detail: 'Breakfast break · last restroom run at 10:30', count: 'BREAK', countLabel: 'until in chairs' };
+    if (min < 660) return { label: 'In Your Chair', detail: 'Settle in — ceremony at 11:00', count: formatCountdown(ceremonyDate - now), countLabel: 'until ceremony' };
+    if (min < 780) return { label: 'Ceremony Live', detail: 'Star-Spangled · Pomp · Azalea · Alma Mater', count: 'LIVE', countLabel: 'on stage' };
+    return { label: 'After Commencement', detail: 'Tear-down help appreciated.', count: null };
   }
 
   function formatCountdown(ms) {
@@ -838,9 +806,9 @@
   }
 
   function updateTimelineState(now) {
-    const isToday = now.getFullYear() === concertDate.getFullYear() &&
-                    now.getMonth() === concertDate.getMonth() &&
-                    now.getDate() === concertDate.getDate();
+    const isToday = now.getFullYear() === eventDate.getFullYear() &&
+                    now.getMonth() === eventDate.getMonth() &&
+                    now.getDate() === eventDate.getDate();
     const min = now.getHours() * 60 + now.getMinutes();
     const stops = document.querySelectorAll('.tl-stop');
     stops.forEach((stop, i) => {
@@ -858,7 +826,7 @@
   setInterval(updateStatus, 30000);
 
   // ============ PERSISTENT CHECKLIST ============
-  const STORAGE_KEY = 'concert-checklist-2026-05-03-jazz-v2';
+  const STORAGE_KEY = 'commencement-checklist-2026-05-16-v1';
 
   async function loadChecklist() {
     try {
