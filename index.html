@@ -497,6 +497,24 @@
     background: var(--paper-warm); border-color: var(--rule); color: var(--ink-soft);
   }
 
+  /* ICS BUTTON */
+  .btn-ics {
+    margin-top: 14px; width: 100%;
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 11px 16px; cursor: pointer;
+    color: var(--paper); background: var(--accent);
+    border: 1px solid var(--accent-deep); border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(168, 61, 42, 0.25);
+    transition: background 0.18s, box-shadow 0.18s, transform 0.06s;
+  }
+  .btn-ics svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .btn-ics:hover { background: var(--accent-deep); box-shadow: 0 3px 10px rgba(107, 36, 24, 0.32); }
+  .btn-ics:active { transform: translateY(1px); }
+  .btn-ics:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .btn-ics.done { background: var(--gold); border-color: var(--amber); }
+
   /* UPDATED BAR */
   .updated {
     padding: 12px 40px; background: var(--paper-warm);
@@ -804,9 +822,10 @@
           <li><strong>Sat, Dec 5</strong> &mdash; off-campus Holiday Concert</li>
           <li><strong>Sun, Dec 6</strong> &mdash; on-campus Holiday Concert</li>
         </ul>
-        <div class="rep-links" style="margin-top: 12px;">
-          <a href="assets/keystone-concerts.ics" download>Add all dates to your calendar</a>
-        </div>
+        <button class="btn-ics" id="ics-download">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span id="ics-label">Add all dates to your calendar</span>
+        </button>
       </div>
 
       <div class="block">
@@ -864,50 +883,91 @@
 </div>
 
 <script>
-  // ============ LIVE STATUS BANNER ============
-  const sessions = [
-    { id: 'tl-reh1', date: new Date(2026, 8, 8), label: 'The First Rehearsal', detail: 'Tuesday — Chorale & Symphonic Band' },
-    { id: 'tl-jazz1', date: new Date(2026, 8, 9), label: 'Jazz Kickoff', detail: 'Wednesday, 7:00–9:00 PM' },
-    { id: 'tl-alumni', date: new Date(2026, 9, 9), label: 'The Alumni Reception', detail: 'Friday evening — combo only' },
-    { id: 'tl-homecoming', date: new Date(2026, 9, 10), label: 'Homecoming & Open House', detail: 'Saturday, 9:00 AM–2:00 PM' },
-    { id: 'tl-fall', date: new Date(2026, 9, 18), label: 'The Fall Concert', detail: 'Sunday, October 18' },
-    { id: 'tl-carter', date: new Date(2026, 10, 8), label: 'Bill Carter Quintet', detail: 'Sunday, 7:00 PM — Jazz Ensemble opens' },
-    { id: 'tl-holiday', date: new Date(2026, 11, 5), label: 'Holiday Concert', detail: 'Saturday off campus, Sunday on campus' }
+  // ============ THE SEASON — SINGLE SOURCE OF TRUTH ============
+  // start/end are [year, month (0-based), day] or [year, month, day, hour, minute].
+  // `stop` links an event to its dot on the timeline; two events may share one stop.
+  const seasonEvents = [
+    {
+      stop: 'tl-reh1', start: [2026, 8, 8], allDay: true,
+      label: 'The First Rehearsal', detail: 'Tuesday — Chorale & Symphonic Band',
+      summary: 'First Rehearsal — Chorale & Symphonic Band',
+      description: 'Season opener. Non-committal for new members, and there is free food.'
+    },
+    {
+      stop: 'tl-jazz1', start: [2026, 8, 9, 19, 0], end: [2026, 8, 9, 21, 0],
+      label: 'Jazz Kickoff', detail: 'Wednesday, 7:00–9:00 PM',
+      summary: 'First Jazz Ensemble Rehearsal',
+      description: 'Normal time, 7–9 PM. Be on time — we are hitting the ground running.'
+    },
+    {
+      stop: 'tl-alumni', start: [2026, 9, 9], allDay: true,
+      label: 'The Alumni Reception', detail: 'Friday evening — combo only',
+      summary: 'Alumni Reception — Combo only',
+      description: 'Evening performance, combo only.'
+    },
+    {
+      stop: 'tl-homecoming', start: [2026, 9, 10, 9, 0], end: [2026, 9, 10, 14, 0],
+      label: 'Homecoming & Open House', detail: 'Saturday, 9:00 AM–2:00 PM',
+      summary: 'Homecoming & Open House — Jazz Ensemble',
+      description: '9 AM to 2 PM. You will be fed.'
+    },
+    {
+      stop: 'tl-fall', start: [2026, 9, 18], allDay: true,
+      label: 'The Fall Concert', detail: 'Sunday, October 18',
+      summary: 'Fall Concert'
+    },
+    {
+      stop: 'tl-carter', start: [2026, 10, 8, 19, 0], end: [2026, 10, 8, 21, 0],
+      label: 'Bill Carter Quintet', detail: 'Sunday, 7:00 PM — Jazz Ensemble opens',
+      summary: 'Jazz Ensemble opens for the Bill Carter Quintet',
+      description: 'Doors and downbeat at 7 PM.'
+    },
+    {
+      stop: 'tl-holiday', start: [2026, 11, 5], allDay: true,
+      label: 'Holiday Concert', detail: 'Saturday — off campus',
+      summary: 'Holiday Concert — off campus'
+    },
+    {
+      stop: 'tl-holiday', start: [2026, 11, 6], allDay: true,
+      label: 'Holiday Concert', detail: 'Sunday — on campus',
+      summary: 'Holiday Concert — on campus'
+    }
   ];
 
+  // ============ LIVE STATUS BANNER ============
   function dayOnly(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function eventDay(e) { return new Date(e.start[0], e.start[1], e.start[2]); }
 
-  function getNextSession(today) {
-    for (const s of sessions) {
-      const sDay = dayOnly(s.date);
-      if (sDay >= today) return { session: s, dayDiff: Math.round((sDay - today) / (1000 * 60 * 60 * 24)) };
+  function getNextEvent(today) {
+    for (const e of seasonEvents) {
+      const d = eventDay(e);
+      if (d >= today) return { event: e, dayDiff: Math.round((d - today) / (1000 * 60 * 60 * 24)) };
     }
     return null;
   }
 
-  function getPhase(now) {
-    const today = dayOnly(now);
-    const next = getNextSession(today);
+  function getPhase(today) {
+    const next = getNextEvent(today);
 
     if (!next) {
       return { label: 'See You In The Spring', detail: 'Thanks for a great fall season', count: null };
     }
 
-    const { session, dayDiff } = next;
+    const { event, dayDiff } = next;
     if (dayDiff === 0) {
-      return { label: `${session.label} Is Today`, detail: session.detail, count: null };
+      return { label: `${event.label} Is Today`, detail: event.detail, count: null };
     }
     return {
       label: 'The Fall Season',
-      detail: `${session.label} — ${session.detail}`,
+      detail: `${event.label} — ${event.detail}`,
       count: String(dayDiff),
-      countLabel: dayDiff === 1 ? `day until ${session.label}` : `days until ${session.label}`
+      countLabel: dayDiff === 1 ? `day until ${event.label}` : `days until ${event.label}`
     };
   }
 
   function updateStatus() {
-    const now = new Date();
-    const phase = getPhase(now);
+    const today = dayOnly(new Date());
+    const phase = getPhase(today);
     document.getElementById('status-label').textContent = phase.label;
     document.getElementById('status-detail').textContent = phase.detail;
     const countdownEl = document.getElementById('status-countdown');
@@ -921,17 +981,130 @@
       countdownEl.style.display = 'none';
     }
 
-    const today = dayOnly(now);
-    sessions.forEach(s => {
-      const el = document.getElementById(s.id);
-      const sDay = dayOnly(s.date);
-      el.classList.toggle('passed', sDay < today);
-      el.classList.toggle('highlight', sDay >= today && getNextSession(today).session.id === s.id);
+    const next = getNextEvent(today);
+    const stops = [...new Set(seasonEvents.map(e => e.stop))];
+    stops.forEach(stopId => {
+      const el = document.getElementById(stopId);
+      if (!el) return;
+      const events = seasonEvents.filter(e => e.stop === stopId);
+      el.classList.toggle('passed', events.every(e => eventDay(e) < today));
+      el.classList.toggle('highlight', !!next && next.event.stop === stopId);
     });
   }
 
   updateStatus();
   setInterval(updateStatus, 60 * 60 * 1000);
+
+  // ============ CALENDAR (.ics) DOWNLOAD ============
+  const pad = n => String(n).padStart(2, '0');
+
+  // All-day values are dates; timed values carry a local time used with TZID below.
+  function icsDay(parts) {
+    return `${parts[0]}${pad(parts[1] + 1)}${pad(parts[2])}`;
+  }
+  function icsDateTime(parts) {
+    return `${icsDay(parts)}T${pad(parts[3] || 0)}${pad(parts[4] || 0)}00`;
+  }
+  // DTEND is exclusive for all-day events, so a one-day event ends the next morning.
+  function nextDay(parts) {
+    const d = new Date(parts[0], parts[1], parts[2] + 1);
+    return [d.getFullYear(), d.getMonth(), d.getDate()];
+  }
+  function icsEscape(text) {
+    return String(text)
+      .replace(/\\/g, '\\\\')
+      .replace(/;/g, '\\;')
+      .replace(/,/g, '\\,')
+      .replace(/\r?\n/g, '\\n');
+  }
+  // RFC 5545 caps lines at 75 octets; continuations start with a single space.
+  function fold(line) {
+    if (line.length <= 73) return line;
+    const chunks = [line.slice(0, 73)];
+    let rest = line.slice(73);
+    while (rest.length > 72) {
+      chunks.push(' ' + rest.slice(0, 72));
+      rest = rest.slice(72);
+    }
+    if (rest.length) chunks.push(' ' + rest);
+    return chunks.join('\r\n');
+  }
+
+  function buildCalendar() {
+    const now = new Date();
+    const stamp = [
+      now.getUTCFullYear(), pad(now.getUTCMonth() + 1), pad(now.getUTCDate()), 'T',
+      pad(now.getUTCHours()), pad(now.getUTCMinutes()), pad(now.getUTCSeconds()), 'Z'
+    ].join('');
+
+    const lines = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Keystone College//Performance Music Fall 2026//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'X-WR-CALNAME:KC Performance Music — Fall 2026',
+      // Shipped so clients resolve the TZID without guessing at DST.
+      'BEGIN:VTIMEZONE',
+      'TZID:America/New_York',
+      'BEGIN:DAYLIGHT',
+      'TZOFFSETFROM:-0500',
+      'TZOFFSETTO:-0400',
+      'TZNAME:EDT',
+      'DTSTART:19700308T020000',
+      'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU',
+      'END:DAYLIGHT',
+      'BEGIN:STANDARD',
+      'TZOFFSETFROM:-0400',
+      'TZOFFSETTO:-0500',
+      'TZNAME:EST',
+      'DTSTART:19701101T020000',
+      'RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU',
+      'END:STANDARD',
+      'END:VTIMEZONE'
+    ];
+
+    seasonEvents.forEach((e, i) => {
+      lines.push('BEGIN:VEVENT');
+      lines.push(`UID:kc-fall-2026-${icsDay(e.start)}-${i}@keystone.edu`);
+      lines.push(`DTSTAMP:${stamp}`);
+      if (e.allDay) {
+        lines.push(`DTSTART;VALUE=DATE:${icsDay(e.start)}`);
+        lines.push(`DTEND;VALUE=DATE:${icsDay(e.end || nextDay(e.start))}`);
+      } else {
+        lines.push(`DTSTART;TZID=America/New_York:${icsDateTime(e.start)}`);
+        if (e.end) lines.push(`DTEND;TZID=America/New_York:${icsDateTime(e.end)}`);
+      }
+      lines.push(fold(`SUMMARY:${icsEscape(e.summary)}`));
+      if (e.description) lines.push(fold(`DESCRIPTION:${icsEscape(e.description)}`));
+      lines.push('END:VEVENT');
+    });
+
+    lines.push('END:VCALENDAR');
+    return lines.join('\r\n') + '\r\n';
+  }
+
+  const icsButton = document.getElementById('ics-download');
+  const icsLabel = document.getElementById('ics-label');
+
+  icsButton.addEventListener('click', () => {
+    const blob = new Blob([buildCalendar()], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'kc-performance-music-fall-2026.ics';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    icsButton.classList.add('done');
+    icsLabel.textContent = `${seasonEvents.length} dates downloaded`;
+    setTimeout(() => {
+      icsButton.classList.remove('done');
+      icsLabel.textContent = 'Add all dates to your calendar';
+    }, 3200);
+  });
 
   // ============ PERSISTENT CHECKLIST ============
   const STORAGE_KEY = 'kc-fall-2026-checklist-v1';
