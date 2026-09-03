@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Jazz Ensemble Experience — Summer 2026</title>
+<title>The Fall Season — KC Performance Music 2026</title>
 <style>
   :root {
     --ink: #1f1a2e;
@@ -145,7 +145,7 @@
     color: var(--ink-soft); margin-bottom: 22px; text-align: center;
   }
   .timeline-track {
-    display: grid; grid-template-columns: repeat(4, 1fr);
+    display: grid; grid-template-columns: repeat(7, 1fr);
     gap: 0; position: relative;
   }
   .timeline-track::before {
@@ -170,14 +170,14 @@
   }
   .tl-time {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 15px; font-weight: 700; color: var(--ink);
+    font-size: 13px; font-weight: 700; color: var(--ink);
     letter-spacing: 0.02em;
   }
-  .tl-stop.highlight .tl-time { color: var(--accent-deep); font-size: 17px; }
+  .tl-stop.highlight .tl-time { color: var(--accent-deep); font-size: 15px; }
   .tl-stop.passed .tl-time { color: var(--ink-soft); opacity: 0.6; }
   .tl-label {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 10.5px; color: var(--ink-soft);
+    font-size: 9.5px; color: var(--ink-soft);
     text-transform: uppercase; letter-spacing: 0.06em;
     margin-top: 4px; line-height: 1.35; padding: 0 4px;
   }
@@ -400,6 +400,124 @@
     .body { padding: 20px 24px; }
     .stagger > *, .card { animation: none; }
   }
+
+  /* REPERTOIRE */
+  .rep-section {
+    padding: 36px 40px 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .rep-section h2 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent-deep); margin-bottom: 4px; text-align: center;
+  }
+  .rep-section .ornament {
+    text-align: center; color: var(--gold);
+    margin-bottom: 24px; font-size: 18px; letter-spacing: 0.4em;
+  }
+  .rep-grid { display: grid; gap: 28px; max-width: 700px; margin: 0 auto; }
+  .rep-head {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--accent-deep);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 8px; margin-bottom: 10px;
+    display: flex; align-items: baseline;
+    justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .rep-head .rep-when {
+    font-size: 10px; letter-spacing: 0.12em;
+    color: var(--ink-soft); text-transform: none;
+  }
+  .rep-list { list-style: none; }
+  .rep-list > li {
+    padding: 11px 0; border-bottom: 1px dotted var(--rule);
+    display: grid; gap: 5px;
+  }
+  .rep-list > li:last-child { border-bottom: none; }
+  .rep-title {
+    font-family: 'Georgia', serif; font-style: italic;
+    font-size: 17px; color: var(--ink); line-height: 1.35;
+  }
+  .rep-title .sub {
+    font-style: normal; font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px; color: var(--ink-soft); letter-spacing: 0.02em;
+  }
+  .tag {
+    display: inline-block; vertical-align: 2px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 10px; margin-left: 8px;
+    background: var(--tint); color: var(--ink-soft);
+    border: 1px solid var(--rule);
+  }
+  .tag.hot { background: rgba(168, 61, 42, 0.1); color: var(--accent-deep); border-color: rgba(168, 61, 42, 0.28); }
+  .tag.warm { background: var(--amber-bg); color: var(--amber); border-color: var(--amber-rule); }
+  .rep-note {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12.5px; color: var(--ink-soft); line-height: 1.5;
+  }
+  .rep-links {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-top: 2px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 10.5px; letter-spacing: 0.11em; text-transform: uppercase;
+  }
+  .rep-links a {
+    color: var(--accent-deep); text-decoration: none;
+    border-bottom: 1px solid var(--gold-soft); padding-bottom: 1px;
+  }
+  .rep-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-rule);
+    border-left: 3px solid var(--amber);
+    border-radius: 4px; padding: 12px 14px; margin-top: 14px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px; line-height: 1.5; color: var(--ink);
+  }
+  .callout strong {
+    display: block; margin-bottom: 4px;
+    font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--amber);
+  }
+  .callout a { color: var(--accent-deep); }
+
+  /* NEEDS CHIPS */
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .chip {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11.5px; padding: 5px 11px; border-radius: 14px;
+    background: rgba(168, 61, 42, 0.09);
+    border: 1px solid rgba(168, 61, 42, 0.22);
+    color: var(--accent-deep);
+  }
+  .chip.soft {
+    background: var(--paper-warm); border-color: var(--rule); color: var(--ink-soft);
+  }
+
+  /* UPDATED BAR */
+  .updated {
+    padding: 12px 40px; background: var(--paper-warm);
+    border-top: 1px solid var(--rule);
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px; letter-spacing: 0.08em;
+    color: var(--ink-soft); text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    .rep-section { padding: 28px 22px 24px; }
+    .rep-grid { gap: 24px; }
+    .updated { padding: 12px 22px; }
+    .rep-head { flex-direction: column; gap: 4px; }
+  }
+
+  @media print {
+    .rep-section { padding: 20px 24px; }
+    .rep-links { display: none; }
+    .updated { background: white; }
+  }
 </style>
 </head>
 <body>
@@ -446,27 +564,31 @@
           <line x1="771" y1="82" x2="771" y2="130" stroke="#fbf7ee" stroke-width="1.5"/>
         </g>
         <g fill="#fbf7ee" opacity="0.4" font-family="Georgia, serif" font-size="32">
-          <text x="60" y="92">♭</text>
-          <text x="455" y="115">♯</text>
+          <text x="60" y="92">&#9837;</text>
+          <text x="455" y="115">&#9839;</text>
         </g>
       </svg>
     </div>
     <div class="header-content">
-      <div class="header-tag">Keystone College · Department of Performance Music</div>
-      <h1 class="header-title">The Jazz Ensemble Experience</h1>
-      <div class="header-sub">KC Performance Music · 11th Annual Summer Series</div>
+      <div class="header-tag">Keystone College &middot; Department of Performance Music</div>
+      <h1 class="header-title">The Fall Season</h1>
+      <div class="header-sub">KC Performance Music &middot; Fall 2026</div>
       <div class="header-meta">
         <div>
-          <span class="label">Starts</span>
-          <span class="val">Wed, Jul 22, 2026</span>
+          <span class="label">First Rehearsal</span>
+          <span class="val">Tue, Sep 8, 2026</span>
         </div>
         <div>
-          <span class="label">Format</span>
-          <span class="val">3 rehearsals + concert</span>
+          <span class="label">Ensembles</span>
+          <span class="val">Chorale &middot; Symphonic &middot; Jazz</span>
+        </div>
+        <div>
+          <span class="label">Season</span>
+          <span class="val">4 performances + holiday pair</span>
         </div>
         <div>
           <span class="label">Status</span>
-          <span class="val">Required · Good standing</span>
+          <span class="val">You're on the fall roster</span>
         </div>
       </div>
     </div>
@@ -477,37 +599,144 @@
     <div class="status-left">
       <div class="status-pulse"></div>
       <div class="status-text">
-        <strong id="status-label">Loading…</strong>
+        <strong id="status-label">Loading&hellip;</strong>
         <span id="status-detail">Checking the date</span>
       </div>
     </div>
     <div class="status-countdown" id="status-countdown">
-      <strong id="status-count">—</strong>
-      <span id="status-count-label">until Rehearsal 1</span>
+      <strong id="status-count">&mdash;</strong>
+      <span id="status-count-label">until the first rehearsal</span>
     </div>
   </div>
 
-  <!-- PROGRAM TIMELINE -->
+  <!-- SEASON TIMELINE -->
   <div class="timeline">
-    <h2>Program at a Glance</h2>
+    <h2>The Season at a Glance</h2>
     <div class="timeline-track">
-      <div class="tl-stop" id="tl-reh1"><div class="tl-dot"></div><div class="tl-time">Jul 22</div><div class="tl-label">Rehearsal 1<br>Wed evening</div></div>
-      <div class="tl-stop" id="tl-reh2"><div class="tl-dot"></div><div class="tl-time">Jul 26</div><div class="tl-label">Rehearsal 2<br>Sun · 7 PM</div></div>
-      <div class="tl-stop" id="tl-reh3"><div class="tl-dot"></div><div class="tl-time">Jul 29</div><div class="tl-label">Rehearsal 3<br>Wed · 7 PM</div></div>
-      <div class="tl-stop" id="tl-concert"><div class="tl-dot"></div><div class="tl-time">Aug 2</div><div class="tl-label">Outdoor Concert<br>Sun · Bonfire + food</div></div>
+      <div class="tl-stop" id="tl-reh1"><div class="tl-dot"></div><div class="tl-time">Sep 8</div><div class="tl-label">First Rehearsal<br>Tue &middot; Chorale + Band</div></div>
+      <div class="tl-stop" id="tl-jazz1"><div class="tl-dot"></div><div class="tl-time">Sep 9</div><div class="tl-label">Jazz Kickoff<br>Wed &middot; 7&ndash;9 PM</div></div>
+      <div class="tl-stop" id="tl-alumni"><div class="tl-dot"></div><div class="tl-time">Oct 9</div><div class="tl-label">Alumni Reception<br>Fri &middot; Combo only</div></div>
+      <div class="tl-stop" id="tl-homecoming"><div class="tl-dot"></div><div class="tl-time">Oct 10</div><div class="tl-label">Homecoming<br>Sat &middot; 9 AM&ndash;2 PM</div></div>
+      <div class="tl-stop" id="tl-fall"><div class="tl-dot"></div><div class="tl-time">Oct 18</div><div class="tl-label">Fall Concert<br>Sun</div></div>
+      <div class="tl-stop" id="tl-carter"><div class="tl-dot"></div><div class="tl-time">Nov 8</div><div class="tl-label">Bill Carter Quintet<br>Sun &middot; 7 PM</div></div>
+      <div class="tl-stop" id="tl-holiday"><div class="tl-dot"></div><div class="tl-time">Dec 5&ndash;6</div><div class="tl-label">Holiday Concerts<br>Sat off &middot; Sun on campus</div></div>
     </div>
   </div>
 
-  <!-- WHAT TO EXPECT -->
-  <div class="setlist-section">
-    <h2>What to Expect</h2>
-    <div class="ornament">✦ ✦ ✦</div>
-    <ol class="setlist">
-      <li><span class="piece">Three relaxed evening rehearsals — a lower-key pace than Spend-a-Day</span></li>
-      <li><span class="piece">More advanced, "musically robust" literature this year</span></li>
-      <li><span class="piece">Expert instruction from multiple world-renowned clinicians</span></li>
-      <li><span class="piece">An outdoor concert finale — bonfire, games, food, and wine tasting</span></li>
-    </ol>
+  <!-- MUSIC TO PRACTICE -->
+  <div class="rep-section">
+    <h2>Music to Practice</h2>
+    <div class="ornament">&#10022; &#10022; &#10022;</div>
+    <div class="rep-grid">
+
+      <div class="rep-group">
+        <div class="rep-head">
+          <span>Symphonic Band</span>
+          <span class="rep-when">First rehearsal Tue, Sep 8</span>
+        </div>
+        <ul class="rep-list">
+          <li>
+            <span class="rep-title">Homeward Bound <span class="sub">&mdash; Sousa march</span><span class="tag hot">Day one</span></span>
+            <span class="rep-note">Very easy &mdash; the first thing we hit at rehearsal one.</span>
+            <span class="rep-links">
+              <a href="https://www.youtube.com/watch?v=BfBOzBd5dxs" target="_blank" rel="noopener">Listen</a>
+              <a href="https://drive.google.com/file/d/1MDsygg9CpCc_krhStrbCkX90DLBviAOo/view?usp=sharing" target="_blank" rel="noopener">Sheet music</a>
+            </span>
+          </li>
+          <li>
+            <span class="rep-title">Octane<span class="tag warm">Fall concert</span></span>
+            <span class="rep-note">Mid-level difficulty &mdash; this one is on the October 18 program.</span>
+            <span class="rep-links">
+              <a href="https://www.youtube.com/watch?v=nQvC99zp--0" target="_blank" rel="noopener">Listen</a>
+              <a href="https://drive.google.com/file/d/10q9mRsE5S5pTcDQS-5UQ0SkKyNt8M-R6/view?usp=sharing" target="_blank" rel="noopener">Sheet music</a>
+            </span>
+          </li>
+          <li>
+            <span class="rep-title">Looking ahead <span class="sub">&mdash; the challenge piece</span><span class="tag">Spring</span></span>
+            <span class="rep-note">Not for the fall. For anyone who wants to get a head start on something harder.</span>
+            <span class="rep-links">
+              <a href="https://www.youtube.com/watch?v=B-iogvj5WP8" target="_blank" rel="noopener">Listen</a>
+              <a href="https://drive.google.com/file/d/1IqpBjlcWoMmSGl8AsxJsY9-UgISWEdRP/view?usp=sharing" target="_blank" rel="noopener">Sheet music 1</a>
+              <a href="https://drive.google.com/file/d/1M6GIalfOIql2kAtQf_14vkNJ7Ng8zZ5s/view?usp=sharing" target="_blank" rel="noopener">Sheet music 2</a>
+            </span>
+          </li>
+        </ul>
+        <div class="callout">
+          <strong>From Mr. Tylutki</strong>
+          Make sure you're practicing &mdash; don't come to the first rehearsal with "summer chops." It won't be as fun. Trouble with any of the links? Let him know.
+        </div>
+      </div>
+
+      <div class="rep-group">
+        <div class="rep-head">
+          <span>Jazz Ensemble</span>
+          <span class="rep-when">First rehearsal Wed, Sep 9 &middot; 7&ndash;9 PM</span>
+        </div>
+        <ul class="rep-list">
+          <li>
+            <span class="rep-title">Every chart from the summer concert<span class="tag">Carry over</span></span>
+            <span class="rep-note">All of it comes back this semester &mdash; keep it in the folder.</span>
+          </li>
+          <li>
+            <span class="rep-title">Tico's South Side Rumba<span class="tag hot">New</span></span>
+            <span class="rep-note">The big one. It will take work and prep &mdash; start now, and give it a listen today.</span>
+            <span class="rep-links">
+              <a href="https://www.youtube.com/watch?v=aQFTlGX3Jkg" target="_blank" rel="noopener">Listen</a>
+              <a href="https://drive.google.com/file/d/1cxaQnj5Boirvhkqtyd_WcLqU8iu_obOm/view?usp=sharing" target="_blank" rel="noopener">Sheet music</a>
+            </span>
+          </li>
+          <li>
+            <span class="rep-title">The Chicken<span class="tag warm">It's back</span></span>
+            <span class="rep-links">
+              <a href="https://www.jwpepper.com/sheet-music/media-player.jsp?&amp;type=video&amp;productID=2467934" target="_blank" rel="noopener">Listen</a>
+              <a href="https://drive.google.com/file/d/1gC2sLXLMBV2SZbWSFU4RyLUO1FYXPnB6/view?usp=sharing" target="_blank" rel="noopener">Sheet music</a>
+            </span>
+          </li>
+          <li>
+            <span class="rep-title">Cry Me a River<span class="tag warm">It's back</span></span>
+            <span class="rep-note">Listen to this recording specifically, please.</span>
+            <span class="rep-links">
+              <a href="https://www.youtube.com/watch?v=xvcPK_L2nJs" target="_blank" rel="noopener">Listen</a>
+            </span>
+          </li>
+          <li>
+            <span class="rep-title">Witchcraft</span>
+            <span class="rep-links">
+              <a href="https://www.youtube.com/watch?v=dYw_VI_k_gc" target="_blank" rel="noopener">Listen</a>
+            </span>
+          </li>
+        </ul>
+        <div class="callout">
+          <strong>Vocalists</strong>
+          Vocal Jazz Ensemble plans and a rehearsal schedule are still coming. Solo vocalists get their schedule at least a week before the Wednesday they're needed &mdash; including Sep 9. Keep sending chart ideas.
+        </div>
+      </div>
+
+      <div class="rep-group">
+        <div class="rep-head">
+          <span>Chorale</span>
+          <span class="rep-when">First rehearsal Tue, Sep 8</span>
+        </div>
+        <ul class="rep-list">
+          <li>
+            <span class="rep-title">Dolly, with the full band treatment<span class="tag hot">Newest</span></span>
+            <span class="rep-note">Drum set and other instruments are coming in on this one. It's going to be a lot of fun.</span>
+            <span class="rep-links">
+              <a href="https://www.youtube.com/watch?v=RMhL00GHJng" target="_blank" rel="noopener">Listen</a>
+            </span>
+          </li>
+          <li>
+            <span class="rep-title">Opening selections <span class="sub">&mdash; listen through only</span></span>
+            <span class="rep-note">Just get these in your ear to start. More lively ones are on the way.</span>
+            <span class="rep-links">
+              <a href="https://www.youtube.com/watch?v=wiBopHBH3h4" target="_blank" rel="noopener">Listen</a>
+              <a href="https://viewer.jwpepper.com/smc2/?preview=true&amp;product=10028546" target="_blank" rel="noopener">Score preview</a>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
   </div>
 
   <!-- BODY -->
@@ -517,15 +746,17 @@
       <div class="block">
         <h3>
           <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-          Get Ready
+          Before September 8
         </h3>
         <div class="checklist">
           <div class="checklist-items" id="checklist">
-            <div class="check-item priority" data-id="attend"><span class="check-box"></span><span class="check-label">Attend all 3 rehearsals + the concert (counts toward good standing)</span></div>
-            <div class="check-item" data-id="calendar"><span class="check-box"></span><span class="check-label">Mark all 4 dates on your calendar (7/22, 7/26, 7/29, 8/2)</span></div>
-            <div class="check-item" data-id="suggest-tunes"><span class="check-box"></span><span class="check-label">Send tune suggestions to Mr. Tylutki</span></div>
-            <div class="check-item" data-id="watch-clip"><span class="check-box"></span><span class="check-label"><a href="https://drive.google.com/file/d/1VTRRZWmjOAp354ugKXyqb9bmdC-JbGvG/view?usp=sharing" target="_blank" rel="noopener">Watch last year's Experience clip</a></span></div>
-            <div class="check-item" data-id="watch-recordings"><span class="check-box"></span><span class="check-label"><a href="https://drive.google.com/drive/folders/1olqi_bveht9RihLOWsmUjcF2UgC_EnJU?usp=sharing" target="_blank" rel="noopener">Watch the spring concert recordings</a></span></div>
+            <div class="check-item priority" data-id="practice"><span class="check-box"></span><span class="check-label">Practice now &mdash; no "summer chops" at rehearsal one</span></div>
+            <div class="check-item" data-id="download"><span class="check-box"></span><span class="check-label">Download and listen to your parts above</span></div>
+            <div class="check-item" data-id="calendar"><span class="check-box"></span><span class="check-label">Put every season date on your calendar</span></div>
+            <div class="check-item" data-id="conflicts"><span class="check-box"></span><span class="check-label">Email about a Modified Attendance Contract or class conflict</span></div>
+            <div class="check-item" data-id="recruit"><span class="check-box"></span><span class="check-label">Invite one musician &mdash; have them email <a href="mailto:music@keystone.edu">music@keystone.edu</a></span></div>
+            <div class="check-item" data-id="minors"><span class="check-box"></span><span class="check-label">Bringing someone 15&ndash;17? Get them the Minors Permission Documents</span></div>
+            <div class="check-item" data-id="roster"><span class="check-box"></span><span class="check-label">Not returning this fall? Tell Mr. Tylutki so he can clean up the list</span></div>
           </div>
           <button class="check-reset" id="check-reset">Reset checklist</button>
         </div>
@@ -534,14 +765,24 @@
       <div class="block">
         <h3>
           <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-          What This Means for You
+          Recruiting Is Priority One
         </h3>
         <ul class="tidy">
-          <li>Required to remain in good standing this summer, unless already excused</li>
-          <li>This is the primary recruiting engagement of the year</li>
-          <li>The 2026-27 roster will be based on this summer's Experience</li>
-          <li>Graduating or departing? You still must attend to finish in good standing</li>
+          <li>You are the most effective recruiter &mdash; people trust you over the staff pitch</li>
+          <li>Meet a musician on campus? They belong here. Send them to <a href="mailto:music@keystone.edu">music@keystone.edu</a></li>
+          <li>The three hesitations, all wrong: it's too hard, they'll be the "old" one, they're too busy (it's 90 minutes a week)</li>
         </ul>
+        <div class="chips">
+          <span class="chip">Trumpets</span>
+          <span class="chip">Flutes</span>
+          <span class="chip">Tenors &amp; basses (vocal)</span>
+          <span class="chip soft">Double reeds</span>
+          <span class="chip soft">Horns</span>
+        </div>
+        <div class="callout">
+          <strong>Tell them this</strong>
+          The first rehearsal is non-committal for new members. They can come see what we're about &mdash; and there's free food.
+        </div>
       </div>
 
     </div>
@@ -550,37 +791,73 @@
 
       <div class="block">
         <h3>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+          Fall Dates
+        </h3>
+        <ul class="tidy">
+          <li><strong>Tue, Sep 8</strong> &mdash; first Chorale &amp; Symphonic Band rehearsal</li>
+          <li><strong>Wed, Sep 9</strong> &mdash; first Jazz Ensemble rehearsal, 7&ndash;9 PM</li>
+          <li><strong>Fri, Oct 9</strong> &mdash; Alumni Reception, evening (combo only)</li>
+          <li><strong>Sat, Oct 10</strong> &mdash; Homecoming &amp; Open House, Jazz Ensemble 9 AM&ndash;2 PM (you'll be fed)</li>
+          <li><strong>Sun, Oct 18</strong> &mdash; Fall Concert</li>
+          <li><strong>Sun, Nov 8</strong> &mdash; Jazz Ensemble opens for the Bill Carter Quintet, 7 PM</li>
+          <li><strong>Sat, Dec 5</strong> &mdash; off-campus Holiday Concert</li>
+          <li><strong>Sun, Dec 6</strong> &mdash; on-campus Holiday Concert</li>
+        </ul>
+        <div class="rep-links" style="margin-top: 12px;">
+          <a href="assets/keystone-concerts.ics" download>Add all dates to your calendar</a>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>
           <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
-          Program Format
+          Rehearsal Format
         </h3>
         <div class="info-grid">
           <div class="info-cell">
-            <div class="label">Rehearsals</div>
-            <div class="val">3 evening sessions<br>Relaxed pace</div>
+            <div class="label">Chorale + Symphonic</div>
+            <div class="val">Tuesdays<br>Starting Sep 8</div>
           </div>
           <div class="info-cell alt">
-            <div class="label">Concert</div>
-            <div class="val">Outdoor finale<br>Bonfire, games, food, wine</div>
+            <div class="label">Jazz Ensemble</div>
+            <div class="val">Wednesdays<br>7&ndash;9 PM, starting Sep 9</div>
           </div>
         </div>
+      </div>
+
+      <div class="block">
+        <h3>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          Standing &amp; Conflicts
+        </h3>
+        <ul class="tidy">
+          <li>Getting the emails means you're planned for the fall roster</li>
+          <li>Departures needed to be raised earlier &mdash; quitting now without unavoidable cause counts as leaving not-in-good-standing and bars future engagement</li>
+          <li>Modified Attendance Contracts and Keystone class conflicts: raise them with Mr. Tylutki now, not later</li>
+          <li>Be on time on Sep 9 &mdash; Jazz is hitting the ground running</li>
+        </ul>
       </div>
 
     </div>
   </div>
 
+  <!-- UPDATED -->
+  <div class="updated" data-updated="2026-09-03">Updated Sep 3, 2026 &middot; from director emails Aug 17 &ndash; Sep 1, 2026</div>
+
   <!-- FOOTER -->
   <div class="footer">
     <div class="footer-block">
       <div class="label">Director</div>
-      <div class="val">Jeffrey A. Tylutki<small>Director of Bands & Performance Music</small></div>
+      <div class="val">Jeffrey A. Tylutki<small>Director of Bands &amp; Performance Music</small></div>
     </div>
     <div class="footer-block">
       <div class="label">Contact</div>
       <div class="val"><a href="tel:5709458599">570-945-8599</a><small><a href="mailto:jeffrey.tylutki@keystone.edu">jeffrey.tylutki@keystone.edu</a></small></div>
     </div>
     <div class="footer-block">
-      <div class="label">Campus Safety</div>
-      <div class="val"><a href="tel:5709458989">570-945-8989</a><small>Backup if Music office is unreachable</small></div>
+      <div class="label">New Members</div>
+      <div class="val"><a href="mailto:music@keystone.edu">music@keystone.edu</a><small>Office: 109 Brooks Hall</small></div>
     </div>
   </div>
 
@@ -589,10 +866,13 @@
 <script>
   // ============ LIVE STATUS BANNER ============
   const sessions = [
-    { id: 'tl-reh1', date: new Date(2026, 6, 22), label: 'Rehearsal 1', detail: 'Wednesday evening' },
-    { id: 'tl-reh2', date: new Date(2026, 6, 26), label: 'Rehearsal 2', detail: 'Sunday, 7:00 PM' },
-    { id: 'tl-reh3', date: new Date(2026, 6, 29), label: 'Rehearsal 3', detail: 'Wednesday, 7:00 PM' },
-    { id: 'tl-concert', date: new Date(2026, 7, 2), label: 'The Outdoor Concert', detail: 'Sunday — bonfire, games, food' }
+    { id: 'tl-reh1', date: new Date(2026, 8, 8), label: 'The First Rehearsal', detail: 'Tuesday — Chorale & Symphonic Band' },
+    { id: 'tl-jazz1', date: new Date(2026, 8, 9), label: 'Jazz Kickoff', detail: 'Wednesday, 7:00–9:00 PM' },
+    { id: 'tl-alumni', date: new Date(2026, 9, 9), label: 'The Alumni Reception', detail: 'Friday evening — combo only' },
+    { id: 'tl-homecoming', date: new Date(2026, 9, 10), label: 'Homecoming & Open House', detail: 'Saturday, 9:00 AM–2:00 PM' },
+    { id: 'tl-fall', date: new Date(2026, 9, 18), label: 'The Fall Concert', detail: 'Sunday, October 18' },
+    { id: 'tl-carter', date: new Date(2026, 10, 8), label: 'Bill Carter Quintet', detail: 'Sunday, 7:00 PM — Jazz Ensemble opens' },
+    { id: 'tl-holiday', date: new Date(2026, 11, 5), label: 'Holiday Concert', detail: 'Saturday off campus, Sunday on campus' }
   ];
 
   function dayOnly(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
@@ -610,7 +890,7 @@
     const next = getNextSession(today);
 
     if (!next) {
-      return { label: 'See You Next Summer', detail: 'Thanks for a great Jazz Ensemble Experience', count: null };
+      return { label: 'See You In The Spring', detail: 'Thanks for a great fall season', count: null };
     }
 
     const { session, dayDiff } = next;
@@ -618,7 +898,7 @@
       return { label: `${session.label} Is Today`, detail: session.detail, count: null };
     }
     return {
-      label: 'The Experience Continues',
+      label: 'The Fall Season',
       detail: `${session.label} — ${session.detail}`,
       count: String(dayDiff),
       countLabel: dayDiff === 1 ? `day until ${session.label}` : `days until ${session.label}`
@@ -654,7 +934,7 @@
   setInterval(updateStatus, 60 * 60 * 1000);
 
   // ============ PERSISTENT CHECKLIST ============
-  const STORAGE_KEY = 'jazz-experience-2026-checklist-v1';
+  const STORAGE_KEY = 'kc-fall-2026-checklist-v1';
 
   async function loadChecklist() {
     try {
@@ -677,7 +957,8 @@
   }
 
   document.querySelectorAll('.check-item').forEach(item => {
-    item.addEventListener('click', () => {
+    item.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') return;
       item.classList.toggle('checked');
       saveChecklist();
     });

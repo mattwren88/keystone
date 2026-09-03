@@ -4,31 +4,63 @@ PRODID:-//Keystone College//Performance Music//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
-UID:keystone-recruiting-20260301@keystone.edu
-DTSTAMP:20260115T000000Z
-DTSTART;TZID=America/New_York:20260301T190000
-SUMMARY:Recruiting Concert
-DESCRIPTION:Weather date Tue Mar 3 at 7:30 PM.
+UID:keystone-first-rehearsal-20260908@keystone.edu
+DTSTAMP:20260903T000000Z
+DTSTART;VALUE=DATE:20260908
+DTEND;VALUE=DATE:20260909
+SUMMARY:First Rehearsal - Chorale & Symphonic Band
+DESCRIPTION:Season opener. Non-committal for new members\, and there is free food.
 END:VEVENT
 BEGIN:VEVENT
-UID:keystone-symphonic-vocal-20260426@keystone.edu
-DTSTAMP:20260115T000000Z
-DTSTART;TZID=America/New_York:20260426T190000
-SUMMARY:Symphonic + Vocal Concert
-DESCRIPTION:Dress rehearsal Sat Apr 25, 8-10 AM.
+UID:keystone-jazz-first-rehearsal-20260909@keystone.edu
+DTSTAMP:20260903T000000Z
+DTSTART;TZID=America/New_York:20260909T190000
+DTEND;TZID=America/New_York:20260909T210000
+SUMMARY:First Jazz Ensemble Rehearsal
+DESCRIPTION:Normal time\, 7-9 PM. Be on time - we hit the ground running.
 END:VEVENT
 BEGIN:VEVENT
-UID:keystone-jazz-20260503@keystone.edu
-DTSTAMP:20260115T000000Z
-DTSTART;TZID=America/New_York:20260503T190000
-SUMMARY:Jazz Ensemble Concert
+UID:keystone-alumni-reception-20261009@keystone.edu
+DTSTAMP:20260903T000000Z
+DTSTART;VALUE=DATE:20261009
+DTEND;VALUE=DATE:20261010
+SUMMARY:Alumni Reception - Combo only
+DESCRIPTION:Evening performance\, combo only.
 END:VEVENT
 BEGIN:VEVENT
-UID:keystone-all-program-20260516@keystone.edu
-DTSTAMP:20260115T000000Z
-DTSTART;VALUE=DATE:20260516
-DTEND;VALUE=DATE:20260517
-SUMMARY:All-Program Event
-DESCRIPTION:Saturday morning, typically done by 1:00 PM.
+UID:keystone-homecoming-20261010@keystone.edu
+DTSTAMP:20260903T000000Z
+DTSTART;TZID=America/New_York:20261010T090000
+DTEND;TZID=America/New_York:20261010T140000
+SUMMARY:Homecoming & Open House - Jazz Ensemble
+DESCRIPTION:9 AM - 2 PM. Food provided.
+END:VEVENT
+BEGIN:VEVENT
+UID:keystone-fall-concert-20261018@keystone.edu
+DTSTAMP:20260903T000000Z
+DTSTART;VALUE=DATE:20261018
+DTEND;VALUE=DATE:20261019
+SUMMARY:Fall Concert
+END:VEVENT
+BEGIN:VEVENT
+UID:keystone-bill-carter-20261108@keystone.edu
+DTSTAMP:20260903T000000Z
+DTSTART;TZID=America/New_York:20261108T190000
+SUMMARY:Jazz Ensemble opens for the Bill Carter Quintet
+DESCRIPTION:7 PM.
+END:VEVENT
+BEGIN:VEVENT
+UID:keystone-holiday-off-campus-20261205@keystone.edu
+DTSTAMP:20260903T000000Z
+DTSTART;VALUE=DATE:20261205
+DTEND;VALUE=DATE:20261206
+SUMMARY:Holiday Concert - off campus
+END:VEVENT
+BEGIN:VEVENT
+UID:keystone-holiday-on-campus-20261206@keystone.edu
+DTSTAMP:20260903T000000Z
+DTSTART;VALUE=DATE:20261206
+DTEND;VALUE=DATE:20261207
+SUMMARY:Holiday Concert - on campus
 END:VEVENT
 END:VCALENDAR
