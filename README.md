@@ -1,6 +1,8 @@
 # Keystone College Band Briefing
 
-A focused, static one-page summary for Symphonic Band, Jazz Band, and upcoming concert dates. The content is curated from director emails and rendered as clean, readable detail cards.
+A focused, static one-page summary for Chorale, Symphonic Band, Jazz Ensemble, and the season's
+performance dates. The content is curated by hand from director emails and rendered as a single
+readable page.
 
 ## Quick start
 
@@ -14,100 +16,30 @@ Then visit `http://localhost:3000`.
 
 ## Project layout
 
-- `index.html`: main page content
-- `assets/css/styles.css`: site styles
-- `assets/keystone-concerts.ics`: calendar download
+- `index.html`: the entire page — markup, styles, and script are all inline
+- `assets/css/styles.css`: currently unused (page styles are inline in `index.html`); kept for future use
 - `assets/Handbook KC Performance Music Spring 2026.pdf`: handbook link
-- `emails/`: optional local email cache (ignored by git)
+- `assets/logo.png` / `assets/logo.svg`: branding assets
 
 ## Updating content
 
-Plain terms:
-- New director emails (labeled `Keystone College`) are pulled via the Gmail API twice a day.
-- If no new email is detected, the run stops early.
-- Recent emails (last 21 days) are summarized into the Symphonic/Jazz cards by AI, with heuristics as a fallback.
-- The page updates itself automatically; if automation fails, you can run one command locally.
+This site has no build step and no automation — it's a static page you edit by hand.
 
-Manual updates:
-- Edit `index.html` directly.
+1. Read the director's recent emails and note what changed: rehearsal dates, repertoire, concert
+   dates, recruiting asks, etc.
+2. Edit `index.html` directly:
+   - The season's rehearsals and concerts live in one place: the `seasonEvents` array near the
+     bottom of the file (inside the `<script>` block). Each entry drives the countdown banner,
+     the timeline strip, and the "Add all dates to your calendar" download — update it and all
+     three stay in sync.
+   - The "Music to Practice" section (`rep-section`) lists repertoire per ensemble with listening
+     and sheet-music links.
+   - The "Fall Dates" list, checklist, and footer are plain HTML further down the page.
+3. Update the `.updated` bar's date and email range near the bottom of the page body.
+4. Preview locally (see Quick start above) before committing.
 
-Automated updates (local):
-- `scripts/update_site.py` pulls labeled Gmail messages (if Gmail env vars are set) and updates `index.html`.
-- `scripts/fetch_gmail_emails.py` is optional; it caches `.eml` files in `emails/` for offline parsing.
-- Optional Gmail knobs: `GMAIL_LABEL` (default `Keystone College`), `GMAIL_LABEL_ID` (overrides name), `MAX_RESULTS`.
+## Calendar download
 
-AI-assisted updates (recommended):
-- If `OPENAI_API_KEY` is set, `scripts/update_site.py` sends recent email content to OpenAI and
-  uses the response to update the pieces, other details, and additional notes lists.
-- Optional knobs: `OPENAI_MODEL` (default `gpt-5-mini`), `OPENAI_EMAIL_LIMIT` (default `6`),
-  `RECENT_DAYS` (default `21`).
-- If the AI returns empty lists, the existing schedule is preserved. If the AI call fails, heuristics kick in.
-
-Token helper:
-- `scripts/get_gmail_refresh_token.py` generates the Gmail OAuth refresh token needed by GitHub Actions.
-
-## GitHub Actions automation
-
-A twice-daily workflow runs at 00:00 and 12:00 UTC to pull labeled emails and refresh the page:
-- Label: `Keystone College`
-- Workflow: `.github/workflows/update-from-emails.yml`
-
-Required repository secrets:
-- `GMAIL_CLIENT_ID`
-- `GMAIL_CLIENT_SECRET`
-- `GMAIL_REFRESH_TOKEN`
-- `OPENAI_API_KEY` (optional, enables AI summaries)
-
-The workflow caches the last processed email id and commits only `index.html`
-(email files remain local and ignored).
-
-## Manual fallback (local)
-
-If the Action doesn’t run, you can update locally:
-
-```bash
-python3 scripts/update_site.py
-```
-
-If you need to set credentials for a local run, export:
-
-```bash
-export GMAIL_CLIENT_ID=...
-export GMAIL_CLIENT_SECRET=...
-export GMAIL_REFRESH_TOKEN=...
-```
-
-If you prefer an `.eml` cache for offline runs:
-
-```bash
-python3 scripts/fetch_gmail_emails.py
-```
-
-## Workflow diagram
-
-```text
-GitHub Action (00:00, 12:00 UTC)
-  |
-  v
-Gmail API: newest id for label
-  |
-  +-- no new id --> stop
-  |
-  v
-Fetch recent emails (last 21 days)
-  |
-  v
-OpenAI classify + extract
-  |
-  +-- AI ok --> update weekly blocks in index.html
-  |
-  +-- AI fails --> heuristic extraction (recent emails)
-  |
-  v
-Commit index.html (only if changed)
-```
-
-## Notes
-
-- The `emails/` folder and OAuth client JSON are gitignored.
-- Update the concert list in `assets/keystone-concerts.ics` if dates change.
+The "Add all dates to your calendar" button generates a `.ics` file in the browser, straight from
+`seasonEvents` — there's no separate calendar file to keep in sync. Update `seasonEvents` and the
+downloaded calendar updates with it.
